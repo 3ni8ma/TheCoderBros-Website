@@ -3,58 +3,118 @@ import { Code2 } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-zinc-800/50 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D946EF] via-[#6366F1] to-[#22D3EE] p-0.5">
-                <div className="w-full h-full rounded-[6px] bg-zinc-950 flex items-center justify-center">
-                  <Code2 className="w-4 h-4 text-white" />
+    <footer className="border-t border-border/50 bg-background">
+      <div className="section-container py-16">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
+          <div className="col-span-2">
+            <Link href="/" className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary via-[#8B5CF6] to-accent p-0.5">
+                <div className="w-full h-full rounded-[6px] bg-background flex items-center justify-center">
+                  <Code2 className="w-4 h-4 text-foreground" />
                 </div>
               </div>
-              <span className="font-heading font-bold text-lg tracking-tight">
-                <span className="text-white">The</span>{" "}
-                <span className="text-gradient">Coder Bros</span>
+              <span className="font-semibold text-lg tracking-tight">
+                <span className="text-foreground">The</span>{" "}
+                <span className="text-gradient-primary">Coder Bros</span>
               </span>
             </Link>
-            <p className="font-heading text-zinc-400 text-sm max-w-md">
-              Premium interactive coding education and software development services.
-              Master Python, JavaScript, Java, C#, C++, and more.
+            <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
+              Premium interactive coding education and software development
+              services. Master Python, JavaScript, Java, C#, C++, and more with
+              hands-on projects.
             </p>
           </div>
+
           <div>
-            <h3 className="font-heading font-semibold text-white mb-3 text-sm">Platform</h3>
-            <ul className="space-y-2 text-sm text-zinc-400 font-heading">
-              <li><Link href="/courses" className="hover:text-white transition-colors">Courses</Link></li>
-              <li><Link href="/cheatsheets" className="hover:text-white transition-colors">Cheatsheets</Link></li>
-              <li><Link href="/labs" className="hover:text-white transition-colors">Interactive Labs</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+            <h3 className="font-semibold text-foreground mb-4 text-sm tracking-wider uppercase">
+              Platform
+            </h3>
+            <ul className="space-y-2.5">
+              <li><FooterLink href="/courses">Courses</FooterLink></li>
+              <li><FooterLink href="/cheatsheets">Cheatsheets</FooterLink></li>
+              <li><FooterLink href="/labs">Interactive Labs</FooterLink></li>
+              <li><FooterLink href="/pricing">Pricing</FooterLink></li>
             </ul>
           </div>
+
           <div>
-            <h3 className="font-heading font-semibold text-white mb-3 text-sm">Connect</h3>
-            <ul className="space-y-2 text-sm text-zinc-400 font-heading">
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">Hire Us</Link></li>
-              <li className="flex items-center gap-3 pt-2">
-                <a href="#" className="text-zinc-400 hover:text-white transition-colors" aria-label="GitHub">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            <h3 className="font-semibold text-foreground mb-4 text-sm tracking-wider uppercase">
+              Company
+            </h3>
+            <ul className="space-y-2.5">
+              <li><FooterLink href="/about">About Us</FooterLink></li>
+              <li><FooterLink href="/blog">Blog</FooterLink></li>
+              <li><FooterLink href="/contact">Contact</FooterLink></li>
+              <li><FooterLink href="/contact">Hire Us</FooterLink></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-foreground mb-4 text-sm tracking-wider uppercase">
+              Connect
+            </h3>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="https://github.com/the-coder-bros"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                  GitHub
                 </a>
-                <a href="https://www.linkedin.com/company/the-coder-bros/" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors" aria-label="LinkedIn">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/company/the-coder-bros/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:hello@thecoderbros.com"
+                  className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Email
                 </a>
               </li>
             </ul>
           </div>
         </div>
-        <div className="mt-10 pt-6 border-t border-zinc-800/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-heading text-zinc-500 text-xs">&copy; {new Date().getFullYear()} The Coder Bros. All rights reserved.</p>
-          <div className="flex items-center gap-4 text-xs font-heading text-zinc-600">
-            <span>Built with Next.js & Tailwind CSS</span>
-          </div>
+
+        <div className="mt-12 pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-muted-foreground text-xs">
+            &copy; {new Date().getFullYear()} The Coder Bros. All rights reserved.
+          </p>
+          <p className="text-muted-foreground/50 text-xs">
+            Built with Next.js & Tailwind CSS
+          </p>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+    >
+      {children}
+    </Link>
   );
 }

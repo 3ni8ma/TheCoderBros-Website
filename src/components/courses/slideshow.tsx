@@ -2,85 +2,173 @@
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Play, RotateCcw } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Check,
+  BookOpen,
+} from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Slide, Lesson } from "@/lib/data/courses";
+import { Language } from "@/lib/data/courses";
 import { Progress } from "@/components/ui/progress";
 
 function CodeBlock({ code, language }: { code: string; language: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [code]);
+
   return (
-    <div className="relative group">
-      <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-        <button onClick={() => navigator.clipboard.writeText(code)}
-          className="p-1.5 rounded bg-zinc-700 text-zinc-300 hover:bg-zinc-600 transition-colors" title="Copy Code">
-          <RotateCcw className="w-3.5 h-3.5" />
+    <div className="relative group rounded-lg overflow-hidden border border-border/50">
+      <div className="flex items-center justify-between px-4 py-2 bg-secondary/50 border-b border-border/50">
+        <span className="text-xs text-muted-foreground font-mono">{language}</span>
+        <button
+          onClick={handleCopy}
+          className="p-1 rounded text-muted-foreground hover:text-foreground transition-colors"
+          title="Copy code"
+        >
+          {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
         </button>
       </div>
-      <pre className="text-sm font-mono leading-relaxed overflow-x-auto" style={{ background: "#0a0a0a", border: "1px solid #222", borderRadius: "8px", padding: "1.5rem", fontSize: "0.875rem", margin: 0 }}>
+      <pre className="p-4 text-sm font-mono leading-relaxed overflow-x-auto bg-black/30">
         <code className="text-zinc-300 whitespace-pre">{code}</code>
       </pre>
-      <div className="absolute top-2 left-3 text-[10px] text-zinc-600 font-mono">{language}</div>
     </div>
   );
 }
 
-function SlideContent({ slide, onRunCode }: { slide: Slide; onRunCode: (code: string, lang: string) => void }) {
-  return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.3 }} className="space-y-6">
-      <h2 className="text-2xl font-heading font-bold text-white">{slide.title}</h2>
-      <div className="prose prose-invert max-w-none prose-zinc prose-code:text-[#22D3EE] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800">
-        <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
-          h1: ({ children }) => <h1 className="font-heading">{children}</h1>,
-          h2: ({ children }) => <h2 className="font-heading">{children}</h2>,
-          h3: ({ children }) => <h3 className="font-heading">{children}</h3>,
-          p: ({ children }) => <p className="font-heading">{children}</p>,
-          li: ({ children }) => <li className="font-heading">{children}</li>,
-          strong: ({ children }) => <strong className="font-heading">{children}</strong>,
-        }}>{slide.content}</ReactMarkdown>
-      </div>
-      {slide.code && (
-        <CodeBlock code={slide.code} language={slide.language} />
-      )}
-    </motion.div>
-  );
+interface SlideshowProps {
+  course: Language;
 }
 
-export function Slideshow({ lesson, onRunCode }: { lesson: Lesson; onRunCode: (code: string, lang: string) => void }) {
+export default function Slideshow({ course }: SlideshowProps) {
+  const [currentLesson, setCurrentLesson] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = lesson.slides.length;
-  const slide = lesson.slides[currentSlide];
+  const lesson = course.lessons[currentLesson];
+  const slide = lesson?.slides[currentSlide];
+  const totalSlides = lesson?.slides.length ?? 0;
 
-  const goNext = useCallback(() => {
-    if (currentSlide < totalSlides - 1) setCurrentSlide((s) => s + 1);
-  }, [currentSlide, totalSlides]);
+  const goNextSlide = useCallback(() => {
+    if (currentSlide < totalSlides - 1) {
+      setCurrentSlide((s) => s + 1);
+    } else if (currentLesson < course.lessons.length - 1) {
+      setCurrentLesson((l) => l + 1);
+      setCurrentSlide(0);
+    }
+  }, [currentSlide, totalSlides, currentLesson, course.lessons.length]);
 
-  const goPrev = useCallback(() => {
-    if (currentSlide > 0) setCurrentSlide((s) => s - 1);
-  }, [currentSlide]);
+  const goPrevSlide = useCallback(() => {
+    if (currentSlide > 0) {
+      setCurrentSlide((s) => s - 1);
+    } else if (currentLesson > 0) {
+      setCurrentLesson((l) => l - 1);
+      setCurrentSlide(course.lessons[currentLesson - 1].slides.length - 1);
+    }
+  }, [currentSlide, currentLesson, course.lessons]);
+
+  const totalSlidesOverall = course.lessons.reduce((a, l) => a + l.slides.length, 0);
+  const currentSlideOverall = course.lessons
+    .slice(0, currentLesson)
+    .reduce((a, l) => a + l.slides.length, 0) + currentSlide + 1;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-heading font-semibold text-white">{lesson.title}</h3>
-        <span className="text-sm font-heading text-zinc-500">Slide {currentSlide + 1} / {totalSlides}</span>
+    <div className="grid lg:grid-cols-[280px_1fr] gap-8">
+      <div className="space-y-1">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          Lessons
+        </h3>
+        <nav className="space-y-1">
+          {course.lessons.map((l, i) => (
+            <button
+              key={l.title}
+              onClick={() => {
+                setCurrentLesson(i);
+                setCurrentSlide(0);
+              }}
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                i === currentLesson
+                  ? "bg-primary/10 text-primary font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                <span className="line-clamp-1">{l.title}</span>
+              </div>
+              <span className="text-xs text-muted-foreground block mt-0.5 ml-5.5">
+                {l.slides.length} slides
+              </span>
+            </button>
+          ))}
+        </nav>
       </div>
-      <Progress value={((currentSlide + 1) / totalSlides) * 100} className="h-1" />
-      
-      <AnimatePresence mode="wait">
-        <SlideContent key={currentSlide} slide={slide} onRunCode={onRunCode} />
-      </AnimatePresence>
 
-      <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
-        <button onClick={goPrev} disabled={currentSlide === 0}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-heading text-zinc-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-          <ChevronLeft className="w-4 h-4" /> Previous
-        </button>
-        <button onClick={goNext} disabled={currentSlide === totalSlides - 1}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-heading text-zinc-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-          Next <ChevronRight className="w-4 h-4" />
-        </button>
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">
+              {lesson.title}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Slide {currentSlideOverall} of {totalSlidesOverall}
+            </p>
+          </div>
+        </div>
+
+        <Progress
+          value={(currentSlideOverall / totalSlidesOverall) * 100}
+          className="h-1 mb-8"
+        />
+
+        <AnimatePresence mode="wait">
+          {slide && (
+            <motion.div
+              key={`${currentLesson}-${currentSlide}`}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-6"
+            >
+              <h3 className="text-xl font-semibold text-foreground">
+                {slide.title}
+              </h3>
+              <div className="prose prose-invert max-w-none prose-zinc prose-code:text-primary">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {slide.content}
+                </ReactMarkdown>
+              </div>
+              {slide.code && (
+                <CodeBlock code={slide.code} language={slide.language} />
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex items-center justify-between pt-6 mt-8 border-t border-border/50">
+          <button
+            onClick={goPrevSlide}
+            disabled={currentLesson === 0 && currentSlide === 0}
+            className="inline-flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-secondary/50"
+          >
+            <ChevronLeft className="w-4 h-4" /> Previous
+          </button>
+          <button
+            onClick={goNextSlide}
+            disabled={
+              currentLesson === course.lessons.length - 1 &&
+              currentSlide === totalSlides - 1
+            }
+            className="inline-flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-secondary/50"
+          >
+            Next <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

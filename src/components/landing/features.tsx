@@ -1,45 +1,90 @@
 "use client";
 
-import { BookOpen, FileCode, FlaskConical, MessageSquare, Sparkles, Zap } from "lucide-react";
-import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/shared/animated-section";
-import { GlowCard } from "@/components/shared/glow-card";
+import { motion } from "framer-motion";
+import { AnimatedSection } from "@/components/shared/animated-section";
+import {
+  Monitor,
+  BookOpen,
+  Beaker,
+  Cloud,
+  MessageSquare,
+  Box,
+} from "lucide-react";
 
 const features = [
-  { icon: BookOpen, title: "Interactive Courses", description: "Step-by-step lessons with runnable code examples. Learn by doing, not just watching.", color: "#D946EF" },
-  { icon: FileCode, title: "Smart Cheatsheets", description: "Quick-reference guides with syntax highlighting and one-click copy for every language.", color: "#6366F1" },
-  { icon: FlaskConical, title: "Code Sandbox", description: "Browser-based IDE with live preview and multi-language code execution engine.", color: "#22D3EE" },
-  { icon: MessageSquare, title: "SaaS Solutions", description: "Custom software development, integration, and digital solutions for your business.", color: "#D946EF" },
-  { icon: Zap, title: "Real-time Feedback", description: "Instant code execution results with terminal-style output and live preview rendering.", color: "#6366F1" },
-  { icon: Sparkles, title: "Modern Stack", description: "Learn industry-standard tools: Python, JavaScript, Java, C#, C++, and modern frameworks.", color: "#22D3EE" },
+  {
+    icon: Monitor,
+    title: "Interactive Courses",
+    description:
+      "Step-by-step lessons with real code examples. Learn at your own pace with structured content.",
+  },
+  {
+    icon: BookOpen,
+    title: "Smart Cheatsheets",
+    description:
+      "Quick syntax references for every language. Search, filter, and copy code snippets instantly.",
+  },
+  {
+    icon: Beaker,
+    title: "Code Sandbox",
+    description:
+      "Experiment with HTML, CSS, and JavaScript in our browser-based frontend lab with live preview.",
+  },
+  {
+    icon: Cloud,
+    title: "SaaS Solutions",
+    description:
+      "From concept to deployment. We build scalable software solutions for startups and enterprises.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Real-time Feedback",
+    description:
+      "Get immediate results from code execution and see your changes live as you type.",
+  },
+  {
+    icon: Box,
+    title: "Modern Stack",
+    description:
+      "Learn industry-standard tools and frameworks. Python, React, Node.js, and more.",
+  },
 ];
 
 export function Features() {
   return (
-    <section className="relative py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">
-            Everything You Need to <span className="text-gradient">Master Code</span>
-          </h2>
-          <p className="font-heading text-zinc-400 max-w-2xl mx-auto">
-            From interactive lessons to real-time code execution, we provide the tools and content to accelerate your programming journey.
-          </p>
+    <section className="section-padding">
+      <div className="section-container">
+        <AnimatedSection>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
+              Everything You Need to <span className="text-gradient-primary">Succeed</span>
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
+              A complete platform for learning and building with modern technology.
+            </p>
+          </div>
         </AnimatedSection>
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <StaggerItem key={feature.title}>
-              <GlowCard>
-                <div className="p-6">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ backgroundColor: `${feature.color}15` }}>
-                    <feature.icon className="w-5 h-5" style={{ color: feature.color }} />
-                  </div>
-                  <h3 className="text-lg font-heading font-semibold text-white mb-2">{feature.title}</h3>
-                  <p className="text-sm font-heading text-zinc-400 leading-relaxed">{feature.description}</p>
-                </div>
-              </GlowCard>
-            </StaggerItem>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {features.map((feature, i) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+              className="card-elevated p-6"
+            >
+              <feature.icon className="w-5 h-5 text-primary mb-4" />
+              <h3 className="font-semibold text-foreground mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {feature.description}
+              </p>
+            </motion.div>
           ))}
-        </StaggerContainer>
+        </div>
       </div>
     </section>
   );

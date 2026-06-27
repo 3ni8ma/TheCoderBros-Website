@@ -7,17 +7,41 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["system-ui", "sans-serif"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["monospace"],
 });
 
 export const metadata: Metadata = {
-  title: "The Coder Bros - Interactive Coding Education & SaaS Solutions",
-  description: "Master Python, JavaScript, Java, C#, C++ with interactive courses, cheatsheets, and code labs. Premium coding education and software development services.",
+  title: {
+    default: "The Coder Bros — Master Modern Development",
+    template: "%s | The Coder Bros",
+  },
+  description:
+    "Interactive coding courses, cheatsheets, and labs for Python, JavaScript, Java, C#, and C++. Learn modern development with hands-on projects.",
+  keywords: [
+    "coding courses",
+    "learn programming",
+    "Python",
+    "JavaScript",
+    "Java",
+    "C#",
+    "C++",
+    "web development",
+    "coding education",
+  ],
+  openGraph: {
+    title: "The Coder Bros — Master Modern Development",
+    description:
+      "Interactive coding courses, cheatsheets, and labs. Learn Python, JavaScript, Java, C#, and C++.",
+    type: "website",
+    locale: "en_US",
+  },
   icons: {
     icon: "/images/logo.png",
   },
@@ -25,10 +49,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-      </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} min-h-full flex flex-col bg-zinc-950 text-zinc-100 antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrainsMono.variable} dark`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-dvh flex flex-col antialiased font-sans">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
