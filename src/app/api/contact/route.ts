@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { Resend } from "resend";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -12,10 +11,6 @@ export async function POST(req: NextRequest) {
     if (!projectType || !budget || !timeline || !stack || !name || !email || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
-
-    await prisma.contactSubmission.create({
-      data: { projectType, budget, timeline, stack, name, email, company: company || "", message },
-    });
 
     if (resend) {
       await resend.emails.send({
