@@ -8,19 +8,24 @@ import Link from "next/link";
 
 const team = [
   {
-    name: "Alex Rivera",
-    role: "Co-Founder & Lead Developer",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
+    name: "Aarush Karak",
+    role: "Founder & CEO",
+    avatar: "/images/profile.jpg",
   },
   {
-    name: "Marcus Chen",
-    role: "Co-Founder & Curriculum Designer",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
+    name: "Nivyadin Dey",
+    role: "Managing Director",
+    avatar: "https://ui-avatars.com/api/?name=Nivyadin+Dey&background=8B5CF6&color=fff&size=200",
   },
   {
-    name: "Sophia Williams",
-    role: "Co-Founder & Full-Stack Engineer",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
+    name: "Ryan Banerjee",
+    role: "Chairman",
+    avatar: "https://ui-avatars.com/api/?name=Ryan+Banerjee&background=A855F7&color=fff&size=200",
+  },
+  {
+    name: "Anay Shah",
+    role: "Marketing",
+    avatar: "https://ui-avatars.com/api/?name=Anay+Shah&background=EC4899&color=fff&size=200",
   },
 ];
 
@@ -35,7 +40,7 @@ const timeline = [
   { year: "2022", event: "The Coder Bros founded by three friends passionate about coding education." },
   { year: "2023", event: "Launched first interactive Python course with in-browser code execution." },
   { year: "2024", event: "Expanded to 6 languages, launched SaaS development services." },
-  { year: "2025", event: "Built interactive labs with Monaco editor integration. 10,000+ learners." },
+  { year: "2025", event: "Built interactive labs with Monaco editor integration. 10,000+ audience reached." },
   { year: "2026", event: "Redesigned platform with Next.js 16, enhanced curriculum, and new blog." },
 ];
 
@@ -96,7 +101,7 @@ export default function AboutPage() {
             description="The people behind The Coder Bros."
           />
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             {team.map((member, i) => (
               <motion.div
                 key={member.name}

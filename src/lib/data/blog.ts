@@ -49,7 +49,7 @@ for fruit in fruits:
     print(fruit)
 \`\`\`
 `,
-    author: "Alex Rivera",
+    author: "Aarush Karak",
     date: "2026-06-15",
     category: "Python",
     readTime: 5,
@@ -95,7 +95,7 @@ const [users, posts] = await Promise.all([
 ]);
 \`\`\`
 `,
-    author: "Marcus Chen",
+    author: "Nivyadin Dey",
     date: "2026-06-10",
     category: "JavaScript",
     readTime: 6,
@@ -147,7 +147,7 @@ Car myCar = new ElectricCar("Tesla", 2024, 350);
 myCar.start(); // "Electric motor activated"
 \`\`\`
 `,
-    author: "Sophia Williams",
+    author: "Ryan Banerjee",
     date: "2026-06-05",
     category: "Java",
     readTime: 7,

@@ -3,11 +3,17 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Play, RotateCcw, Download } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { frontendCode } from "@/lib/data/labs";
 
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full bg-zinc-950">
+      <Loader2 className="w-5 h-5 animate-spin text-zinc-400" />
+    </div>
+  ),
+});
 
 export function FrontendLab() {
   const [html, setHtml] = useState(frontendCode.html);
@@ -15,7 +21,7 @@ export function FrontendLab() {
   const [js, setJs] = useState(frontendCode.js);
   const [activeTab, setActiveTab] = useState("html");
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout>(undefined);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const updatePreview = useCallback(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -24,13 +30,13 @@ export function FrontendLab() {
       if (!iframe) return;
       const combined = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}<script>${js}<\/script></body></html>`;
       iframe.srcdoc = combined;
-    }, 500);
+    }, 300);
   }, [html, css, js]);
 
   useEffect(() => { updatePreview(); }, [updatePreview]);
 
   const handleEditorChange = (value: string | undefined) => {
-    if (!value) return;
+    if (value == null) return;
     if (activeTab === "html") setHtml(value);
     else if (activeTab === "css") setCss(value);
     else if (activeTab === "js") setJs(value);
@@ -55,19 +61,29 @@ export function FrontendLab() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-4 py-2 border-b border-zinc-800 bg-zinc-900/50">
         <div className="flex items-center gap-2">
           <span className="text-sm font-heading font-medium text-white">Frontend Sandbox</span>
           <span className="text-xs font-heading text-zinc-500">HTML / CSS / JS</span>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={handleReset} className="text-zinc-400 font-heading">
-            <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset
-          </Button>
-          <Button size="sm" onClick={updatePreview} className="bg-[#22D3EE]/20 text-[#22D3EE] hover:bg-[#22D3EE]/30 font-heading">
-            <Play className="w-3.5 h-3.5 mr-1" /> Run
-          </Button>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center justify-center gap-1 h-7 px-2.5 rounded-lg text-[0.8rem] font-medium border border-border bg-background text-zinc-400 hover:bg-muted hover:text-foreground transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Reset
+          </button>
+          <button
+            type="button"
+            onClick={updatePreview}
+            className="inline-flex items-center justify-center gap-1 h-7 px-2.5 rounded-lg text-[0.8rem] font-medium bg-[#22D3EE]/20 text-[#22D3EE] hover:bg-[#22D3EE]/30 transition-all"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Run
+          </button>
         </div>
       </div>
 
@@ -81,6 +97,7 @@ export function FrontendLab() {
             </TabsList>
             <TabsContent value={activeTab} className="flex-1 p-0 m-0">
               <MonacoEditor
+                key={activeTab}
                 language={getLanguage()}
                 value={getCurrentCode()}
                 onChange={handleEditorChange}
