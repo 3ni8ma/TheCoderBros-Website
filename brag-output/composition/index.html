@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=1920, height=1080" />
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1920px;height:1080px;overflow:hidden;background:#0A0A0F}
@@ -12,165 +11,134 @@ body{font-family:"Inter",sans-serif;color:#fff}
 .mono{font-family:"JetBrains Mono",monospace}
 
 .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
-.scene-inner{perspective:1200px;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;position:relative}
+.scene-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;position:relative}
 
-.gradient-text{background:linear-gradient(135deg,#6366F1,#8B5CF6,#A78BFA,#C084FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.gradient-text{background:linear-gradient(135deg,#6366F1,#8B5CF6,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 .glass-card{background:rgba(17,17,24,0.82);border:1px solid rgba(255,255,255,0.06);border-radius:20px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
 
-.lang-card{display:flex;flex-direction:column;align-items:center;gap:10px;padding:26px 20px;border-radius:16px;background:rgba(17,17,24,0.85);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(20px);width:150px}
+.lang-card{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 22px;border-radius:16px;background:rgba(17,17,24,0.85);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(20px);width:150px}
 
-/* Rich background patterns */
-#grid-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px}
-#dot-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px);background-size:24px 24px}
-#vscode-grid{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px}
+.vignette{position:absolute;inset:0;pointer-events:none;z-index:998;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.6) 100%)}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:997;opacity:0.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:192px 192px}
 
-/* Text readability — white with heavy shadow */
-.txt{color:#fff;text-shadow:0 2px 16px rgba(0,0,0,0.7),0 0 40px rgba(0,0,0,0.3)}
-.txt-l{color:#F0F0F0;text-shadow:0 2px 20px rgba(0,0,0,0.8),0 0 60px rgba(0,0,0,0.4)}
-.txt-m{color:#A1A1AA;text-shadow:0 1px 8px rgba(0,0,0,0.6)}
+.bg-grad{position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 0%,#111118 0%,#0A0A0F 70%)}
+.bg-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(120px);will-change:transform}
 
-.vignette{position:absolute;inset:0;pointer-events:none;z-index:998;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.7) 100%)}
-.grain{position:absolute;inset:0;pointer-events:none;z-index:997;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:192px 192px}
+.terminal{background:#1E1E2E;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
 
-.glow-ring{position:absolute;border-radius:50%;pointer-events:none}
+.feature-line{font-size:16px;line-height:2.1;color:#E4E4E7}
 
-/* Transition wipe */
-#wipe{position:absolute;inset:-100px;z-index:900;border-radius:50%;background:radial-gradient(circle,#0A0A0F 0%,#0A0A0F 100%);pointer-events:none;opacity:0}
-#wipe2{position:absolute;inset:-100px;z-index:901;border-radius:50%;background:radial-gradient(circle,#6366F1 0%,rgba(99,102,241,0) 70%);pointer-events:none;opacity:0}
-
-.feature-line{font-size:15px;line-height:1.9;color:#F0F0F0;text-shadow:0 1px 6px rgba(0,0,0,0.5)}
-
-#code-slab-wrap{position:absolute;inset:0;z-index:500;pointer-events:none;opacity:0}
-#code-canvas{width:1920px;height:1080px;display:block}
-#liquid-canvas{position:absolute;inset:0;width:1920px;height:1080px;z-index:0;pointer-events:none}
-
-/* Scene 2 particles */
-.p-dot{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,0.25)}
-
-/* Quadrant logo pieces */
-.ql{position:absolute;width:220px;height:220px;overflow:hidden;pointer-events:none}
-.ql img{position:absolute;width:220px;height:220px;display:block}
-#ql-tl{left:calc(50% - 110px);top:calc(50% - 110px)}
-#ql-tr{left:calc(50% - 110px);top:calc(50% - 110px)}
-#ql-bl{left:calc(50% - 110px);top:calc(50% - 110px)}
-#ql-br{left:calc(50% - 110px);top:calc(50% - 110px)}
-#ql-tl img{clip-path:inset(0 50% 50% 0)}
-#ql-tr img{clip-path:inset(0 0 50% 50%)}
-#ql-bl img{clip-path:inset(50% 50% 0 0)}
-#ql-br img{clip-path:inset(50% 0 0 50%)}
+#wipe{position:absolute;inset:-100px;z-index:900;border-radius:50%;background:#0A0A0F;pointer-events:none;opacity:0}
 </style>
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
 
-  <!-- Persistent overlays -->
   <div class="vignette clip" data-start="0" data-duration="20" data-track-index="1"></div>
   <div class="grain clip" data-start="0" data-duration="20" data-track-index="2"></div>
+  <div class="bg-grad clip" data-start="0" data-duration="20" data-track-index="3"></div>
 
-  <!-- THREE.js Liquid Background -->
-  <canvas id="liquid-canvas" class="clip" data-start="0" data-duration="20" data-track-index="3"></canvas>
-
-  <!-- Rich pattern overlays -->
-  <div id="grid-overlay" class="clip" data-start="0" data-duration="20" data-track-index="4"></div>
-  <div id="dot-overlay" class="clip" data-start="0" data-duration="20" data-track-index="5"></div>
-  <div id="vscode-grid" class="clip" data-start="8.5" data-duration="5" data-track-index="6"></div>
-
-  <!-- THREE.js Code Slab -->
-  <div id="code-slab-wrap">
-    <canvas id="code-canvas"></canvas>
-  </div>
+  <div class="bg-orb clip" style="width:700px;height:700px;top:-200px;left:-100px;background:rgba(99,102,241,0.08)" data-start="0" data-duration="20" data-track-index="4"></div>
+  <div class="bg-orb clip" style="width:500px;height:500px;bottom:-150px;right:-100px;background:rgba(139,92,246,0.06)" data-start="0" data-duration="20" data-track-index="5"></div>
 
   <!-- Scene 1: Hero (0-4s) -->
   <div id="s1" class="scene clip" data-start="0" data-duration="4" data-track-index="10">
     <div class="scene-inner">
-      <div id="s1-bg" style="position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.15),transparent 70%);opacity:0;pointer-events:none"></div>
-      <div id="s1-r1" class="glow-ring" style="inset:calc(50% - 220px);width:440px;height:440px;margin:auto;opacity:0;border:1px solid rgba(139,92,246,0.3)"></div>
-      <div id="s1-r2" class="glow-ring" style="inset:calc(50% - 360px);width:720px;height:720px;margin:auto;opacity:0;border:1px solid rgba(99,102,241,0.2)"></div>
-      <div id="s1-logo" style="opacity:0;position:relative;z-index:10">
-        <img src="assets/logo.png" width="340" height="340" alt="logo" style="clip-path:circle(0%);" />
+      <div id="s1-logo" style="opacity:0;transform:scale(0.3) translateZ(-100px)">
+        <img src="assets/logo.png" width="340" height="340" alt="logo" />
       </div>
-      <div id="s1-tag" style="overflow:hidden;margin-top:24px;height:50px;z-index:10">
-        <div id="s1-tt" class="txt-l" style="font-size:22px;letter-spacing:12px;text-transform:uppercase;font-weight:300;opacity:0;transform:translateY(30px)">Master Modern Development</div>
+      <div id="s1-tag-wrap" style="overflow:hidden;margin-top:32px;height:60px">
+        <div id="s1-tag" class="gradient-text" style="font-size:48px;letter-spacing:2px;font-weight:800;opacity:0;transform:translateY(30px)">The Coder Bros</div>
       </div>
     </div>
-    <div id="s1-t" style="position:absolute;inset:0;pointer-events:none;opacity:0;z-index:100;background:#0A0A0F"></div>
+    <div id="s1-t" class="clip" style="position:absolute;inset:0;pointer-events:none;opacity:0;z-index:100;background:#0A0A0F" data-start="0" data-duration="4" data-track-index="11"></div>
   </div>
 
   <!-- Scene 2: Languages (4-8.5s) -->
-  <div id="s2" class="scene clip" data-start="4" data-duration="4.5" data-track-index="11" style="opacity:0">
+  <div id="s2" class="scene clip" data-start="4" data-duration="4.5" data-track-index="12" style="opacity:0">
     <div class="scene-inner">
-      <div id="s2-h" style="text-align:center;margin-bottom:48px;opacity:0;transform:translateY(20px)">
-        <div class="txt-l" style="font-size:34px;font-weight:700;letter-spacing:-0.5px"><span class="gradient-text">Five Languages</span> <span style="font-weight:300;color:#fff">. Zero limits.</span></div>
+      <div id="s2-h" style="margin-bottom:44px;opacity:0;transform:translateY(15px);text-align:center">
+        <div style="font-size:36px;font-weight:700;letter-spacing:-0.5px"><span class="gradient-text">Five Languages</span> <span style="font-weight:300;color:#A1A1AA">. Zero limits.</span></div>
         <div id="s2-r" style="height:2px;width:0;margin:14px auto 0;border-radius:2px;background:linear-gradient(90deg,#6366F1,#8B5CF6,#A78BFA)"></div>
       </div>
       <div style="display:flex;gap:18px;flex-wrap:nowrap;justify-content:center">
-        <div id="lc-py" class="lang-card" style="opacity:0;transform:translateY(70px) rotateY(-30deg) translateZ(-120px)">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" width="36" height="36"><path d="M12 2C7.58 2 4 3.79 4 6v2c0 2.21 3.58 4 8 4s8-1.79 8-4V6c0-2.21-3.58-4-8-4z" fill="#3776AB"/><path d="M4 10v2c0 2.21 3.58 4 8 4s8-1.79 8-4v-2c0 2.21-3.58 4-8 4s-8-1.79-8-4z" fill="#FFD43B"/><path d="M4 14v2c0 2.21 3.58 4 8 4s8-1.79 8-4v-2c0 2.21-3.58 4-8 4s-8-1.79-8-4z" fill="#3776AB"/></svg>
-          <span class="txt-l" style="font-size:15px;font-weight:600">Python</span>
+        <div id="lc-py" class="lang-card" style="opacity:0;transform:translateY(50px)">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2C7.58 2 4 3.79 4 6v2c0 2.21 3.58 4 8 4s8-1.79 8-4V6c0-2.21-3.58-4-8-4z" fill="#3776AB"/><path d="M4 10v2c0 2.21 3.58 4 8 4s8-1.79 8-4v-2c0 2.21-3.58 4-8 4s-8-1.79-8-4z" fill="#FFD43B"/><path d="M4 14v2c0 2.21 3.58 4 8 4s8-1.79 8-4v-2c0 2.21-3.58 4-8 4s-8-1.79-8-4z" fill="#3776AB"/></svg>
+          <span style="font-size:16px;font-weight:600;color:#E4E4E7">Python</span>
         </div>
-        <div id="lc-js" class="lang-card" style="opacity:0;transform:translateY(70px) rotateY(-15deg) translateZ(-80px)">
-          <svg viewBox="0 0 24 24" fill="none" width="36" height="36"><rect x="2" y="2" width="20" height="20" rx="4" fill="#F7DF1E"/><text x="12" y="16" text-anchor="middle" fill="#000" font-weight="900" font-size="11">JS</text></svg>
-          <span class="txt-l" style="font-size:15px;font-weight:600">JavaScript</span>
+        <div id="lc-js" class="lang-card" style="opacity:0;transform:translateY(50px)">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#F7DF1E"/><text x="12" y="16" text-anchor="middle" fill="#000" font-weight="900" font-size="11">JS</text></svg>
+          <span style="font-size:16px;font-weight:600;color:#E4E4E7">JavaScript</span>
         </div>
-        <div id="lc-java" class="lang-card" style="opacity:0;transform:translateY(70px) translateZ(-50px)">
-          <svg viewBox="0 0 24 24" fill="none" width="36" height="36"><path d="M8.85 18.5s-.7.4.5.54c1.45.16 2.2.14 3.8-.16 0 0 .42.26 1 .5-3.56 1.52-8.06-.1-5.3-.88z" fill="#ED8B00"/><path d="M8.2 15.85s-.78.58.42.7c1.57.16 2.82.18 4.97-.24 0 0 .3.3.76.45-4.3 1.26-9.08.1-6.15-.91z" fill="#ED8B00"/><path d="M12.96 11.21c.88 1.01-.23 1.92-.23 1.92s2.23-1.15 1.2-2.6c-.96-1.35-1.7-2.02 2.29-4.33 0 0-6.26 1.56-3.26 5.01z" fill="#ED8B00"/></svg>
-          <span class="txt-l" style="font-size:15px;font-weight:600">Java</span>
+        <div id="lc-java" class="lang-card" style="opacity:0;transform:translateY(50px)">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M8.85 18.5s-.7.4.5.54c1.45.16 2.2.14 3.8-.16 0 0 .42.26 1 .5-3.56 1.52-8.06-.1-5.3-.88z" fill="#ED8B00"/><path d="M8.2 15.85s-.78.58.42.7c1.57.16 2.82.18 4.97-.24 0 0 .3.3.76.45-4.3 1.26-9.08.1-6.15-.91z" fill="#ED8B00"/><path d="M12.96 11.21c.88 1.01-.23 1.92-.23 1.92s2.23-1.15 1.2-2.6c-.96-1.35-1.7-2.02 2.29-4.33 0 0-6.26 1.56-3.26 5.01z" fill="#ED8B00"/></svg>
+          <span style="font-size:16px;font-weight:600;color:#E4E4E7">Java</span>
         </div>
-        <div id="lc-cs" class="lang-card" style="opacity:0;transform:translateY(70px) rotateY(15deg) translateZ(-80px)">
-          <svg viewBox="0 0 24 24" fill="none" width="36" height="36"><rect x="2" y="2" width="20" height="20" rx="4" fill="#9B59B6"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-weight="900" font-size="11">C#</text></svg>
-          <span class="txt-l" style="font-size:15px;font-weight:600">C#</span>
+        <div id="lc-cs" class="lang-card" style="opacity:0;transform:translateY(50px)">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#9B59B6"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-weight="900" font-size="11">C#</text></svg>
+          <span style="font-size:16px;font-weight:600;color:#E4E4E7">C#</span>
         </div>
-        <div id="lc-cpp" class="lang-card" style="opacity:0;transform:translateY(70px) rotateY(30deg) translateZ(-120px);border-color:rgba(99,102,241,0.2);background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1))">
-          <svg viewBox="0 0 24 24" fill="none" width="32" height="32"><circle cx="12" cy="12" r="10" stroke="#6366F1" stroke-width="1.5"/><path d="M12 8v8M8 12h8" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round"/><path d="M17 15l3-3-3-3" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 9l-3 3 3 3" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="txt-l" style="font-size:13px;font-weight:600">Visit Us Today</span>
-          <span style="font-size:10px;color:#A1A1AA;text-shadow:0 1px 6px rgba(0,0,0,0.5);margin-top:-4px">thecoderbros.vercel.app</span>
+        <div id="lc-cpp" class="lang-card" style="opacity:0;transform:translateY(50px)">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7v10l10 5 10-5V7l-10-5z" fill="#00599C"/><path d="M8 12c0-2.2 1.8-4 4-4 1.5 0 2.8.8 3.5 2h-2.2c-.3-.6-1-1.2-1.3-1.2-.8 0-1.4.6-1.4 1.4v3.6c0 .8.6 1.4 1.4 1.4.3 0 1-.6 1.3-1.2h2.2c-.7 1.2-2 2-3.5 2-2.2 0-4-1.8-4-4z" fill="#fff"/></svg>
+          <span style="font-size:16px;font-weight:600;color:#E4E4E7">C++</span>
         </div>
       </div>
     </div>
-    <div id="s2-t" style="position:absolute;inset:0;pointer-events:none;opacity:0;z-index:100;background:#0A0A0F"></div>
+    <div id="s2-t" class="clip" style="position:absolute;inset:0;pointer-events:none;opacity:0;z-index:100;background:#0A0A0F" data-start="4" data-duration="4.5" data-track-index="13"></div>
   </div>
 
-  <!-- Scene 3: Code (8.5-13.5s) -->
-  <div id="s3" class="scene clip" data-start="8.5" data-duration="5" data-track-index="12" style="opacity:0">
+  <!-- Scene 3: Code Lab (8.5-13.5s) -->
+  <div id="s3" class="scene clip" data-start="8.5" data-duration="5" data-track-index="14" style="opacity:0">
     <div class="scene-inner">
-      <!-- Code typing overlay -->
-      <div id="code-type-overlay" style="position:absolute;z-index:600;left:50%;top:50%;transform:translate(-50%,-60%);background:rgba(31,41,55,0.85);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:24px 28px;backdrop-filter:blur(16px);opacity:0">
-        <div style="display:flex;gap:6px;margin-bottom:14px">
-          <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57"></span>
-          <span style="width:10px;height:10px;border-radius:50%;background:#FFBD2E"></span>
-          <span style="width:10px;height:10px;border-radius:50%;background:#28C840"></span>
-        </div>
-        <div id="ct-body" class="mono" style="font-size:20px;line-height:1.8;color:#E1E4E8;white-space:pre">
+      <div id="code-win" style="opacity:0;position:relative">
+        <div class="terminal mono" style="width:680px">
+          <div style="display:flex;align-items:center;padding:14px 20px;background:#181825;border-bottom:1px solid rgba(255,255,255,0.04)">
+            <div style="display:flex;gap:8px;margin-right:16px">
+              <span style="width:12px;height:12px;border-radius:50%;background:#FF5F57;display:block"></span>
+              <span style="width:12px;height:12px;border-radius:50%;background:#FFBD2E;display:block"></span>
+              <span style="width:12px;height:12px;border-radius:50%;background:#28C840;display:block"></span>
+            </div>
+            <span style="font-size:12px;color:#6C7086;font-family:Inter,sans-serif;position:absolute;left:50%;transform:translateX(-50%)">lab.py</span>
+          </div>
+          <div style="padding:24px 28px;font-size:21px;line-height:2;color:#CDD6F4">
+            <div id="s3-l1"><span style="color:#CBA6F7">def</span> <span style="color:#89B4FA">greet</span><span style="color:#CDD6F4">(</span><span style="color:#FAB387">name</span><span style="color:#CDD6F4">):</span></div>
+            <div id="s3-l2" style="opacity:0"><span style="color:#CDD6F4">    </span><span style="color:#CBA6F7">return</span> <span style="color:#A6E3A1">f</span><span style="color:#F5C2E7">"Hello, {</span><span style="color:#FAB387">name</span><span style="color:#F5C2E7">}!"</span></div>
+            <div id="s3-l3" style="height:22px;opacity:0"></div>
+            <div id="s3-l4" style="opacity:0"><span style="color:#89B4FA">print</span><span style="color:#CDD6F4">(</span><span style="color:#89B4FA">greet</span><span style="color:#CDD6F4">(</span><span style="color:#F5C2E7">"Developer"</span><span style="color:#CDD6F4">))</span></div>
+            <div id="s3-l5" style="opacity:0"><span style="color:#A6E3A1"># → Hello, Developer!</span></div>
+          </div>
+          <div id="cursor-line" style="padding:0 28px 24px;font-size:21px;line-height:1;display:none">
+            <span style="display:inline-block;width:9px;height:23px;background:#CBA6F7"></span>
+          </div>
         </div>
       </div>
-      <div style="position:absolute;bottom:8%;width:100%;text-align:center;z-index:600">
-        <div id="s3-l1" class="txt-l" style="font-size:18px;font-weight:400;opacity:0">Interactive labs. <span style="font-weight:600">Real code.</span> Real results.</div>
-      </div>
+      <div id="s3-l1-out" style="margin-top:24px;font-size:20px;color:#A1A1AA;font-weight:400;opacity:0;text-shadow:0 1px 8px rgba(0,0,0,0.5)">Interactive labs. <span style="color:#E4E4E7;font-weight:600">Real code.</span> Real results.</div>
     </div>
+    <div id="s3-t" class="clip" style="position:absolute;inset:0;pointer-events:none;opacity:0;z-index:100;background:#0A0A0F" data-start="8.5" data-duration="5" data-track-index="15"></div>
   </div>
 
   <!-- Scene 4: Features (13.5-17s) -->
-  <div id="s4" class="scene clip" data-start="13.5" data-duration="3.5" data-track-index="13" style="opacity:0">
+  <div id="s4" class="scene clip" data-start="13.5" data-duration="3.5" data-track-index="16" style="opacity:0">
     <div class="scene-inner">
-      <div id="s4-h" class="txt-l" style="font-size:28px;font-weight:700;margin-bottom:44px;text-align:center;opacity:0;transform:translateY(15px)">Everything you need to <span class="gradient-text">ship faster</span></div>
-      <div style="display:flex;gap:32px">
-        <div id="f-c1" class="glass-card" style="width:400px;padding:36px;opacity:0;transform:translateX(-70px) rotateX(80deg)">
-          <div style="width:38px;height:38px;border-radius:10px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px">
+      <div id="s4-h" style="font-size:30px;font-weight:700;color:#E4E4E7;margin-bottom:44px;text-align:center;opacity:0;transform:translateY(12px)">Everything you need to <span class="gradient-text">ship faster</span></div>
+      <div style="display:flex;gap:36px">
+        <div id="f-c1" class="glass-card" style="width:420px;padding:36px;opacity:0;transform:translateX(-50px)">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           </div>
-          <div class="txt-l" style="font-size:24px;font-weight:700;margin-bottom:16px">Courses</div>
+          <div style="font-size:26px;font-weight:700;color:#E4E4E7;margin-bottom:16px">Courses</div>
           <div class="feature-line">
             <div id="f1-l1" style="opacity:0">Interactive code examples</div>
             <div id="f1-l2" style="opacity:0">Hands-on exercises</div>
             <div id="f1-l3" style="opacity:0">Progress tracking</div>
           </div>
         </div>
-        <div id="f-c2" class="glass-card" style="width:400px;padding:36px;opacity:0;transform:translateX(70px) rotateX(-80deg)">
-          <div style="width:38px;height:38px;border-radius:10px;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px">
+        <div id="f-c2" class="glass-card" style="width:420px;padding:36px;opacity:0;transform:translateX(50px)">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           </div>
-          <div class="txt-l" style="font-size:24px;font-weight:700;margin-bottom:16px">Cheatsheets</div>
+          <div style="font-size:26px;font-weight:700;color:#E4E4E7;margin-bottom:16px">Cheatsheets</div>
           <div class="feature-line">
             <div id="f2-l1" style="opacity:0">Quick syntax references</div>
             <div id="f2-l2" style="opacity:0">Reusable code snippets</div>
@@ -182,299 +150,96 @@ body{font-family:"Inter",sans-serif;color:#fff}
   </div>
 
   <!-- Scene 5: Outro (17-20s) -->
-  <div id="s5" class="scene clip" data-start="17" data-duration="3" data-track-index="14" style="opacity:0">
+  <div id="s5" class="scene clip" data-start="17" data-duration="3" data-track-index="17" style="opacity:0">
     <div class="scene-inner">
-      <div id="s5-glow" style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.2),transparent 70%);opacity:0;pointer-events:none"></div>
-      <!-- Quadrant logo pieces -->
-      <div id="ql-tl" class="ql"><img src="assets/logo.png" alt="" /></div>
-      <div id="ql-tr" class="ql"><img src="assets/logo.png" alt="" /></div>
-      <div id="ql-bl" class="ql"><img src="assets/logo.png" alt="" /></div>
-      <div id="ql-br" class="ql"><img src="assets/logo.png" alt="" /></div>
-      <div id="s5-t" class="txt-l" style="font-size:17px;margin-top:140px;opacity:0;transform:translateY(8px);letter-spacing:5px;text-transform:uppercase;font-weight:300;position:relative;z-index:20">Master Modern Development</div>
-      <div id="s5-cta" style="margin-top:26px;opacity:0;transform:translateY(10px);position:relative;z-index:20">
-        <div style="padding:14px 48px;background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:12px;font-size:18px;font-weight:600;color:#fff;position:relative;z-index:1;box-shadow:0 4px 24px rgba(99,102,241,0.3)">Start Learning</div>
+      <div id="s5-logo" style="opacity:0;transform:scale(0.3);position:relative">
+        <img src="assets/logo.png" width="220" height="220" alt="logo" />
+      </div>
+      <div id="s5-t" style="font-size:18px;color:#A1A1AA;margin-top:14px;opacity:0;transform:translateY(8px);letter-spacing:5px;text-transform:uppercase;font-weight:300">Master Modern Development</div>
+      <div id="s5-cta" style="margin-top:28px;opacity:0;transform:translateY(10px);position:relative">
+        <div style="padding:16px 52px;background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:12px;font-size:20px;font-weight:600;color:#fff;position:relative;z-index:1;box-shadow:0 4px 24px rgba(99,102,241,0.3)">Start Learning</div>
         <div id="s5-ring" style="position:absolute;inset:-4px;border-radius:14px;border:2px solid rgba(99,102,241,0.3);opacity:0"></div>
       </div>
-      <div id="s5-url" class="txt-m" style="margin-top:10px;font-size:13px;opacity:0;letter-spacing:1px;position:relative;z-index:20">thecoderbros.vercel.app</div>
+      <div id="s5-url" style="margin-top:12px;font-size:14px;color:#52525B;opacity:0;letter-spacing:1px">thecoderbros.vercel.app</div>
     </div>
   </div>
 
-  <!-- Transition wipe -->
   <div id="wipe" class="clip" data-start="0" data-duration="20" data-track-index="30"></div>
-  <div id="wipe2" class="clip" data-start="0" data-duration="20" data-track-index="31"></div>
 
-  <!-- Audio -->
   <audio id="bgm" data-start="0" data-duration="20" data-track-index="40" data-volume="0.30" src="assets/music/happy-beats-business-moves-vol-12-by-ende-dot-app.mp3"></audio>
-  <audio id="sfx-1" data-start="0.6" data-duration="0.19" data-track-index="41" data-volume="0.35" src="assets/sfx/interface/drop_002.ogg"></audio>
-  <audio id="sfx-2" data-start="1.6" data-duration="0.12" data-track-index="42" data-volume="0.55" src="assets/sfx/impact/impactSoft_medium_000.ogg"></audio>
-  <audio id="sfx-3" data-start="4.8" data-duration="0.11" data-track-index="43" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
-  <audio id="sfx-4" data-start="17.4" data-duration="0.3" data-track-index="44" data-volume="0.5" src="assets/sfx/impact/impactBell_heavy_000.ogg"></audio>
+  <audio id="sfx-1" data-start="0.5" data-duration="0.19" data-track-index="41" data-volume="0.35" src="assets/sfx/interface/drop_002.ogg"></audio>
+  <audio id="sfx-2" data-start="1.4" data-duration="0.12" data-track-index="42" data-volume="0.55" src="assets/sfx/impact/impactSoft_medium_000.ogg"></audio>
+  <audio id="sfx-3" data-start="4.6" data-duration="0.11" data-track-index="43" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-4" data-start="17.3" data-duration="0.3" data-track-index="44" data-volume="0.5" src="assets/sfx/impact/impactBell_heavy_000.ogg"></audio>
 </div>
 
 <script>
 (function(){
-  var W=1920,H=1080;
-  window.__timelines=window.__timelines||{};
+  window.__timelines = window.__timelines || {};
+  var tl = gsap.timeline({ paused: true, smoothChildTiming: true });
 
-  // ═══ LIQUID BACKGROUND ═══
-  var lc=document.getElementById("liquid-canvas");
-  var lr=new THREE.WebGLRenderer({canvas:lc,antialias:true,alpha:false});
-  lr.setSize(W,H,false);lr.setPixelRatio(1);lr.setClearColor(0x0A0A0F,1);
-  var ls=new THREE.Scene();
-  var lcam=new THREE.PerspectiveCamera(45,W/H,0.1,100);
-  lcam.position.set(0,0,2.8);lcam.lookAt(0,0,0);
+  // Scene 1
+  tl.fromTo("#s1-logo", {opacity:0,scale:0.3,z:-100}, {opacity:1,scale:1,z:0,duration:0.8,ease:"back.out(2)"},0.1);
+  tl.fromTo("#s1-tag", {opacity:0,y:30}, {opacity:1,y:0,duration:0.45,ease:"power3.out"},1.4);
+  tl.set("#wipe",{opacity:0},3.7);
+  tl.to("#wipe",{scale:2.5,opacity:1,duration:0.25,ease:"power2.in"},3.7);
+  tl.set("#wipe",{opacity:0,scale:0},4.0);
 
-  // Richer mesh gradient texture (multiple overlapping color spots)
-  function mkMesh(){
-    var c=document.createElement("canvas");c.width=512;c.height=512;
-    var ctx=c.getContext("2d");
-    function spot(cx,cy,cr,c1,c2){
-      var g=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);
-      g.addColorStop(0,c1);g.addColorStop(1,c2||"transparent");
-      ctx.fillStyle=g;ctx.fillRect(0,0,512,512);
-    }
-    spot(160,140,280,"rgba(99,102,241,0.5)");
-    spot(380,180,260,"rgba(139,92,246,0.4)");
-    spot(240,380,250,"rgba(168,85,247,0.3)");
-    spot(100,360,200,"rgba(192,132,252,0.2)");
-    spot(400,350,220,"rgba(99,102,241,0.25)");
-    ctx.globalCompositeOperation="destination-over";
-    ctx.fillStyle="#0A0A0F";ctx.fillRect(0,0,512,512);
-    return c;
-  }
-  var tA=new THREE.CanvasTexture(mkMesh());
-  tA.minFilter=THREE.LinearFilter;tA.magFilter=THREE.LinearFilter;
-  var tB=new THREE.CanvasTexture(mkMesh());
-  tB.minFilter=THREE.LinearFilter;tB.magFilter=THREE.LinearFilter;
-
-  var vs=["uniform float uT;","uniform float uWI;","uniform float uRI;","varying vec2 vUv;","varying float vD;","void main(){vUv=uv;vec3 p=position;float w1=sin(p.x*3.0+uT*1.2)*0.04*uWI;float w2=sin((p.x+p.y)*5.0+uT*1.8)*0.025*uWI;float w3=sin(p.x*12.0-uT*3.0)*sin(p.y*10.0+uT*2.5)*0.015*uRI;float d=w1+w2+w3;p.z+=d;vD=d;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}"].join("\n");
-  var fs=["uniform sampler2D uA;","uniform sampler2D uB;","uniform float uT;","uniform float uM;","uniform float uWI;","uniform float uRI;","varying vec2 vUv;","varying float vD;","void main(){vec2 du=vUv;du.x+=sin(vUv.y*10.0+uT*1.8)*0.008*uWI;du.y+=sin(vUv.x*8.0+uT*1.2)*0.006*uWI;du.x+=sin(vUv.x*20.0-uT*3.0)*0.003*uRI;du.y+=cos(vUv.y*18.0+uT*2.5)*0.003*uRI;vec4 ca=texture2D(uA,du);vec4 cb=texture2D(uB,du);vec4 co=mix(ca,cb,uM);float hl=vD*3.0;co.rgb+=vec3(hl*0.12,hl*0.08,hl*0.18);float vi=1.0-0.35*length((vUv-0.5)*1.4);co.rgb*=vi;gl_FragColor=co;}"].join("\n");
-
-  var lu={uT:{value:0},uA:{value:tA},uB:{value:tB},uM:{value:0},uWI:{value:0},uRI:{value:0}};
-  var lm=new THREE.ShaderMaterial({vertexShader:vs,fragmentShader:fs,uniforms:lu,side:THREE.FrontSide});
-  var pw=4.8;
-  var liq=new THREE.Mesh(new THREE.PlaneGeometry(pw,pw*H/W,100,60),lm);
-  ls.add(liq);
-  function rL(t){lu.uT.value=t;lr.render(ls,lcam);}
-
-  // ═══ 3D CODE SLAB ═══
-  var cw=document.getElementById("code-slab-wrap");
-  var cc=document.getElementById("code-canvas");
-  var cr=new THREE.WebGLRenderer({canvas:cc,antialias:true,alpha:true});
-  cr.setSize(W,H,false);cr.setPixelRatio(1);cr.setClearColor(0x000000,0);
-  var cs=new THREE.Scene();
-  var ccam=new THREE.PerspectiveCamera(45,W/H,0.1,200);
-  var st={ry:-0.6,rx:0.2,cz:10};
-
-  var ctoks=[
-    {c:"def ",cl:"#F97583"},{c:"greet",cl:"#B392F0"},{c:"(",cl:"#E1E4E8"},
-    {c:"name",cl:"#FFAB70"},{c:"):",cl:"#E1E4E8"},{c:"\n",cl:"#e1e4e8"},
-    {c:"    return ",cl:"#F97583"},{c:"f",cl:"#79B8FF"},
-    {c:"\"Hello, ",cl:"#9ECBFF"},{c:"{name}",cl:"#FFAB70"},{c:"!\"",cl:"#9ECBFF"},
-    {c:"\n",cl:"#e1e4e8"},{c:"\n",cl:"#e1e4e8"},
-    {c:"print(",cl:"#E1E4E8"},{c:"greet",cl:"#B392F0"},
-    {c:"(\"Developer\")",cl:"#9ECBFF"},{c:"\n",cl:"#e1e4e8"}
-  ];
-
-  var cdMesh,cdTex;
-  function build(){
-    var fp=40,lh=58,px=80,py=70;
-    var f='600 '+fp+'px "JetBrains Mono", monospace';
-    var lines=[[]];
-    for(var i=0;i<ctoks.length;i++){if(ctoks[i].c==="\n"){lines.push([]);continue}lines[lines.length-1].push(ctoks[i])}
-    while(lines.length&&lines[lines.length-1].length===0)lines.pop();
-    var m=document.createElement("canvas").getContext("2d");m.font=f;
-    var mw=0;
-    for(var li=0;li<lines.length;li++){var w=0;for(var j=0;j<lines[li].length;j++)w+=m.measureText(lines[li][j].c).width;if(w>mw)mw=w}
-    var cw2=Math.max(2,Math.ceil(mw+px*2)),ch=Math.max(2,Math.ceil(lines.length*lh+py*2));
-    var ca=document.createElement("canvas");ca.width=cw2;ca.height=ch;
-    var ctx=ca.getContext("2d");ctx.clearRect(0,0,cw2,ch);ctx.textBaseline="top";ctx.font=f;
-    for(li=0;li<lines.length;li++){var x=px,y=py+li*lh;for(var k=0;k<lines[li].length;k++){ctx.fillStyle=lines[li][k].cl;ctx.fillText(lines[li][k].c,x,y);x+=ctx.measureText(lines[li][k].c).width}}
-    cdTex=new THREE.CanvasTexture(ca);
-    cdTex.minFilter=THREE.LinearFilter;cdTex.magFilter=THREE.LinearFilter;cdTex.generateMipmaps=false;
-    var asp=cw2/ch,sh=3.8,sw=sh*asp,dep=0.35,hw=sw/2,hh=sh/2,r=0.12;
-    var shape=new THREE.Shape();
-    shape.moveTo(-hw+r,-hh);shape.lineTo(hw-r,-hh);shape.quadraticCurveTo(hw,-hh,hw,-hh+r);
-    shape.lineTo(hw,hh-r);shape.quadraticCurveTo(hw,hh,hw-r,hh);shape.lineTo(-hw+r,hh);
-    shape.quadraticCurveTo(-hw,hh,-hw,hh-r);shape.lineTo(-hw,-hh+r);shape.quadraticCurveTo(-hw,-hh,-hw+r,-hh);
-    var geo=new THREE.ExtrudeGeometry(shape,{depth:dep,bevelEnabled:true,bevelThickness:0.08,bevelSize:0.06,bevelSegments:3,steps:1});
-    geo.center();geo.computeBoundingBox();
-    var bb=geo.boundingBox,sx=bb.max.x-bb.min.x,sy=bb.max.y-bb.min.y;
-    var pos=geo.attributes.position,uv=geo.attributes.uv;
-    for(var vi=0;vi<pos.count;vi++)uv.setXY(vi,(pos.getX(vi)-bb.min.x)/sx,(pos.getY(vi)-bb.min.y)/sy);
-    uv.needsUpdate=true;
-    var fm=new THREE.MeshBasicMaterial({map:cdTex});
-    var em=new THREE.MeshStandardMaterial({color:0x141d2b,roughness:0.3,metalness:0.4});
-    cdMesh=new THREE.Mesh(geo,[fm,em]);cs.add(cdMesh);
-    cs.add(new THREE.AmbientLight(0xffffff,0.5));
-    var key=new THREE.DirectionalLight(0xbcd4ff,1.25);key.position.set(5,7,9);cs.add(key);
-    var rim=new THREE.DirectionalLight(0x4fffa0,0.45);rim.position.set(-7,-3,5);cs.add(rim);
-  }
-  function rC(){
-    if(!cdMesh)return;
-    cdMesh.rotation.y=st.ry;cdMesh.rotation.x=st.rx;
-    ccam.position.set(0,0,st.cz);ccam.lookAt(0,0,0);
-    cr.render(cs,ccam);
-  }
-
-  // ═══ SCENE 2 PARTICLE FIELD ═══
-  var pContainer=document.getElementById("s2");
-  var pData=[];
-  function seedRand(s){return function(){s=(s*1664525+1013904223)|0;return(s>>>0)/4294967296}}
-  var prng=seedRand(12345);
-  for(var pi=0;pi<55;pi++){
-    var dot=document.createElement("div");dot.className="p-dot";
-    var sz=1+prng()*2.5;
-    dot.style.cssText="width:"+sz+"px;height:"+sz+"px;opacity:"+(0.08+prng()*0.2)+";left:"+(prng()*W)+"px;top:"+(prng()*H)+"px";
-    pContainer.appendChild(dot);
-    pData.push({el:dot,sx:0,sy:0,dx:(-20+prng()*40),dy:(-20+prng()*40)});
-  }
-
-  // ═══ CODE TYPING DATA ═══
-  var codeLines=[
-    {t:"def greet(name):",s:""},
-    {t:"    return f\"Hello, {name}!\"",s:""},
-    {t:"",s:""},
-    {t:"print(greet(\"Developer\"))",s:""},
-  ];
-  var fullCode="";
-  for(var ci=0;ci<codeLines.length;ci++){codeLines[ci].s=fullCode.length;fullCode+=codeLines[ci].t+"\n"}
-  var ctBody=document.getElementById("ct-body");
-  var codeChars=[];
-  for(var cci=0;cci<fullCode.length;cci++)codeChars.push(cci);
-  var cursorSpan=document.createElement("span");
-  cursorSpan.style.cssText="display:inline-block;width:10px;height:24px;background:#6366F1;vertical-align:text-bottom;margin-left:2px";
-
-  // ═══ MASTER TIMELINE ═══
-  var tl=gsap.timeline({paused:true,smoothChildTiming:true});
-
-  // Liquid bg
-  tl.to(lu.uWI,{value:0.9,duration:2,ease:"power2.out"},0);
-  tl.to(lu.uRI,{value:0.5,duration:2.5,ease:"power2.out"},0.5);
-  tl.to(lu.uM,{value:0.5,duration:4,ease:"sine.inOut"},3);
-  tl.to(lu.uWI,{value:0.4,duration:2,ease:"power2.out"},7);
-  tl.to(lu.uRI,{value:0.2,duration:2,ease:"power2.out"},7.5);
-  tl.to(lu.uWI,{value:0.7,duration:2,ease:"power2.in"},12.5);
-  tl.to(lu.uRI,{value:0.35,duration:2,ease:"power2.in"},12.5);
-  tl.to(lu.uM,{value:0.3,duration:3,ease:"sine.inOut"},13);
-  tl.to(lu.uWI,{value:0.8,duration:2,ease:"power2.out"},16);
-  tl.to(lu.uRI,{value:0.4,duration:2,ease:"power2.out"},16.5);
-
-  // ── Scene 1: Hero (0-4s) ──
-  tl.fromTo("#s1-bg",{opacity:0,scale:0.3},{opacity:1,scale:1.5,duration:0.9,ease:"power2.out"},0);
-  tl.to("#s1-bg",{opacity:0,duration:0.8,ease:"power2.in"},1.6);
-  tl.fromTo("#s1-r1",{opacity:0,scale:0.5},{opacity:1,scale:1,duration:0.4,ease:"power2.out"},0.15);
-  tl.to("#s1-r1",{opacity:0,scale:1.6,duration:0.7,ease:"power2.in"},1.0);
-  tl.fromTo("#s1-r2",{opacity:0,scale:0.5},{opacity:1,scale:1,duration:0.4,ease:"power2.out"},0.45);
-  tl.to("#s1-r2",{opacity:0,scale:1.7,duration:0.8,ease:"power2.in"},1.3);
-  // Logo clip-path reveal
-  tl.to("#s1-logo img",{clipPath:"circle(50%)",duration:0.7,ease:"power2.out"},0.1);
-  tl.fromTo("#s1-logo",{opacity:0,scale:0.4},{opacity:1,scale:1,duration:0.8,ease:"back.out(2)"},0.1);
-  tl.fromTo("#s1-tt",{opacity:0,y:30},{opacity:1,y:0,duration:0.5,ease:"power3.out"},1.5);
-  // Scene 1 → 2 transition: wipe dark
-  tl.set("#wipe",{opacity:0,scale:0},3.7);
-  tl.to("#wipe",{opacity:1,scale:2.5,duration:0.25,ease:"power2.in"},3.7);
-  tl.set("#wipe",{scale:0,opacity:0},4.0);
-
-  // ── Scene 2: Languages (4-8.5s) ──
+  // Scene 2
   tl.set("#s2",{opacity:1},4.0);
-  // Particles drift
-  for(var pi2=0;pi2<pData.length;pi2++){
-    (function(idx){
-      var p=pData[idx];
-      tl.to(p.el,{x:p.dx,y:p.dy,duration:3+prng()*2,ease:"sine.inOut"},4.0);
-      tl.to(p.el,{x:0,y:0,duration:3+prng()*2,ease:"sine.inOut"},7+prng()*1.5);
-    })(pi2);
-  }
-  tl.fromTo("#s2-h",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power3.out"},4.1);
-  tl.to("#s2-r",{width:"200px",duration:0.55,ease:"power2.inOut"},4.35);
-  tl.fromTo("#lc-py",{opacity:0,y:70,rotationY:-30},{opacity:1,y:0,rotationY:0,duration:0.5,ease:"back.out(1.8)"},4.8);
-  tl.fromTo("#lc-js",{opacity:0,y:70,rotationY:-15},{opacity:1,y:0,rotationY:0,duration:0.5,ease:"back.out(1.8)"},5.2);
-  tl.fromTo("#lc-java",{opacity:0,y:70},{opacity:1,y:0,duration:0.5,ease:"back.out(1.8)"},5.6);
-  tl.fromTo("#lc-cs",{opacity:0,y:70,rotationY:15},{opacity:1,y:0,rotationY:0,duration:0.5,ease:"back.out(1.8)"},6.0);
-  tl.fromTo("#lc-cpp",{opacity:0,y:70,rotationY:30},{opacity:1,y:0,rotationY:0,duration:0.5,ease:"back.out(1.8)"},6.4);
-  // Transition
+  tl.fromTo("#s2-h",{opacity:0,y:15},{opacity:1,y:0,duration:0.4,ease:"power3.out"},4.1);
+  tl.to("#s2-r",{width:"200px",duration:0.5,ease:"power2.inOut"},4.3);
+  tl.fromTo("#lc-py",{opacity:0,y:50},{opacity:1,y:0,duration:0.45,ease:"back.out(1.7)"},4.7);
+  tl.fromTo("#lc-js",{opacity:0,y:50},{opacity:1,y:0,duration:0.45,ease:"back.out(1.7)"},5.0);
+  tl.fromTo("#lc-java",{opacity:0,y:50},{opacity:1,y:0,duration:0.45,ease:"back.out(1.7)"},5.3);
+  tl.fromTo("#lc-cs",{opacity:0,y:50},{opacity:1,y:0,duration:0.45,ease:"back.out(1.7)"},5.6);
+  tl.fromTo("#lc-cpp",{opacity:0,y:50},{opacity:1,y:0,duration:0.45,ease:"back.out(1.7)"},5.9);
   tl.set("#wipe",{opacity:0,scale:0},8.15);
-  tl.to("#wipe",{opacity:1,scale:2.5,duration:0.25,ease:"power2.in"},8.15);
+  tl.to("#wipe",{scale:2.5,opacity:1,duration:0.25,ease:"power2.in"},8.15);
   tl.set("#wipe",{opacity:0,scale:0},8.5);
 
-  // ── Scene 3: Code (8.5-13.5s) ──
+  // Scene 3 — realistic terminal
   tl.set("#s3",{opacity:1},8.5);
-  tl.set("#code-slab-wrap",{opacity:0},8.5);
-  tl.set("#vscode-grid",{opacity:1},8.5);
-  // Fade in typing overlay
-  tl.set("#code-type-overlay",{opacity:0},8.5);
-  tl.to("#code-type-overlay",{opacity:1,duration:0.35,ease:"power2.out"},8.5);
-  // Type character by character
-  var typeStart=9.0;
-  var charDur=0.055;
-  for(var ci=0;ci<codeChars.length;ci++){
-    (function(idx){
-      tl.add(function(){
-        ctBody.textContent=fullCode.substring(0,idx+1);
-        ctBody.appendChild(cursorSpan);
-      },typeStart+idx*charDur);
-    })(ci);
-  }
-  // Blink cursor a few times after typing
-  var cursorEnd=typeStart+codeChars.length*charDur;
-  tl.set(cursorSpan,{opacity:1},cursorEnd);
-  for(var b=0;b<4;b++){tl.set(cursorSpan,{opacity:0},cursorEnd+0.15+b*0.4);tl.set(cursorSpan,{opacity:1},cursorEnd+0.3+b*0.4)}
-  // Fade out typing overlay
-  tl.to("#code-type-overlay",{opacity:0,duration:0.3},cursorEnd+0.7);
-  // 3D slab reveals after typing
-  tl.to("#code-slab-wrap",{opacity:1,duration:0.5,ease:"power2.out"},cursorEnd+0.5);
-  tl.to(st,{ry:0,rx:0,cz:9,duration:1.2,ease:"power3.out"},cursorEnd+0.6);
-  tl.to(st,{ry:0.04,rx:-0.02,duration:2,ease:"sine.inOut"},cursorEnd+2);
+  tl.fromTo("#code-win",{opacity:0,scale:0.9},{opacity:1,scale:1,duration:0.5,ease:"power3.out"},8.6);
+  tl.to("#s3-l2",{opacity:1,duration:0.25},9.6);
+  tl.set("#s3-l3",{opacity:1,height:"22px"},10.6);
+  tl.to("#s3-l4",{opacity:1,duration:0.25},10.7);
+  tl.to("#s3-l5",{opacity:1,duration:0.2},11.3);
+  // Blinking cursor after all code shown
+  tl.set("#cursor-line",{display:"block"},11.6);
+  tl.to("#cursor-line span",{opacity:0,duration:0.01},12.0);
+  tl.to("#cursor-line span",{opacity:1,duration:0.01},12.3);
+  tl.to("#cursor-line span",{opacity:0,duration:0.01},12.6);
+  tl.set("#cursor-line",{display:"none"},12.8);
   // Label
-  tl.to("#s3-l1",{opacity:1,duration:0.3,ease:"power2.out"},11.5);
+  tl.to("#s3-l1-out",{opacity:1,duration:0.3,ease:"power2.out"},11.5);
   // Transition
-  tl.set("#wipe",{opacity:0,scale:0},13.2);
-  tl.to("#wipe",{opacity:1,scale:2.5,duration:0.2,ease:"power2.in"},13.2);
+  tl.set("#wipe",{opacity:0,scale:0},13.15);
+  tl.to("#wipe",{scale:2.5,opacity:1,duration:0.25,ease:"power2.in"},13.15);
   tl.set("#wipe",{opacity:0,scale:0},13.5);
 
-  // ── Scene 4: Features (13.5-17s) ──
+  // Scene 4
   tl.set("#s4",{opacity:1},13.5);
-  tl.set("#vscode-grid",{opacity:0},13.5);
-  tl.fromTo("#s4-h",{opacity:0,y:15},{opacity:1,y:0,duration:0.5,ease:"power3.out"},13.6);
-  // Cards flip in (rotationX)
-  tl.fromTo("#f-c1",{opacity:0,x:-70,rotationX:80},{opacity:1,x:0,rotationX:0,duration:0.6,ease:"power3.out"},14.0);
-  tl.fromTo("#f-c2",{opacity:0,x:70,rotationX:-80},{opacity:1,x:0,rotationX:0,duration:0.6,ease:"power3.out"},14.3);
-  tl.to("#f1-l1",{opacity:1,duration:0.25,ease:"power2.out"},14.7);
-  tl.to("#f1-l2",{opacity:1,duration:0.25,ease:"power2.out"},15.0);
-  tl.to("#f1-l3",{opacity:1,duration:0.25,ease:"power2.out"},15.3);
-  tl.to("#f2-l1",{opacity:1,duration:0.25,ease:"power2.out"},14.9);
-  tl.to("#f2-l2",{opacity:1,duration:0.25,ease:"power2.out"},15.2);
-  tl.to("#f2-l3",{opacity:1,duration:0.25,ease:"power2.out"},15.5);
-  // Transition
-  tl.set("#wipe2",{opacity:0,scale:0},16.7);
-  tl.to("#wipe2",{opacity:0.5,scale:2.5,duration:0.2,ease:"power2.in"},16.7);
-  tl.set("#wipe2",{opacity:0,scale:0},17.0);
+  tl.fromTo("#s4-h",{opacity:0,y:12},{opacity:1,y:0,duration:0.4,ease:"power3.out"},13.6);
+  tl.fromTo("#f-c1",{opacity:0,x:-50},{opacity:1,x:0,duration:0.5,ease:"power3.out"},14.0);
+  tl.fromTo("#f-c2",{opacity:0,x:50},{opacity:1,x:0,duration:0.5,ease:"power3.out"},14.3);
+  tl.to("#f1-l1",{opacity:1,duration:0.2,ease:"power2.out"},14.7);
+  tl.to("#f1-l2",{opacity:1,duration:0.2,ease:"power2.out"},14.95);
+  tl.to("#f1-l3",{opacity:1,duration:0.2,ease:"power2.out"},15.2);
+  tl.to("#f2-l1",{opacity:1,duration:0.2,ease:"power2.out"},14.9);
+  tl.to("#f2-l2",{opacity:1,duration:0.2,ease:"power2.out"},15.15);
+  tl.to("#f2-l3",{opacity:1,duration:0.2,ease:"power2.out"},15.4);
 
-  // ── Scene 5: Outro (17-20s) ──
+  // Scene 5
   tl.set("#s5",{opacity:1},17.0);
-  // Logo quadrant pieces assemble from corners
-  var qEls=[{id:"#ql-tl",ix:-300,iy:-300},{id:"#ql-tr",ix:300,iy:-300},{id:"#ql-bl",ix:-300,iy:300},{id:"#ql-br",ix:300,iy:300}];
-  for(var qi=0;qi<qEls.length;qi++){
-    (function(q){
-      tl.fromTo(q.id,{opacity:0,x:q.ix,y:q.iy,scale:0.3},{opacity:1,x:0,y:0,scale:1,duration:0.55,ease:"back.out(1.7)"},17.0+qi*0.08);
-    })(qEls[qi]);
-  }
-  tl.fromTo("#s5-glow",{opacity:0,scale:0.3},{opacity:0.5,scale:2.5,duration:0.6,ease:"power2.out"},17.0);
-  tl.to("#s5-glow",{opacity:0,duration:1,ease:"power2.in"},18.0);
-  tl.fromTo("#s5-t",{opacity:0,y:8},{opacity:1,y:0,duration:0.4,ease:"power3.out"},17.8);
-  tl.fromTo("#s5-cta",{opacity:0,y:10},{opacity:1,y:0,duration:0.45,ease:"back.out(1.7)"},18.3);
-  tl.fromTo("#s5-ring",{opacity:0.5,scale:1},{opacity:0,scale:1.2,duration:0.7,ease:"power2.out"},18.3);
-  tl.fromTo("#s5-url",{opacity:0},{opacity:1,duration:0.3,ease:"power2.out"},18.7);
+  tl.fromTo("#s5-logo",{opacity:0,scale:0.3},{opacity:1,scale:1,duration:0.6,ease:"back.out(2.1)"},17.1);
+  tl.fromTo("#s5-t",{opacity:0,y:8},{opacity:1,y:0,duration:0.35,ease:"power3.out"},17.8);
+  tl.fromTo("#s5-cta",{opacity:0,y:10},{opacity:1,y:0,duration:0.4,ease:"back.out(1.7)"},18.3);
+  tl.fromTo("#s5-ring",{opacity:0.5,scale:1},{opacity:0,scale:1.2,duration:0.6,ease:"power2.out"},18.3);
+  tl.fromTo("#s5-url",{opacity:0},{opacity:1,duration:0.25,ease:"power2.out"},18.7);
 
-  // ── THREE.js driver ──
-  tl.to({},{duration:20,ease:"none",onUpdate:function(){var t=tl.time();rL(t);rC()}},0);
-
-  window.__timelines["main"]=tl;
-
-  document.fonts.ready.then(function(){build();rC();});
-  rL(0);
-  window.addEventListener("hf-seek",function(e){var t=e.detail.time;tl.seek(t);rL(t);rC()});
+  window.__timelines["main"] = tl;
+  window.addEventListener("hf-seek", function(e) { tl.seek(e.detail.time); });
 })();
 </script>
 </body>
