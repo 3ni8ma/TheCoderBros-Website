@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored registry components (originkit CLI + componentry shadcn registry):
+    "src/components/originkit/**",
+    "src/components/ui/kinetic-text-reveal.tsx",
+    "src/components/ui/scroll-based-velocity.tsx",
+    "src/components/ui/split-flap-display.tsx",
   ]),
 ]);
 

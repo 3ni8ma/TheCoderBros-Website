@@ -1,37 +1,37 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { AnimatedCounter } from "@/components/shared/animated-counter";
-import { BookOpen, FileCode, Beaker, GraduationCap } from "lucide-react";
+import { SectionHeader } from "@/components/shared/section-header";
+import { SplitFlapDisplay } from "@/components/ui/split-flap-display";
 
-const stats = [
-  { icon: BookOpen, end: 6, suffix: "+", label: "Languages" },
-  { icon: FileCode, end: 30, suffix: "+", label: "Lessons" },
-  { icon: Beaker, end: 200, suffix: "+", label: "Code Examples" },
-  { icon: GraduationCap, end: 100, suffix: "%", label: "Hands-On" },
+const boardRows = [
+  { label: "Languages", value: "6+" },
+  { label: "Lessons", value: "30+" },
+  { label: "Code Examples", value: "200+" },
+  { label: "Hands-On", value: "100%" },
 ];
 
 export function Stats() {
   return (
     <section className="section-padding">
       <div className="section-container">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="card-elevated p-6 text-center"
-            >
-              <stat.icon className="w-6 h-6 text-primary mx-auto mb-3" />
-              <div className="text-3xl sm:text-4xl font-bold text-foreground">
-                <AnimatedCounter end={stat.end} suffix={stat.suffix} />
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
-            </motion.div>
-          ))}
+        <SectionHeader
+          title="Learning by the numbers"
+          description="Real curriculum, real examples, zero filler. Track your progress as you ship code."
+          align="center"
+        />
+        <div className="md:hidden flex justify-center">
+          <SplitFlapDisplay
+            size="sm"
+            accentColor="#6366F1"
+            rows={boardRows}
+          />
+        </div>
+        <div className="hidden md:flex justify-center">
+          <SplitFlapDisplay
+            size="md"
+            accentColor="#6366F1"
+            rows={boardRows}
+          />
         </div>
       </div>
     </section>

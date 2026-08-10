@@ -1,10 +1,13 @@
 "use client";
 
 import { Hero } from "@/components/landing/hero";
+import { MarqueeDivider } from "@/components/landing/marquee-divider";
 import { FeaturedCourses } from "@/components/landing/featured-courses";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { Stats } from "@/components/landing/stats";
 import { Testimonials } from "@/components/landing/testimonials";
+import { BlogPicks } from "@/components/landing/blog-picks";
+import { FAQ } from "@/components/landing/faq";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -13,10 +16,13 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <MarqueeDivider />
       <FeaturedCourses />
       <HowItWorks />
       <Stats />
       <Testimonials />
+      <BlogPicks />
+      <FAQ />
 
       <section className="section-padding bg-secondary/30">
         <div className="section-container text-center">

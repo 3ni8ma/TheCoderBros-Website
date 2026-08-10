@@ -8,21 +8,21 @@ const testimonials = [
   {
     name: "Alex Chen",
     role: "Frontend Developer",
-    avatar: "https://ui-avatars.com/api/?name=Alex+Chen&background=6366F1&color=fff&size=100",
+    avatar: "/images/avatars/a12.jpg",
     content:
       "The interactive labs are incredible. Being able to write and test code directly in the browser made learning so much faster.",
   },
   {
     name: "Sarah Johnson",
     role: "CS Student",
-    avatar: "https://ui-avatars.com/api/?name=Sarah+Johnson&background=8B5CF6&color=fff&size=100",
+    avatar: "/images/avatars/a33.jpg",
     content:
       "I went from zero Python knowledge to building my own project in just a few weeks. The course structure is perfect for beginners.",
   },
   {
     name: "Marcus Williams",
     role: "Software Engineer",
-    avatar: "https://ui-avatars.com/api/?name=Marcus+Williams&background=F59E0B&color=fff&size=100",
+    avatar: "/images/avatars/a47.jpg",
     content:
       "The cheatsheets are my go-to reference at work. Every time I need to quickly look up syntax, I know where to find it.",
   },

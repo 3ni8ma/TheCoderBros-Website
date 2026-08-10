@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/shared/section-header";
 import { blogPosts } from "@/lib/data/blog";
@@ -24,7 +25,20 @@ export default function BlogPage() {
               transition={{ duration: 0.4, delay: i * 0.1 }}
             >
               <Link href={`/blog/${post.slug}`} className="block group">
-                <div className="card-elevated p-6">
+                <div className="card-elevated p-6 flex gap-5">
+                  {post.image && (
+                    <div className="relative w-36 h-24 sm:w-44 sm:h-28 shrink-0 rounded-xl overflow-hidden border border-border/50">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        sizes="(min-width: 640px) 176px, 144px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    </div>
+                  )}
+                  <div className="min-w-0">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
                     <span className="px-2 py-0.5 rounded bg-primary/10 text-primary font-medium">
                       {post.category}
@@ -47,6 +61,7 @@ export default function BlogPage() {
                   <div className="mt-4 flex items-center gap-1 text-xs text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                     <span>Read more</span>
                     <ArrowRight className="w-3 h-3" />
+                  </div>
                   </div>
                 </div>
               </Link>

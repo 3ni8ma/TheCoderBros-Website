@@ -1021,3 +1021,6 @@ next-env.d.ts
 # Pipeline timestamp 1786146341
 
 # Pipeline timestamp 1786393808
+.originkit/
+
+# Pipeline timestamp 1786401002

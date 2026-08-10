@@ -5,6 +5,7 @@ import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Code2, Users, Target, Award, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const team = [
   {
@@ -15,17 +16,17 @@ const team = [
   {
     name: "Nivyadin Dey",
     role: "Managing Director",
-    avatar: "https://ui-avatars.com/api/?name=Nivyadin+Dey&background=8B5CF6&color=fff&size=200",
+    avatar: "/images/avatars/a68.jpg",
   },
   {
     name: "Ryan Banerjee",
     role: "Chairman",
-    avatar: "https://ui-avatars.com/api/?name=Ryan+Banerjee&background=A855F7&color=fff&size=200",
+    avatar: "/images/avatars/a47.jpg",
   },
   {
     name: "Anay Shah",
     role: "Marketing",
-    avatar: "https://ui-avatars.com/api/?name=Anay+Shah&background=EC4899&color=fff&size=200",
+    avatar: "/images/avatars/a57.jpg",
   },
 ];
 
@@ -95,6 +96,52 @@ export default function AboutPage() {
           </AnimatedSection>
         </div>
 
+        <AnimatedSection className="mb-24">
+          <div className="card-elevated p-6 sm:p-10 overflow-hidden">
+            <div className="grid lg:grid-cols-[300px_1fr] gap-8 lg:gap-12 items-center">
+              <div className="relative">
+                <img
+                  src="/images/profile.jpg"
+                  alt="Aarush Karak, Founder & CEO of The Coder Bros"
+                  className="w-full aspect-[4/5] object-cover rounded-2xl"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-primary tracking-widest uppercase mb-3">
+                  Meet the Founder
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-semibold text-foreground mb-4">
+                  Aarush Karak
+                </h2>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Aarush founded The Coder Bros in 2022 with one belief: that coding is best
+                  learned with hands on the keyboard. Every lesson on this platform exists
+                  because he wanted the learning experience he never had — interactive,
+                  example-driven, and free from fluff.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  Today he leads the curriculum design, writes the interactive lessons, and
+                  still runs every lab demo before it ships.
+                </p>
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { value: "2022", label: "Founded" },
+                    { value: "6", label: "Languages taught" },
+                    { value: "10k+", label: "Learners reached" },
+                  ].map((s) => (
+                    <div key={s.label} className="rounded-xl border border-border/60 px-4 py-3 text-center">
+                      <div className="text-xl font-bold text-foreground">{s.value}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+
         <div className="mb-24">
           <SectionHeader
             title="Meet the Team"
@@ -109,7 +156,7 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="card-elevated p-6 text-center"
+                className={cn("card-elevated p-6 text-center", member.name === "Aarush Karak" && "ring-2 ring-primary/50")}
               >
                 <img
                   src={member.avatar}

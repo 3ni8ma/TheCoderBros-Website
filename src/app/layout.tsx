@@ -41,6 +41,14 @@ export const metadata: Metadata = {
       "Interactive coding courses, cheatsheets, and labs. Learn Python, JavaScript, Java, C#, and C++.",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "The Coder Bros — Master Modern Development",
+      },
+    ],
   },
 };
 

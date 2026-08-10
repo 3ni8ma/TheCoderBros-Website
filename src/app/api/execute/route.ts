@@ -111,12 +111,15 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ output, stderr: "" });
-  } catch (error: any) {
-    if (error?.code === "ETIMEDOUT" || error?.killed) {
+  } catch (error: unknown) {
+    if (
+      (error instanceof Error && "code" in error && (error as { code?: string }).code === "ETIMEDOUT") ||
+      (error instanceof Error && error.message.includes("killed"))
+    ) {
       return NextResponse.json({ output: "Execution timed out (8s limit)", stderr: "" }, { status: 408 });
     }
     return NextResponse.json(
-      { output: `Execution error: ${error?.message || "Unknown error"}`, stderr: "" },
+      { output: `Execution error: ${error instanceof Error ? error.message : "Unknown error"}`, stderr: "" },
       { status: 500 }
     );
   }

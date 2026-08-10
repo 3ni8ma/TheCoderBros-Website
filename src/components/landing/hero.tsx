@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import MagneticButton from "@/components/originkit/ui/magnetic-hover-button";
+import { KineticTextReveal } from "@/components/ui/kinetic-text-reveal";
 
 export function Hero() {
   return (
@@ -15,21 +15,44 @@ export function Hero() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]"
             >
-              Master Modern{" "}
-              <span className="text-gradient-primary">Development</span>
+              <KineticTextReveal
+                text="Master Modern"
+                autoPlay
+                delay={0.1}
+                stagger={0.06}
+                direction="up"
+                blur
+              />
               <br />
-              With Hands-On Coding
+              <KineticTextReveal
+                text="Development"
+                className="text-gradient-primary"
+                autoPlay
+                delay={0.3}
+                stagger={0.06}
+                direction="up"
+                blur
+              />
+              <br />
+              <KineticTextReveal
+                text="With Hands-On Coding"
+                autoPlay
+                delay={0.5}
+                stagger={0.05}
+                direction="up"
+                blur
+              />
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
               className="mt-6 text-lg text-muted-foreground max-w-lg leading-relaxed"
             >
               Learn Python, JavaScript, Java, C#, and C++ through interactive
@@ -40,30 +63,58 @@ export function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
               className="mt-8 flex items-center gap-4"
             >
-              <Link
-                href="/courses"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:opacity-90 transition-all"
-              >
-                Start Learning
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/labs"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground font-medium rounded-xl hover:bg-border transition-all"
-              >
-                <Play className="w-4 h-4" />
-                Try the Lab
-              </Link>
+              <MagneticButton
+                label="Start Learning"
+                link="/courses"
+                fill="#6366F1"
+                textColor="#FFFFFF"
+                sweepColor="#4F46E5"
+                sweepTextColor="#FFFFFF"
+                radius={12}
+                magnet={10}
+                paddingX={24}
+                paddingY={14}
+                font={{
+                  fontFamily: "inherit",
+                  fontWeight: 500,
+                  fontSize: 15,
+                  lineHeight: "1em",
+                  letterSpacing: "-0.01em",
+                  textAlign: "left",
+                }}
+              />
+              <MagneticButton
+                label="Try the Lab"
+                link="/labs"
+                fill="transparent"
+                textColor="#FFFFFF"
+                sweepColor="rgba(99,102,241,0.16)"
+                sweepTextColor="#FFFFFF"
+                radius={12}
+                magnet={10}
+                paddingX={24}
+                paddingY={14}
+                border
+                borderOptions={{ color: "rgba(255,255,255,0.16)", width: 1 }}
+                font={{
+                  fontFamily: "inherit",
+                  fontWeight: 500,
+                  fontSize: 15,
+                  lineHeight: "1em",
+                  letterSpacing: "-0.01em",
+                  textAlign: "left",
+                }}
+              />
             </motion.div>
           </div>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
             className="hidden lg:block"
           >
             <div className="relative">
