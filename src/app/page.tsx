@@ -37,13 +37,13 @@ export default function HomePage() {
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link
                 href="/courses"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:opacity-90 transition-all"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-br from-primary to-[#8B5CF6] text-white font-medium shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:brightness-110 transition-all"
               >
                 Explore Courses <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground font-medium rounded-xl border border-border hover:bg-border transition-all"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-xl glass text-foreground font-medium hover:border-white/20 transition-all"
               >
                 Hire Us <ArrowRight className="w-4 h-4" />
               </Link>

@@ -1,17 +1,26 @@
 "use client";
 
-import { ScrollBasedVelocity } from "@/components/ui/scroll-based-velocity";
-
-const languages = "PYTHON  •  JAVASCRIPT  •  JAVA  •  C#  •  C++  •  TYPESCRIPT  •  HTML & CSS  •  ";
+import Link from "next/link";
+import { languages } from "@/lib/data/courses";
 
 export function MarqueeDivider() {
   return (
-    <section className="relative border-y border-border/50 bg-secondary/30 py-6 overflow-hidden">
-      <ScrollBasedVelocity
-        text={languages}
-        default_velocity={3}
-        className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-gradient opacity-80 whitespace-pre"
-      />
+    <section className="relative py-10">
+      <div className="section-container">
+        <div className="glass rounded-full px-6 py-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-3 text-sm text-muted-foreground">
+          {languages.map((lang, i) => (
+            <span key={lang.slug} className="flex items-center gap-2">
+              {i > 0 && <span className="w-1 h-1 rounded-full bg-primary/40" />}
+              <Link
+                href={`/courses/${lang.slug}`}
+                className="uppercase tracking-wider hover:text-foreground transition-colors"
+              >
+                {lang.title}
+              </Link>
+            </span>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

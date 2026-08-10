@@ -1,13 +1,14 @@
 "use client";
 
 import { SectionHeader } from "@/components/shared/section-header";
-import { SplitFlapDisplay } from "@/components/ui/split-flap-display";
+import { AnimatedSection } from "@/components/shared/animated-section";
+import { AnimatedCounter } from "@/components/shared/animated-counter";
 
-const boardRows = [
-  { label: "Languages", value: "6+" },
-  { label: "Lessons", value: "30+" },
-  { label: "Code Examples", value: "200+" },
-  { label: "Hands-On", value: "100%" },
+const statCards = [
+  { value: 6, suffix: "+", label: "Languages" },
+  { value: 30, suffix: "+", label: "Lessons" },
+  { value: 200, suffix: "+", label: "Code Examples" },
+  { value: 100, suffix: "%", label: "Hands-On" },
 ];
 
 export function Stats() {
@@ -17,21 +18,18 @@ export function Stats() {
         <SectionHeader
           title="Learning by the numbers"
           description="Real curriculum, real examples, zero filler. Track your progress as you ship code."
-          align="center"
         />
-        <div className="md:hidden flex justify-center">
-          <SplitFlapDisplay
-            size="sm"
-            accentColor="#6366F1"
-            rows={boardRows}
-          />
-        </div>
-        <div className="hidden md:flex justify-center">
-          <SplitFlapDisplay
-            size="md"
-            accentColor="#6366F1"
-            rows={boardRows}
-          />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          {statCards.map((stat, i) => (
+            <AnimatedSection key={stat.label} delay={i * 0.08}>
+              <div className="glass-card p-6 text-center">
+                <p className="text-4xl sm:text-5xl font-bold text-gradient-primary">
+                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">{stat.label}</p>
+              </div>
+            </AnimatedSection>
+          ))}
         </div>
       </div>
     </section>

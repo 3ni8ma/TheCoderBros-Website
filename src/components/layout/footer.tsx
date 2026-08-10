@@ -3,7 +3,7 @@ import { Code2 } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 bg-background">
+    <footer className="border-t border-[var(--glass-border)] bg-background/60 backdrop-blur-2xl">
       <div className="section-container py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           <div className="col-span-2">
