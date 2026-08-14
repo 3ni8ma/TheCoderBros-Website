@@ -1,0 +1,34 @@
+In Python, the data structure you choose decides whether your script takes 0.3 seconds or 3 minutes — with identical logic.
+
+Lists store items in order and are great for sequences, but answering 'is this in here?' scans every element (O(n)). Dictionaries and sets use hash tables, so lookups are effectively instant (O(1)) regardless of size.
+
+The classic trap is an O(n) membership check inside an O(n) loop: for 10,000 orders against 10,000 users, that is 100 million comparisons. Building one dict up front collapses it to ~20,000 operations — a 5,000x difference.
+
+When to use what:
+
+1.  Ordered sequence, duplicates allowed          -> list
+2.  Lookup by unique key                              -> dict
+3.  'Have I seen this?' membership only                -> set
+4.  Both order and fast membership                     -> dict with an ordered counter, or a set plus a list
+
+Code:
+  # Slow: O(n) check inside O(n) loop -> O(n^2)
+  users = [{'id': 1, 'name': 'Ada'}, {'id': 2, 'name': 'Alan'}]
+  
+  for order in orders:
+      for u in users:
+          if u['id'] == order['user_id']:
+              # ...
+  
+  # Fast: build a dict once, O(1) lookups -> O(n)
+  by_id = {u['id']: u for u in users}
+  for order in orders:
+      u = by_id.get(order['user_id'])
+
+Key takeaway: If you ever write `if x in my_list` inside a loop, you probably want a set or dict.
+
+Tip: Profile before you guess: `python -m cprofile script.py` shows exactly which line burns time. Usually it is one list-to-dict conversion away from fast.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Python #PythonTips #Performance #Coding #DataStructures #LearnPython #TheCoderBros #CodingLife

@@ -1,0 +1,19 @@
+The same code that runs instantly on 1,000 items can take hours on 1 million. Big O tells you why — before it hurts.
+
+Big O describes how runtime grows with input size (n). It ignores constants and focuses on the dominant term: a loop over n items is O(n), a loop inside a loop is O(n²), and dividing the problem in half each step (like binary search) is O(log n).
+
+A concrete example. Searching a list of 1 million items:
+
+1.  Linear scan (list.index)  -> O(n)  -> up to 1,000,000 steps
+2.  Binary search on sorted data -> O(log n) -> ~20 steps
+3.  Dict lookup                  -> O(1)     -> 1 step
+
+That 20-vs-1,000,000 gap is why interviewers, system designers, and slow-query reports all revolve around Big O. It is the first thing to check when code gets sluggish: look for loops inside loops, repeated searches in lists, and sorting in hot paths.
+
+Key takeaway: Nested loops are a smell. Ask: can I do this in one pass?
+
+Tip: Start every optimization by computing the current complexity of the hot path. Most 'too slow' bugs are just O(n²) hiding in a loop.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#BigO #DataStructures #Algorithms #Coding #Programming #LearnToCode #TheCoderBros #CodingLife
