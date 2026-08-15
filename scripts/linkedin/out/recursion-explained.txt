@@ -1,0 +1,27 @@
+Recursion looks magical until you see it as a stack of deferred work. The secret is just two parts.
+
+A recursive function solves a problem by solving a smaller version of the same problem. Two pieces make it work: the base case (when the answer is known directly, no more calls) and the recursive case (which calls itself with a smaller input).
+
+Trace factorial(4): it defers 4 * ?, then 3 * ?, then 2 * ?, hits the base case 1, and unwinds back up: 1, 2, 6, 24. Each pending call sits on the call stack, which is why deep recursion can hit a stack overflow — Python's limit is ~1000 frames by default.
+
+Where recursion shines: trees, graphs, directory traversal, divide-and-conquer (merge sort, quicksort). Where it hurts: long linear chains — an iterative loop uses constant memory where recursion uses O(depth).
+
+Code:
+  def factorial(n):
+      if n <= 1:      # base case
+          return 1
+      return n * factorial(n - 1)  # recursive case
+  
+  # factorial(4)
+  #   = 4 * factorial(3)
+  #   = 4 * 3 * factorial(2)
+  #   = 4 * 3 * 2 * factorial(1)
+  #   = 4 * 3 * 2 * 1 = 24
+
+Key takeaway: Always write the base case first. Without it, recursion never ends.
+
+Tip: Practice with tree traversal: sum every value in a nested list of lists. It is the cleanest recursive problem you will ever write.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Recursion #Algorithms #ComputerScience #Programming #Coding #TheCoderBros #CodingLife

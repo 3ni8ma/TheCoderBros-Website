@@ -43,7 +43,6 @@ def post_to_linkedin(caption, image_path):
         with sync_playwright() as p:
             ctx = p.chromium.launch_persistent_context(
                 user_data_dir=user_data_dir,
-                channel="chrome",
                 headless=True,
                 args=["--disable-blink-features=AutomationControlled"],
                 viewport={"width": 1440, "height": 900},
