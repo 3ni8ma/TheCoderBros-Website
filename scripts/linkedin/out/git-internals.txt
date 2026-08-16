@@ -1,0 +1,28 @@
+Most Git confusion comes from one wrong mental model. Branches are not copies of your code — they are labels pointing at commits.
+
+A commit stores a snapshot of your files plus metadata: author, message, timestamp, and a pointer to its parent commit. That chain of pointers is your history. A branch is just a label sitting on one commit; when you commit, the label moves forward with you.
+
+That is why branching is nearly free: creating `feature/login` does not duplicate files, it drops a new sticker. Merging walks both histories and combines them, producing a merge commit when the paths diverged.
+
+Two facts that remove the fear of breaking things:
+
+1.  Working tree changes live in the index/stash — commit only what you stage.
+2.  Even if you reset, the reflog keeps a journal of every move for ~90 days. Nothing is truly gone.
+
+Code:
+  git checkout -b feature/login   # new branch = new sticker
+  git commit -m "add login flow"  # snapshot + label
+  git checkout main
+  git merge feature/login        # weave histories together
+  
+  # oops? The reflog remembers everything:
+  git reflog
+  git reset --hard HEAD@{2}
+
+Key takeaway: Branch fear disappears once you see branches as stickers, not copies of code.
+
+Tip: Commit small and often with a message that explains WHY. Your future self (and your teammates) read messages, not diffs.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Git #GitHub #DevTools #VersionControl #Programming #CodingTips #TheCoderBros #CodingLife
