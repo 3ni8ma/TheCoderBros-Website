@@ -1,0 +1,28 @@
+'I added the style but nothing changed' is usually specificity. Browsers pick the winner by arithmetic, not by who wrote it last.
+
+CSS resolves conflicts by counting a selector's weight: inline styles count as the highest (1,0,0,0), ids as (0,1,0,0), classes/attributes/pseudo-classes as (0,0,1,0), and elements/pseudo-elements as (0,0,0,1). Higher weight wins. If two rules tie, the one later in the source order wins.
+
+That is why `#header .nav li a` stomps on your carefully written `.nav a`. And why `!important` feels like a fix but creates a war nobody can win: the moment two important rules clash, you are back to specificity, plus 20 minutes of hunting.
+
+Practical system that eliminates the fight:
+
+1.  Elements get zero classes on first pass.
+2.  Layout structure gets one or two classes (e.g. .card, .card--feature).
+3.  Utility classes (spacing, color) do the fine-tuning.
+4.  IDs only for anchors and form labels — never styling.
+
+Code:
+  button { color: gray; }            /* (0,0,1) element */
+  .btn { color: blue; }             /* (0,1,0) class — wins */
+  #submit { color: red; }           /* (1,0,0) id — wins all */
+  button.btn.btn-primary { }        /* (0,2,1) classes add */
+  
+  .btn { color: blue !important; }  /* nuclear option */
+
+Key takeaway: Match specificity deliberately: use classes for styling, ids for identity, and never fight !important.
+
+Tip: Run the specificity calculator on a confusing rule before adding more selectors. Usually the fix is deleting, not adding.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#CSS #WebDevelopment #Frontend #HTMLCSS #Coding #WebDesign #TheCoderBros #CodingLife

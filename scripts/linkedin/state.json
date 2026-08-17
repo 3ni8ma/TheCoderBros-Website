@@ -1,5 +1,6 @@
 {
   "topic_index": 4,
   "last_post_date": "2026-08-16",
-  "last_post_slug": "git-internals"
+  "last_post_slug": "git-internals",
+  "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n"
 }
