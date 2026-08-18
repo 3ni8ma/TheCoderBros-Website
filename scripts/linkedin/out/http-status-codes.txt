@@ -1,0 +1,30 @@
+Status codes are a contract: they tell the client — and every tool in the stack — what happened, without reading the body.
+
+Every HTTP response carries a three-digit status. The families: 1xx (still working), 2xx (success), 3xx (redirect), 4xx (the client's request was bad), 5xx (the server broke). Getting them right makes debugging, caching, and monitoring much easier.
+
+The ones worth memorizing first: 200 OK, 201 Created, 204 No Content, 301/308 permanent redirects, 304 Not Modified (the cache workhorse), 400 Bad Request, 401 Unauthenticated, 403 Forbidden, 404 Not Found, 409 Conflict, 422 Unprocessable (validation), 429 Too Many Requests, 500 Internal Error, 502/503/504 gateway issues.
+
+Common mistakes that silently break integrations:
+
+1.  Returning 200 for every outcome, including failures.
+2.  Using 404 for permission failures (should be 403).
+3.  Returning 500 for bad client input (should be 400/422).
+4.  Not sending 429 when you rate-limit — clients hammer you forever.
+
+Code:
+  @app.post("/api/users")
+  def create_user(payload):
+      if not payload.get("email"):
+          return {"error": "email required"}, 400
+      if db.user_exists(payload["email"]):
+          return {"error": "already exists"}, 409
+      user = db.create(payload)
+      return user, 201   # created, not 200
+
+Key takeaway: Every API response should use the most specific status code — it's free documentation.
+
+Tip: For every endpoint, write the 3 success codes and 4 error codes it can return in your docs. Clients and future-you will thank you.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#HTTP #API #WebDevelopment #Backend #RESTAPI #Coding #TheCoderBros #CodingLife
