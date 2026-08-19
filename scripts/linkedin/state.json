@@ -1,6 +1,6 @@
 {
-  "topic_index": 6,
-  "last_post_date": "2026-08-18",
-  "last_post_slug": "http-status-codes",
+  "topic_index": 7,
+  "last_post_date": "2026-08-19",
+  "last_post_slug": "rest-api-design",
   "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n"
 }

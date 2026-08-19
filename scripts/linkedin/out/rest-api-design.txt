@@ -1,0 +1,29 @@
+A REST API is a vocabulary. If every developer who joins your team can guess the URL for a feature, you designed it right.
+
+The core idea: model your domain as resources (nouns) and use HTTP methods (verbs) as the only actions. A user is /users; reading, creating, updating, and deleting it map to GET, POST, PATCH/PUT, and DELETE. Sub-resources nest: /users/42/orders lists that user's orders.
+
+Consistency beats cleverness. Decide once: plural nouns (/users, not /user), kebab-case IDs, JSON everywhere, pagination via ?page=&limit=, and error bodies with a stable shape like {"error": {"code": 40401, "message": "User not found"}} so clients can parse, not scrape.
+
+Three rules that prevent most API pain:
+
+1.  Never break a contract silently — version with /v1/ or headers.
+2.  Keep responses minimal; let clients request fields if they need more.
+3.  Idempotency matters: DELETE twice should be harmless, POST once should be exact.
+
+Code:
+  GET    /users          -> list users
+  POST   /users          -> create a user
+  GET    /users/42       -> read one user
+  PATCH  /users/42       -> partial update
+  PUT    /users/42       -> full replace
+  DELETE /users/42       -> remove a user
+  
+  GET /orders?status=paid&page=2&limit=20
+
+Key takeaway: If your URL contains a verb (e.g. /users/delete), stop — use DELETE /users/42.
+
+Tip: Design the API from the client's perspective: write the frontend call first, then build the endpoint to match. You will be amazed how much cleaner it gets.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#RESTAPI #APIDesign #Backend #WebDevelopment #SoftwareEngineering #Coding #TheCoderBros #CodingLife
