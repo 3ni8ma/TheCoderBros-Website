@@ -1,6 +1,6 @@
 {
-  "topic_index": 7,
-  "last_post_date": "2026-08-19",
-  "last_post_slug": "rest-api-design",
+  "topic_index": 8,
+  "last_post_date": "2026-08-20",
+  "last_post_slug": "sql-joins",
   "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n"
 }
