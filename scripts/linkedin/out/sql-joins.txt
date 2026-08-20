@@ -1,0 +1,29 @@
+Joins are the difference between 'I can query the DB' and 'I can answer business questions'. They are also the source of most duplicate-row bugs.
+
+A join combines rows from two tables on a condition, usually a foreign key. INNER JOIN keeps only matches. LEFT JOIN keeps every row from the left table, filling the right side with NULLs when there is no match. RIGHT is the mirror, FULL keeps everything.
+
+The 'users who never ordered' pattern (LEFT JOIN + WHERE o.id IS NULL) is the most practical query in analytics — it answers churn, missing profiles, abandoned carts, and unprocessed events. Memorize it.
+
+The classic bug: joining a one-to-many relation duplicates rows. One user with 3 orders appears 3 times. If you then SUM(order totals) you still get the right total, but SUM(anything from users) is now inflated 3x. Rule: aggregate the 'many' side first, or deduplicate with DISTINCT/DISTINCT ON.
+
+Code:
+  -- Every user with their orders (only users who ordered):
+  SELECT u.name, o.total
+  FROM users u
+  INNER JOIN orders o ON o.user_id = u.id;
+  
+  -- ALL users, orders NULL when they never ordered:
+  SELECT u.name, o.total
+  FROM users u
+  LEFT JOIN orders o ON o.user_id = u.id;
+  
+  -- users who NEVER ordered:
+  WHERE o.id IS NULL
+
+Key takeaway: Pick the join by asking: which side must appear even with no match?
+
+Tip: Whenever a query returns more rows than the source table has, a one-to-many join silently duplicated data. Count both sides first.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#SQL #Data #Database #DataAnalytics #Backend #Coding #TheCoderBros #CodingLife
