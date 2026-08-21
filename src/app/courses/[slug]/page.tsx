@@ -1,5 +1,5 @@
-// Updated: 2026-08-21 16:00:10
-import { languages } from "@/lib/data/courses";
+// Updated: 2026-08-21 16:30:25
+import { courses } from "@/lib/data/courses";
 import { notFound } from "next/navigation";
 import Slideshow from "@/components/courses/slideshow";
 
@@ -8,12 +8,12 @@ interface CoursePageProps {
 }
 
 export async function generateStaticParams() {
-  return languages.map((course) => ({ slug: course.slug }));
+  return courses.map((course) => ({ slug: course.slug }));
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
   const { slug } = await params;
-  const course = languages.find((c) => c.slug === slug);
+  const course = courses.find((c) => c.slug === slug);
 
   if (!course) {
     notFound();
