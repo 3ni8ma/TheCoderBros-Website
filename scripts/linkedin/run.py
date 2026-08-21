@@ -93,6 +93,7 @@ def main():
     except Exception as e:
         log(f"POST_FAILED: {e}")
         state["last_error"] = str(e)
+        # Do NOT save last_post_date — let it retry on next cron run
         save_state(state)
         sys.exit(3)
 
