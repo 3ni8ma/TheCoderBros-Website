@@ -19,7 +19,7 @@ export const blogPosts: BlogPost[] = [
     category: "Career",
     readTime: 6,
     author: "Nivyadin Dey",
-    image: "/images/blog/career.jpg",
+    image: "/images/blog/5-mistakes.jpg",
     content: `
 Every developer has a graveyard of habits they had to unlearn. Here are the five most common mistakes beginners make — and the fixes that will save you months of frustration.
 
@@ -69,7 +69,7 @@ _Happy coding!_
     category: "Fundamentals",
     readTime: 8,
     author: "Aarush Karak",
-    image: "/images/blog/dsa.jpg",
+    image: "/images/blog/data-structures.jpg",
     content: `
 Data structures are the building blocks of every program you have ever used. This guide covers the five you will use 90% of the time — with real-world analogies and code.
 
@@ -139,7 +139,7 @@ Master these five and every interview problem starts to look familiar.
     category: "DevOps",
     readTime: 7,
     author: "Ryan Banerjee",
-    image: "/images/blog/deploy-apps.jpg",
+    image: "/images/blog/deploy-web-app.jpg",
     content: `
 You have built a project and it works on localhost. Congratulations — now the scary part: putting it on the internet. It does not have to be scary. Here is the fastest path from localhost to a live URL.
 
@@ -203,7 +203,7 @@ Deploy *something* this week — even a single-page site with your resume. Deplo
     category: "C++",
     readTime: 8,
     author: "Aarush Karak",
-    image: "/images/blog/pointers.jpg",
+    image: "/images/blog/cpp-pointers.jpg",
     content: `
 Pointers scare beginners, but the concept is simple: a pointer is just a number that tells the computer where something lives in memory.
 
@@ -277,7 +277,7 @@ Pointers are not the enemy — they are just the computer opening its doors for 
     category: "JavaScript",
     readTime: 8,
     author: "Nivyadin Dey",
-    image: "/images/blog/frameworks.jpg",
+    image: "/images/blog/js-frameworks.jpg",
     content: `
 Pick a framework and people will argue with you. The truth is that all three main contenders ship production apps every day — the difference is philosophy, not capability.
 
@@ -350,7 +350,7 @@ Frameworks come and go, but the skills underneath — state management, event ha
     category: "Backend",
     readTime: 7,
     author: "Ryan Banerjee",
-    image: "/images/blog/handbook.jpg",
+    image: "/images/blog/java-vs-csharp.jpg",
     content: `
 Java and C# share a common ancestor, and after twenty years of evolution they still look surprisingly similar. If you are choosing a backend language for your first serious project, here is the honest comparison.
 
@@ -416,7 +416,7 @@ Learn the OOP fundamentals through one, then port a project to the other. The sh
     category: "Productivity",
     readTime: 6,
     author: "Aarush Karak",
-    image: "/images/blog/vscode.jpg",
+    image: "/images/blog/vscode-setup.jpg",
     content: `
 Your editor is your home for the next few years. Ten minutes of setup now will save you hours every single week. Here is exactly what to install and configure.
 
@@ -542,7 +542,7 @@ for fruit in fruits:
     date: "2026-06-15",
     category: "Python",
     readTime: 5,
-    image: "/images/blog/python-vs-js.jpg",
+    image: "/images/blog/python.jpg",
   },
   {
     slug: "javascript-async-await",
@@ -589,7 +589,7 @@ const [users, posts] = await Promise.all([
     date: "2026-06-10",
     category: "JavaScript",
     readTime: 6,
-    image: "/images/blog/react-fundamentals.jpg",
+    image: "/images/blog/javascript-async-await.jpg",
   },
   {
     slug: "java-oop-fundamentals",
@@ -642,7 +642,7 @@ myCar.start(); // "Electric motor activated"
     date: "2026-06-05",
     category: "Java",
     readTime: 7,
-    image: "/images/blog/career-blueprint.jpg",
+    image: "/images/blog/java-oop.jpg",
   },
   {
     slug: "understanding-big-o-notation",
@@ -652,7 +652,7 @@ myCar.start(); // "Electric motor activated"
     category: "Computer Science",
     readTime: 6,
     author: "Aarush Karak",
-    image: "/images/blog/fundamentals.jpg",
+    image: "/images/blog/big-o.jpg",
     content: `
 
 Every line of code you write has a cost. Big O notation tells you how that cost grows as your input grows — and understanding it is the difference between code that scales and code that crumbles.
