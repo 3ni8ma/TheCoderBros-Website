@@ -698,5 +698,4 @@ Big O is not about memorizing formulas — it is about predicting behavior at sc
 _Happy coding!_
 `
   },
-  {
 ];
