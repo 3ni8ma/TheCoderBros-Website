@@ -1,0 +1,31 @@
+A query that takes 4 seconds with 100,000 rows and 4 seconds with 100 million rows is using an index. The reverse is a table scan — and the fix is usually one line.
+
+Indexes are sorted lookup structures (usually B-trees) the database maintains alongside your table. Searching a B-tree costs O(log n): about 24 comparisons for 10 million rows, versus scanning all 10 million without an index.
+
+The rules of thumb:
+
+1.  Index foreign keys and any column used in WHERE, JOIN, or ORDER BY.
+2.  Multi-column indexes should match your most common query pattern, most-selective column first.
+3.  Indexes add write overhead — an over-indexed table slows inserts/updates.
+4.  A covering index (all needed columns) skips the table entirely.
+
+The debugging ritual: run EXPLAIN (PostgreSQL: EXPLAIN ANALYZE), find 'Seq Scan' on a big table, add the index, re-run. You will see a 100x+ drop in plan cost. That is the entire skill — the rest is practice.
+
+Code:
+  EXPLAIN SELECT * FROM orders
+  WHERE user_id = 42;
+  -- seq scan: reads every row. 10M rows -> slow
+  
+  CREATE INDEX idx_orders_user ON orders (user_id);
+  
+  EXPLAIN SELECT * FROM orders
+  WHERE user_id = 42;
+  -- index scan: ~log(10M) ~ 24 lookups
+
+Key takeaway: Index the columns you filter, join, and sort on — not everything.
+
+Tip: Never guess. Run EXPLAIN ANALYZE on the slow query, add the index it says is missing, and measure again. Databases tell you exactly what they need.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#SQL #Database #PostgreSQL #Backend #Performance #DataEngineering #TheCoderBros #CodingLife
