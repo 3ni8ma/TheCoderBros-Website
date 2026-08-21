@@ -644,4 +644,58 @@ myCar.start(); // "Electric motor activated"
     readTime: 7,
     image: "/images/blog/career-blueprint.jpg",
   },
+  {
+    slug: "understanding-big-o-notation",
+    title: "Big O Notation: How to Measure Code Efficiency",
+    description: "A practical guide to understanding time complexity and why it matters for every line of code you write.",
+    date: "2026-08-21",
+    category: "Computer Science",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/fundamentals.jpg",
+    content: `
+
+Every line of code you write has a cost. Big O notation tells you how that cost grows as your input grows — and understanding it is the difference between code that scales and code that crumbles.
+
+## What Big O Actually Measures
+
+Big O describes the upper bound of an algorithm's growth rate. It does not measure execution time directly — it measures how execution time changes as the input size increases.
+
+**Think of it as** a growth forecast. If your algorithm is O(n), doubling the input doubles the work. If it is O(n²), doubling the input quadruples the work.
+
+## Common Complexities
+
+| Big O | Name | Example | When n = 1,000,000 |
+| --- | --- | --- | --- |
+| O(1) | Constant | Array index access | 1 step |
+| O(log n) | Logarithmic | Binary search | ~20 steps |
+| O(n) | Linear | Loop through array | 1,000,000 steps |
+| O(n log n) | Linearithmic | Merge sort | ~20,000,000 steps |
+| O(n²) | Quadratic | Nested loops | 1,000,000,000,000 steps |
+
+## How to Identify Big O
+
+1.  **Count the loops.** One loop over n items is O(n). Two nested loops over n items is O(n²).
+2.  **Look for divides.** If you halve the input each step, it is O(log n).
+3.  **Ignore constants.** O(2n) is still O(n). Constants do not matter at scale.
+4.  **Identify the dominant term.** If you have O(n + n²), the n² dominates, so it is O(n²).
+
+## Real-World Example
+
+Searching for a name in an unsorted list of 1 million entries:
+
+1.  Check each one: O(n) — up to 1,000,000 comparisons
+2.  Sort first, then binary search: O(n log n) + O(log n) — about 20,000,200 comparisons
+
+For one search, the sorted approach is slower. For 100 searches, it is 50x faster. Big O helps you decide when the upfront cost is worth it.
+
+**The fix:** before optimizing, identify the Big O of your current approach. Then ask: will this still work when the data grows 10x? If not, it is time to rethink.
+
+## The Takeaway
+
+Big O is not about memorizing formulas — it is about predicting behavior at scale. Learn to read it, and you will write better code without even trying.
+
+_Happy coding!_
+`
+  },
 ];
