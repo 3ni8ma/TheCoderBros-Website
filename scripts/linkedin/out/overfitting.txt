@@ -1,0 +1,32 @@
+A model that scores 99% in training and 71% on new data did not learn your pattern — it memorized your dataset.
+
+Underfitting happens when the model is too simple to capture the relationship (a line fit to a curve). Overfitting happens when it is flexible enough to memorize noise (a 50-degree polynomial that threads every point). The second is sneaky because training error looks amazing.
+
+The defense is separation of concerns: split data into train (fit the model), validation (tune hyperparameters), and test (final, one-time evaluation). If train score is high and validation is low, you are overfitting. If both are low, you are underfitting.
+
+The standard toolkit against overfitting:
+
+1.  More data (or data augmentation) — the most reliable fix.
+2.  Regularization (L1/L2, dropout) — penalize complexity.
+3.  Simpler architecture or fewer features.
+4.  Early stopping — stop training when validation stops improving.
+5.  Cross-validation — get a stable estimate of generalization.
+
+Code:
+  from sklearn.model_selection import train_test_split
+  
+  X_train, X_test, y_train, y_test = train_test_split(
+      X, y, test_size=0.2, random_state=42
+  )
+  
+  model.fit(X_train, y_train)
+  print('train:', model.score(X_train, y_train))  # ~0.99
+  print('test :', model.score(X_test, y_test))   # ~0.71 <- truth
+
+Key takeaway: Performance on training data means nothing. Performance on unseen data means everything.
+
+Tip: Print train vs validation error on the same chart for every experiment. The widening gap between the two lines is overfitting you can see.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#MachineLearning #DataScience #AI #ModelTraining #MLTips #LearnAI #TheCoderBros #CodingLife
