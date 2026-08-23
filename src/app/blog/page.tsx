@@ -35,7 +35,6 @@ export default function BlogPage() {
                         sizes="(min-width: 640px) 176px, 144px"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     </div>
                   )}
                   <div className="min-w-0">
