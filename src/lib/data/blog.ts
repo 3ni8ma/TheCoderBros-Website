@@ -750,4 +750,56 @@ Recursion is a tool, not a hammer. Use it when the problem is naturally recursiv
 _Happy coding!_
 `
   },
+  {
+    slug: "recursion-simply-explained",
+    title: "Recursion Simply Explained: When Functions Call Themselves",
+    description: "Recursion is one of the most powerful patterns in programming. Here is how it works, with examples you can run today.",
+    date: "2026-08-23",
+    category: "Computer Science",
+    readTime: 5,
+    author: "Nivyadin Dey",
+    image: "/images/blog/fundamentals.jpg",
+    content: `
+
+A function that calls itself sounds like a recipe for an infinite loop. But when done right, recursion is one of the cleanest ways to solve problems that involve repetition, branching, or backtracking.
+
+## The Basic Idea
+
+Recursion means a function calls itself with a smaller or simpler input. Each call moves closer to a **base case** — a condition that stops the recursion.
+
+**Think of it as** Russian nesting dolls. You open one doll, find a smaller one inside. You open that, find an even smaller one. Eventually you reach the smallest doll — that is your base case.
+
+## A Working Example
+
+```python
+def factorial(n):
+    if n <= 1:       # Base case
+        return 1
+    return n * factorial(n - 1)  # Recursive call
+
+print(factorial(5))  # 120
+```
+
+Each call multiplies `n` by the result of `factorial(n-1)`, working down to the base case.
+
+## When to Use Recursion
+
+-   **Tree traversal** — navigating file systems, DOM trees, or organizational charts
+-   **Divide and conquer** — merge sort, quicksort, binary search
+-   **Backtracking** — solving mazes, Sudoku, or pathfinding problems
+-   **Mathematical definitions** — factorial, Fibonacci, Tower of Hanoi
+
+## The Common Trap
+
+Forgetting the base case leads to infinite recursion and a `RecursionError`. Always define your exit condition first.
+
+**Best for:** problems where the solution naturally branches into smaller subproblems. If your problem is a simple loop, use a loop — recursion adds overhead.
+
+## The Takeaway
+
+Recursion is a tool, not a hammer. Use it when the problem is naturally recursive, and always make sure the base case is reachable.
+
+_Happy coding!_
+`
+  },
 ];
