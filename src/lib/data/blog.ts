@@ -750,4 +750,59 @@ Recursion is a tool, not a hammer. Use it when the problem is naturally recursiv
 _Happy coding!_
 `
   },
+  {
+    slug: "git-internals-how-it-actually-works",
+    title: "Git Internals: How It Actually Works Under the Hood",
+    description: "Understanding what Git stores, how commits work, and why branches are just pointers.",
+    date: "2026-08-23",
+    category: "Tools",
+    readTime: 7,
+    author: "Nivyadin Dey",
+    image: "/images/blog/tools.jpg",
+    content: `
+
+You use Git every day, but do you know what it actually stores? Understanding Git's internals changes how you use it — and makes recovery from mistakes much easier.
+
+## Git Is a Content-Addressable Store
+
+Every file Git tracks is stored as a **blob** — a compressed snapshot identified by a SHA-1 hash. Every directory is a **tree** — a list of blobs and subtrees. Every commit is a pointer to a tree, plus metadata (author, message, parent commits).
+
+**Think of it as** a ledger where every entry is identified by its content, not its position. If two files have the same content, they share the same blob.
+
+## How Commits Work
+
+A commit does not store a diff. It stores a complete snapshot of the project at that point. Git computes diffs on the fly when you run `git diff`. This is why `git checkout` is fast — it just swaps the tree pointer.
+
+```bash
+git log --oneline --graph
+# * a1b2c3d (HEAD -> main) Update README
+# * e4f5g6h Initial commit
+```
+
+Each hash is a commit object containing: the tree hash, parent commit hash(es), author, committer, and message.
+
+## Branches Are Just Pointers
+
+A branch is a 41-byte file containing the SHA-1 hash of the latest commit. That is it. When you make a new commit, Git updates the branch pointer to point to the new commit.
+
+```bash
+git branch feature
+# Creates a 41-byte file at .git/refs/heads/feature
+```
+
+This is why branches are cheap in Git — they are just pointers, not copies.
+
+## Reflogs: Git's Safety Net
+
+Git keeps a log of every reference change in `.git/logs/`. Even after a `git reset --hard`, your commits still exist in the reflog for about 30 days. This is how you recover "lost" commits.
+
+**The fix:** if you ever lose a commit, check `git reflog`. The commit is almost certainly still there.
+
+## The Takeaway
+
+Git is simpler than it looks: blobs, trees, commits, and pointers. Understanding this model makes every Git command more predictable and every mistake recoverable.
+
+_Happy coding!_
+`
+  },
 ];
