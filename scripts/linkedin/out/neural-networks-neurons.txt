@@ -1,0 +1,25 @@
+Strip away the hype and a neural network is just layered arithmetic: multiply, add, clamp, repeat. The magic is in the scale.
+
+One neuron takes its inputs, multiplies each by a learned weight, sums them, adds a bias, and pushes the result through an activation function (like ReLU: max(0, x)). The weights decide which inputs matter; the activation introduces non-linearity, which is what allows layers to compose into complex functions instead of collapsing into one giant linear regression.
+
+A 'network' stacks neurons in layers: the input layer takes the data, hidden layers progressively build features (edges → shapes → objects, if that sounds like vision, it is), and the output layer produces the answer. Modern models are just this idea with enormous scale, fancier connections, and better training recipes.
+
+Training is the part that sounds like magic but is mechanical: compute the error, then nudge every weight slightly in the direction that reduces it (backpropagation + gradient descent). Repeat across millions of examples, and the weights converge to a useful function. There is no secret ingredient — just scale, data, and a lot of multiplication.
+
+Code:
+  def neuron(inputs, weights, bias):
+      z = sum(x * w for x, w in zip(inputs, weights)) + bias
+      return max(0, z)   # ReLU activation
+  
+  # inputs: [0.9, 0.2, 0.7]  (features)
+  # weights: [0.5, -0.3, 0.8]  (learned)
+  # neuron([0.9,0.2,0.7], [0.5,-0.3,0.8], -0.1)
+  #   = max(0, 0.45 - 0.06 + 0.56 - 0.1) = 0.85
+
+Key takeaway: A neural network is a LOT of these tiny weighted sums, organized into layers.
+
+Tip: Implement a single neuron and gradient descent from scratch once (20 lines). It demystifies every framework you will ever use.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#MachineLearning #NeuralNetworks #DeepLearning #AI #DataScience #LearnAI #TheCoderBros #CodingLife
