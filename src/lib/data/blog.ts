@@ -19,7 +19,7 @@ export const blogPosts: BlogPost[] = [
     category: "Career",
     readTime: 6,
     author: "Nivyadin Dey",
-    image: "/images/blog/5-mistakes.jpg",
+    image: "/images/blog/5-mistakes.jpg?v=2",
     content: `
 Every developer has a graveyard of habits they had to unlearn. Here are the five most common mistakes beginners make — and the fixes that will save you months of frustration.
 
@@ -69,7 +69,7 @@ _Happy coding!_
     category: "Fundamentals",
     readTime: 8,
     author: "Aarush Karak",
-    image: "/images/blog/data-structures.jpg",
+    image: "/images/blog/data-structures.jpg?v=2",
     content: `
 Data structures are the building blocks of every program you have ever used. This guide covers the five you will use 90% of the time — with real-world analogies and code.
 
@@ -139,7 +139,7 @@ Master these five and every interview problem starts to look familiar.
     category: "DevOps",
     readTime: 7,
     author: "Ryan Banerjee",
-    image: "/images/blog/deploy-web-app.jpg",
+    image: "/images/blog/deploy-web-app.jpg?v=2",
     content: `
 You have built a project and it works on localhost. Congratulations — now the scary part: putting it on the internet. It does not have to be scary. Here is the fastest path from localhost to a live URL.
 
@@ -150,7 +150,7 @@ Everything starts with version control.
 \`\`\`
 git init
 git add .
-git commit -m "initial commit"
+git commit -m "initial commit?v=2"
 \`\`\`
 
 Push to a GitHub repository — you will need it in the next step anyway.
@@ -203,7 +203,7 @@ Deploy *something* this week — even a single-page site with your resume. Deplo
     category: "C++",
     readTime: 8,
     author: "Aarush Karak",
-    image: "/images/blog/cpp-pointers.jpg",
+    image: "/images/blog/cpp-pointers.jpg?v=2",
     content: `
 Pointers scare beginners, but the concept is simple: a pointer is just a number that tells the computer where something lives in memory.
 
@@ -277,13 +277,13 @@ Pointers are not the enemy — they are just the computer opening its doors for 
     category: "JavaScript",
     readTime: 8,
     author: "Nivyadin Dey",
-    image: "/images/blog/js-frameworks.jpg",
+    image: "/images/blog/js-frameworks.jpg?v=2",
     content: `
 Pick a framework and people will argue with you. The truth is that all three main contenders ship production apps every day — the difference is philosophy, not capability.
 
 ## React: the industry standard
 
-**Philosophy:** explicit re-renders; "everything is a component."
+**Philosophy:** explicit re-renders; "everything is a component.?v=2"
 
 - Huge ecosystem — libraries for every feature you can imagine
 - Massive job market; knowing React opens doors everywhere
@@ -350,7 +350,7 @@ Frameworks come and go, but the skills underneath — state management, event ha
     category: "Backend",
     readTime: 7,
     author: "Ryan Banerjee",
-    image: "/images/blog/java-vs-csharp.jpg",
+    image: "/images/blog/java-vs-csharp.jpg?v=2",
     content: `
 Java and C# share a common ancestor, and after twenty years of evolution they still look surprisingly similar. If you are choosing a backend language for your first serious project, here is the honest comparison.
 
@@ -416,7 +416,7 @@ Learn the OOP fundamentals through one, then port a project to the other. The sh
     category: "Productivity",
     readTime: 6,
     author: "Aarush Karak",
-    image: "/images/blog/vscode-setup.jpg",
+    image: "/images/blog/vscode-setup.jpg?v=2",
     content: `
 Your editor is your home for the next few years. Ten minutes of setup now will save you hours every single week. Here is exactly what to install and configure.
 
@@ -428,13 +428,13 @@ Open \`settings.json\` (Cmd+Shift+P → "Open User Settings JSON") and add:
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
+    "source.fixAll": "explicit?v=2"
   },
   "editor.minimap.enabled": false,
   "editor.bracketPairColorization.enabled": true,
   "files.autoSave": "afterDelay",
   "workbench.colorTheme": "One Dark Pro",
-  "terminal.integrated.defaultProfile.osx": "zsh"
+  "terminal.integrated.defaultProfile.osx": "zsh?v=2"
 }
 \`\`\`
 
@@ -487,7 +487,7 @@ Create custom snippets for your boilerplate:
   "scope": "javascript,typescript",
   "prefix": "cl",
   "body": ["console.log($1);"],
-  "description": "Log to console"
+  "description": "Log to console?v=2"
 }
 \`\`\`
 
@@ -542,7 +542,7 @@ for fruit in fruits:
     date: "2026-06-15",
     category: "Python",
     readTime: 5,
-    image: "/images/blog/python.jpg",
+    image: "/images/blog/python.jpg?v=2",
   },
   {
     slug: "javascript-async-await",
@@ -550,7 +550,7 @@ for fruit in fruits:
     description: "Master asynchronous programming in JavaScript with async/await patterns and error handling.",
     content: `## The Problem with Callbacks
 
-Before async/await, JavaScript developers used callbacks and promises to handle asynchronous operations, leading to "callback hell."
+Before async/await, JavaScript developers used callbacks and promises to handle asynchronous operations, leading to "callback hell.?v=2"
 
 ## Enter Async/Await
 
@@ -589,7 +589,7 @@ const [users, posts] = await Promise.all([
     date: "2026-06-10",
     category: "JavaScript",
     readTime: 6,
-    image: "/images/blog/javascript-async-await.jpg",
+    image: "/images/blog/javascript-async-await.jpg?v=2",
   },
   {
     slug: "java-oop-fundamentals",
@@ -635,14 +635,14 @@ public class ElectricCar extends Car {
 
 \`\`\`java
 Car myCar = new ElectricCar("Tesla", 2024, 350);
-myCar.start(); // "Electric motor activated"
+myCar.start(); // "Electric motor activated?v=2"
 \`\`\`
 `,
     author: "Ryan Banerjee",
     date: "2026-06-05",
     category: "Java",
     readTime: 7,
-    image: "/images/blog/java-oop.jpg",
+    image: "/images/blog/java-oop.jpg?v=2",
   },
   {
     slug: "understanding-big-o-notation",
@@ -652,7 +652,7 @@ myCar.start(); // "Electric motor activated"
     category: "Computer Science",
     readTime: 6,
     author: "Aarush Karak",
-    image: "/images/blog/big-o.jpg",
+    image: "/images/blog/big-o.jpg?v=2",
     content: `
 
 Every line of code you write has a cost. Big O notation tells you how that cost grows as your input grows — and understanding it is the difference between code that scales and code that crumbles.
@@ -706,7 +706,7 @@ _Happy coding!_
     category: "Computer Science",
     readTime: 5,
     author: "Nivyadin Dey",
-    image: "/images/blog/fundamentals.jpg",
+    image: "/images/blog/fundamentals.jpg?v=2",
     content: `
 
 A function that calls itself sounds like a recipe for an infinite loop. But when done right, recursion is one of the cleanest ways to solve problems that involve repetition, branching, or backtracking.
@@ -758,7 +758,7 @@ _Happy coding!_
     category: "Tools",
     readTime: 7,
     author: "Nivyadin Dey",
-    image: "/images/blog/tools.jpg",
+    image: "/images/blog/tools.jpg?v=2",
     content: `
 
 You use Git every day, but do you know what it actually stores? Understanding Git's internals changes how you use it — and makes recovery from mistakes much easier.
