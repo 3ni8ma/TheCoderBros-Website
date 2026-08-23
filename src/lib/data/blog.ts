@@ -719,16 +719,16 @@ Recursion means a function calls itself with a smaller or simpler input. Each ca
 
 ## A Working Example
 
-```python
+\`\`\`python
 def factorial(n):
     if n <= 1:       # Base case
         return 1
     return n * factorial(n - 1)  # Recursive call
 
 print(factorial(5))  # 120
-```
+\`\`\`
 
-Each call multiplies `n` by the result of `factorial(n-1)`, working down to the base case.
+Each call multiplies \`n\` by the result of \`factorial(n-1)\`, working down to the base case.
 
 ## When to Use Recursion
 
@@ -739,7 +739,7 @@ Each call multiplies `n` by the result of `factorial(n-1)`, working down to the 
 
 ## The Common Trap
 
-Forgetting the base case leads to infinite recursion and a `RecursionError`. Always define your exit condition first.
+Forgetting the base case leads to infinite recursion and a \`RecursionError\`. Always define your exit condition first.
 
 **Best for:** problems where the solution naturally branches into smaller subproblems. If your problem is a simple loop, use a loop — recursion adds overhead.
 
@@ -771,13 +771,13 @@ Every file Git tracks is stored as a **blob** — a compressed snapshot identifi
 
 ## How Commits Work
 
-A commit does not store a diff. It stores a complete snapshot of the project at that point. Git computes diffs on the fly when you run `git diff`. This is why `git checkout` is fast — it just swaps the tree pointer.
+A commit does not store a diff. It stores a complete snapshot of the project at that point. Git computes diffs on the fly when you run \`git diff\`. This is why \`git checkout\` is fast — it just swaps the tree pointer.
 
-```bash
+\`\`\`bash
 git log --oneline --graph
 # * a1b2c3d (HEAD -> main) Update README
 # * e4f5g6h Initial commit
-```
+\`\`\`
 
 Each hash is a commit object containing: the tree hash, parent commit hash(es), author, committer, and message.
 
@@ -785,18 +785,18 @@ Each hash is a commit object containing: the tree hash, parent commit hash(es), 
 
 A branch is a 41-byte file containing the SHA-1 hash of the latest commit. That is it. When you make a new commit, Git updates the branch pointer to point to the new commit.
 
-```bash
+\`\`\`bash
 git branch feature
 # Creates a 41-byte file at .git/refs/heads/feature
-```
+\`\`\`
 
 This is why branches are cheap in Git — they are just pointers, not copies.
 
 ## Reflogs: Git's Safety Net
 
-Git keeps a log of every reference change in `.git/logs/`. Even after a `git reset --hard`, your commits still exist in the reflog for about 30 days. This is how you recover "lost" commits.
+Git keeps a log of every reference change in \`.git/logs/\`. Even after a \`git reset --hard\`, your commits still exist in the reflog for about 30 days. This is how you recover "lost" commits.
 
-**The fix:** if you ever lose a commit, check `git reflog`. The commit is almost certainly still there.
+**The fix:** if you ever lose a commit, check \`git reflog\`. The commit is almost certainly still there.
 
 ## The Takeaway
 
