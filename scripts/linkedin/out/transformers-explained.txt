@@ -1,0 +1,19 @@
+'Transformer' sounds like a terminator upgrade. It is actually a neat trick for reading context — and it made modern AI possible.
+
+Before transformers, models read text sequentially, left to right, which made long-range context hard. The transformer's idea: process all words in parallel and let each one compute a relevance score (attention) against every other word. In 'The bank accepted the deposit', 'bank' attends strongly to 'deposit' and weakly to 'accepted'. That weighting — repeated over many layers — is how the model builds meaning.
+
+The pipeline: text → tokens (small word/subword units) → each token becomes a vector → layers of self-attention and small feed-forward networks refine those vectors → the model predicts the next token, or classifies, or translates. Training is the same next-token prediction at massive scale, which is why the 'AI' label gets slapped on everything these days.
+
+Three terms you will actually encounter:
+
+1.  Context window: the maximum tokens the model attends to (8k, 128k, 1M+). Everything beyond it is invisible.
+2.  Attention head: one 'perspective' of relevance; models run many in parallel.
+3.  Positional encoding: how the model knows order, since it processes in parallel.
+
+Key takeaway: Attention is just: 'how relevant is every other word to THIS word, right now?'
+
+Tip: Next time an LLM 'remembers something from earlier in the chat', check whether it is actually inside the context window. That memory is re-read input, not stored knowledge.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#AI #LLM #Transformers #MachineLearning #DeepLearning #GenAI #TheCoderBros #CodingLife
