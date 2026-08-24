@@ -805,4 +805,51 @@ Git is simpler than it looks: blobs, trees, commits, and pointers. Understanding
 _Happy coding!_
 `
   },
+  {
+    slug: "css-specificity-once-and-for-all",
+    title: "CSS Specificity Explained Once and For All",
+    description: "Why your styles are not applying and how to fix it without !important.",
+    date: "2026-08-24",
+    category: "Web Development",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/webdev.jpg",
+    content: `
+
+You have written the perfect CSS rule. It targets the right element, uses the right property, and it does not work. The culprit is almost always specificity.
+
+## How Specificity Works
+
+CSS specificity is a scoring system that determines which rule wins when multiple rules target the same element. The scores are:
+
+1.  **Inline styles** (1000 points) — \`style="color: red"\`
+2.  **IDs** (100 points) — \`#header\`
+3.  **Classes, attributes, pseudo-classes** (10 points) — \`.nav\`, \`[type=text]\`, \`:hover\`
+4.  **Elements and pseudo-elements** (1 point) — \`div\`, \`::before\`
+
+**Think of it as** a card game. Inline styles are a royal flush. IDs are a full house. You cannot beat a higher category with more lower cards.
+
+## Common Specificity Traps
+
+\`\`\`css
+/* This loses to #header p */
+.content p { color: blue; }
+
+/* This wins over .card */
+#main .card { color: red; }
+\`\`\`
+
+## The Clean Solution
+
+Use BEM naming (\`.block__element--modifier\`) or CSS Modules to create unique class names. This eliminates specificity battles entirely because every selector has the same weight.
+
+**Best for:** avoid \`!important\` whenever possible. It overrides everything, including future changes you might want to make.
+
+## The Takeaway
+
+Specificity is not complicated — it is a four-digit score. Learn the numbers, and you will never fight your own CSS again.
+
+_Happy coding!_
+`
+  },
 ];
