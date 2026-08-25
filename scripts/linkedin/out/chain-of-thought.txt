@@ -1,0 +1,31 @@
+A 10-word addition to your prompt reliably improves LLM reasoning on math, logic, and debugging tasks. It has a name: chain-of-thought.
+
+LLMs predict text; they do not run a calculator. When asked directly, they often short-circuit to a plausible answer. But if you ask for the steps ('Let's think step by step'), the model generates intermediate reasoning tokens before the final answer — and it turns out that generating those intermediate steps drastically reduces errors.
+
+Why it works: during training, the model learned to produce reasoning traces in its training data (solutions, explanations, walkthroughs). By prompting for the trace, you steer it into the mode where it is most reliable. It is not guaranteed — it can hallucinate a confident chain — but empirically it helps on math, logic, multi-hop questions, and debugging sessions.
+
+Practical recipe:
+
+1.  Ask for step-by-step reasoning explicitly.
+2.  Give the model scratch space: 'Write out your working.'
+3.  For code, ask it to restate the problem in its own words first.
+4.  Add a self-check: 'Verify each step before giving the final answer.'
+
+Code:
+  Without CoT:
+  Q: A store has 3 shelves with 12 items each.
+     20 items sell. How many remain?
+  A: 16   <- often wrong
+  
+  With CoT:
+  A: First, total items: 3 x 12 = 36.
+     Then subtract sold: 36 - 20 = 16.
+     Answer: 16   <- reliable
+
+Key takeaway: You get better answers by asking for the reasoning, not just the answer.
+
+Tip: If an LLM gives you a confident wrong answer, ask it to show its work — then point at the exact step that is wrong. You are now debugging a model like code.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#PromptEngineering #AI #LLM #GenAI #ChatGPT #LearnAI #TheCoderBros #CodingLife
