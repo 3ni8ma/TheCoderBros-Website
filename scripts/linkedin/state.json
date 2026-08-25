@@ -1,6 +1,6 @@
 {
-  "topic_index": 13,
-  "last_post_slug": "transformers-explained",
+  "topic_index": 14,
+  "last_post_slug": "chain-of-thought",
   "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-08-24"
+  "last_post_date": "2026-08-25"
 }
