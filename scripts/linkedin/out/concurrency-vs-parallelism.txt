@@ -1,0 +1,19 @@
+One CPU can be concurrent. Two CPUs are needed to be parallel. That is the whole distinction — and it settles most design arguments.
+
+Concurrency is about managing multiple tasks with overlapping lifecycles: a single-core machine interleaves them, switching between tasks, making progress on all of them. Parallelism is about executing tasks simultaneously on multiple cores. Concurrency is a software structure; parallelism is a hardware capability. A system can be concurrent without being parallel (and embarrassingly, parallel-but-broken without being concurrent).
+
+Why it matters in practice: in Python, threads are concurrent but (for CPU-bound code, due to the GIL) not parallel; multiprocessing gives you true parallelism. In JavaScript, async/await is concurrency on a single thread — it does not make your math faster, it keeps I/O waiting from blocking everything else.
+
+The practical mapping:
+
+1.  I/O-bound work (network, disk, API calls): concurrency wins — threads, async, or asyncio. Time is spent waiting, not computing.
+2.  CPU-bound work (loops, transforms, training): parallelism wins — multiprocessing, or a compiled language.
+3.  Shared state is the tax: the more tasks share data, the more locking and bugs you pay.
+
+Key takeaway: Concurrency is a code design. Parallelism is a hardware fact. Design for the first, measure the second.
+
+Tip: Rule: if your program is slow because it waits a lot, add concurrency. If it is slow because it computes a lot, add parallelism. Mixing them up wastes days.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Concurrency #Parallelism #ComputerScience #Programming #SystemDesign #Coding #TheCoderBros #CodingLife
