@@ -1,0 +1,42 @@
+Decorators look like magic until you see that @timed is just slow_thing = timed(slow_thing). Then the whole feature becomes obvious.
+
+In Python, functions are values: you can pass them around and return them. A decorator is a function that takes a function and returns a new, wrapped function. The @ syntax is shorthand for the reassignment. Nothing more mystical than that.
+
+The wrapper gets *args and **kwargs so it can call the original with any signature, and @wraps copies over __name__, __doc__, and other metadata — without it, debugging and help() get confusing (every function becomes 'wrapper').
+
+What decorators are for in the real world:
+
+1.  Logging and timing every call to a function.
+2.  Caching results (lru_cache does this in one line).
+3.  Auth guards: @login_required in Flask/Django.
+4.  Retry logic: @retry(max_attempts=3) around flaky API calls.
+5.  Validation: check inputs before the function runs.
+
+The useful mental model: a decorator adds a thin layer around the function — runs before and after it — without touching the function's code.
+
+Code:
+  import time
+  from functools import wraps
+  
+  def timed(func):
+      @wraps(func)
+      def wrapper(*args, **kwargs):
+          start = time.perf_counter()
+          result = func(*args, **kwargs)
+          print(f"{func.__name__} took {time.perf_counter()-start:.3f}s")
+          return result
+      return wrapper
+  
+  @timed
+  def slow_thing():
+    time.sleep(1)
+  
+  slow_thing()  # slow_thing took 1.000s
+
+Key takeaway: If you repeat the same boilerplate around many functions, a decorator is the DRY answer.
+
+Tip: Write your own @timed and @retry once. They take an hour to build and save you debugging time forever.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Python #PythonTips #Coding #Programming #Backend #LearnPython #TheCoderBros #CodingLife
