@@ -1,0 +1,32 @@
+Reading a 10GB log file in Python is instant — if you do it lazily. Generators are why.
+
+A generator function looks like a normal function but contains yield instead of (or before) return. When called, it does not run — it returns an iterator. Each next() call runs the function until the next yield, suspending with all local state intact. That suspension is the superpower: the work is spread out and memory stays flat.
+
+Compare: list comprehension materializes everything (a 10GB file becomes a 10GB+ list). A generator expression or generator function yields one item at a time, forever. Same loop, a million times less memory.
+
+Where they shine:
+
+1.  Processing streams: logs, CSV chunks, API pagination, infinite sequences.
+2.  Pipelining: chain generators — filter, transform, aggregate — each step lazy.
+3.  itertools: count(), cycle(), chain(), takewhile() compose beautifully with them.
+
+The one warning: generators are single-pass. You cannot index them, re-iterate them, or check len(). If you need the data twice, materialize it — or use itertools.tee() carefully.
+
+Code:
+  def read_logs(path):
+      with open(path) as f:
+          for line in f:
+              yield line.strip()
+  
+  # memory: one line at a time, not the whole file
+  for line in read_logs("server.log"):
+      if "ERROR" in line:
+          print(line)
+
+Key takeaway: If you're building a list just to loop over it once, you probably want a generator.
+
+Tip: Convert any function that builds a list and returns it into a generator by swapping return for yield. Measure memory — the surprise is usually 100x.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Python #PythonTips #Coding #Performance #DataEngineering #LearnPython #TheCoderBros #CodingLife
