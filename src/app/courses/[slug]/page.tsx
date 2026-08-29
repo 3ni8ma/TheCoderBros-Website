@@ -1,4 +1,4 @@
-// Updated: 2026-08-29 07:00:29
+// Updated: 2026-08-29 07:30:45
 import { languages as courses } from "@/lib/data/courses";
 import { notFound } from "next/navigation";
 import Slideshow from "@/components/courses/slideshow";
