@@ -1,0 +1,37 @@
+Why does counter() still see 'count' after createCounter() finished? Because of closures — and once you see it, half of JavaScript patterns click.
+
+When a function is defined, JavaScript bundles it with the scope that existed at that moment. That bundle — the function plus its captured variables — is the closure. The inner function returned by createCounter keeps the count variable alive, private and mutable, even though the outer function has long since returned. That is how JS does 'private state' without classes.
+
+The classic interview trap is the loop closure: using var in a loop with setTimeout logs 3,3,3 because all callbacks share the same var binding. Switching to let creates a fresh binding per iteration, logging 0,1,2. Same code, different mental model of what 'captured' means: the variable itself, not its value.
+
+Everyday closures:
+
+1.  Factory functions that bundle config with behavior (makeLogger(level)).
+2.  Event handlers and callbacks that need access to context.
+3.  Memoization: the cache is a closure variable.
+4.  Module pattern: IIFE returns an object whose methods close over private data.
+
+Code:
+  function createCounter() {
+      let count = 0;          // private, survives
+      return function () {
+          count += 1;
+          return count;
+      };
+  }
+  
+  const counter = createCounter();
+  counter(); // 1
+  counter(); // 2  <- still remembers count
+  
+  for (let i = 0; i < 3; i++) {
+      setTimeout(() => console.log(i)); // 0 1 2 (let!)
+  }
+
+Key takeaway: A closure is a backpack: the function carries its birthplace's variables wherever it goes.
+
+Tip: Ask yourself one question when a callback misbehaves: is it capturing a variable, or a snapshot of its value? The fix is usually let or an extra parameter.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#JavaScript #WebDevelopment #JS #Frontend #Coding #LearnToCode #TheCoderBros #CodingLife
