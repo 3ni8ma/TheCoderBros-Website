@@ -852,4 +852,59 @@ Specificity is not complicated — it is a four-digit score. Learn the numbers, 
 _Happy coding!_
 `
   },
+  {
+    slug: "docker-containers-simply-explained",
+    title: "Docker Containers Simply Explained: Ship Code, Not Problems",
+    description: "Containers solve the 'it works on my machine' problem. Here is how they actually work.",
+    date: "2026-08-29",
+    category: "DevOps",
+    readTime: 6,
+    author: "Ryan Banerjee",
+    image: "/images/blog/devops.jpg",
+    content: `
+
+"It works on my machine" is the oldest excuse in software. Docker solves this by packaging your code and its dependencies into a container that runs the same way everywhere.
+
+## Containers vs. Virtual Machines
+
+A virtual machine runs an entire operating system. A container shares the host OS kernel and only packages the application and its dependencies. This makes containers lightweight, fast to start, and efficient to run.
+
+**Think of it as** an apartment building. A VM is a standalone house — complete with its own foundation, plumbing, and electrical. A container is an apartment — it shares the building's infrastructure but has its own locked unit.
+
+## How Docker Works
+
+\`\`\`dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
+\`\`\`
+
+Each instruction in a Dockerfile creates a **layer**. Layers are cached and reused, so rebuilding is fast when only the code changes.
+
+## Key Concepts
+
+-   **Image** — a read-only template (the blueprint)
+-   **Container** — a running instance of an image (the apartment)
+-   **Volume** — persistent storage that survives container restarts
+-   **Network** — how containers talk to each other
+
+## When to Use Docker
+
+-   Consistent development environments across a team
+-   Deploying microservices
+-   Running services in CI/CD pipelines
+-   Testing against specific OS or database versions
+
+**The fix:** if your team spends more time setting up environments than writing code, Docker will pay for itself in a week.
+
+## The Takeaway
+
+Docker is not about containers — it is about consistency. Package once, run anywhere, and stop blaming the environment.
+
+_Happy coding!_
+`
+  },
 ];
