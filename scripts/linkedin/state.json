@@ -1,6 +1,6 @@
 {
-  "topic_index": 18,
-  "last_post_slug": "js-closures",
+  "topic_index": 19,
+  "last_post_slug": "async-await",
   "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-08-29"
+  "last_post_date": "2026-08-30"
 }

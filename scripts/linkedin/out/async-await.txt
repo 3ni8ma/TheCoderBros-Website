@@ -1,0 +1,30 @@
+The most misunderstood line in modern web dev: 'await pauses the function' — not the page, not the server, just that function. Here is the model.
+
+JavaScript runs on one thread with an event loop. When your code hits await, the function saves its state and returns control to the event loop, which keeps handling clicks, rendering, and other requests. When the promise resolves, the function resumes where it left off. That is why 10,000 concurrent API calls do not freeze a Node server — the thread is never idle-waiting.
+
+A promise is an object with three states: pending, fulfilled, rejected. `fetch()` returns one; await unwraps it. The two skills that separate comfortable async from baffled async:
+
+1.  Parallelism: await inside a loop is sequential (slow). Use Promise.all to fire everything at once.
+2.  Error handling: a rejected promise without a catch becomes an unhandled rejection. Wrap awaits in try/catch, or .catch().
+
+A mental shortcut: if you are awaiting inside a for loop and the calls do not depend on each other, you have a bug — you serialized work that could run in parallel.
+
+Code:
+  async function fetchUser(id) {
+      const res = await fetch(`/api/users/${id}`);
+      const data = await res.json();
+      return data;
+  }
+  
+  // 3 requests in PARALLEL (not sequential):
+  const [a, b, c] = await Promise.all([
+      fetchUser(1), fetchUser(2), fetchUser(3),
+  ]);
+
+Key takeaway: await is not a sleep. It is 'yield to the event loop until this resolves'.
+
+Tip: For a whole batch of independent requests, Promise.allSettled is safer than Promise.all — one failure does not lose the other results.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#JavaScript #Async #NodeJS #WebDevelopment #Frontend #Coding #TheCoderBros #CodingLife
