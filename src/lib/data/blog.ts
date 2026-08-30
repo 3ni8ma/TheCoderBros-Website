@@ -907,4 +907,63 @@ Docker is not about containers — it is about consistency. Package once, run an
 _Happy coding!_
 `
   },
+  {
+    slug: "http-status-codes-you-need-to-know",
+    title: "HTTP Status Codes You Actually Need to Know",
+    description: "Not all 500 errors are the same. Here are the status codes that matter and what they mean.",
+    date: "2026-08-30",
+    category: "Web Development",
+    readTime: 5,
+    author: "Nivyadin Dey",
+    image: "/images/blog/webdev.jpg",
+    content: `
+
+Every API call returns a status code. Most developers only know 200 and 404. Here are the codes that actually matter for building and debugging web applications.
+
+## The 2xx Range: Success
+
+| Code | Meaning | When to use |
+| --- | --- | --- |
+| 200 | OK | Standard successful response |
+| 201 | Created | A new resource was created |
+| 204 | No Content | Success with no response body |
+
+## The 3xx Range: Redirection
+
+| Code | Meaning | When to use |
+| --- | --- | --- |
+| 301 | Moved Permanently | The URL has changed forever |
+| 304 | Not Modified | Use the cached version |
+
+## The 4xx Range: Client Errors
+
+| Code | Meaning | When to use |
+| --- | --- | --- |
+| 400 | Bad Request | The request is malformed |
+| 401 | Unauthorized | Authentication is required |
+| 403 | Forbidden | Authenticated but not allowed |
+| 404 | Not Found | The resource does not exist |
+| 429 | Too Many Requests | Rate limit exceeded |
+
+## The 5xx Range: Server Errors
+
+| Code | Meaning | When to use |
+| --- | --- | --- |
+| 500 | Internal Server Error | Something broke on the server |
+| 502 | Bad Gateway | The upstream server failed |
+| 503 | Service Unavailable | The server is overloaded or down |
+
+## The Common Mistake
+
+Returning 200 for errors. If a request fails validation, return 400. If authentication fails, return 401. Status codes are how clients know what happened without reading the response body.
+
+**The fix:** use the most specific status code available. A 400 is better than a 500. A 404 is better than a 400 for missing resources.
+
+## The Takeaway
+
+HTTP status codes are a language between client and server. Learn the vocabulary, and debugging becomes ten times easier.
+
+_Happy coding!_
+`
+  },
 ];
