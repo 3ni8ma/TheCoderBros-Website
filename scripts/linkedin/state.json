@@ -1,6 +1,6 @@
 {
-  "topic_index": 19,
-  "last_post_slug": "async-await",
+  "topic_index": 20,
+  "last_post_slug": "hash-tables",
   "last_error": "Page.goto: net::ERR_INTERNET_DISCONNECTED at https://www.linkedin.com/feed/\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-08-30"
+  "last_post_date": "2026-08-31"
 }
