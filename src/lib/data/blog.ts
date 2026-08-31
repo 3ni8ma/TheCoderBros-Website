@@ -966,4 +966,83 @@ HTTP status codes are a language between client and server. Learn the vocabulary
 _Happy coding!_
 `
   },
+  {
+    slug: "python-generators-and-lazy-evaluation",
+    title: "Python Generators: Process Infinite Data with Zero Memory",
+    description: "Generators let you iterate over massive datasets without loading them into memory. Here is how.",
+    date: "2026-08-31",
+    category: "Python",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/python.jpg",
+    content: `
+
+Loading a 10GB file into memory crashes your script. Generators solve this by producing one item at a time, on demand, with almost zero memory overhead.
+
+## What Makes a Generator Different
+
+A normal function returns a value and exits. A generator **yields** values one at a time and pauses execution. Each time you call \`next()\`, it resumes where it left off.
+
+**Think of it as** a vending machine. Instead of dumping all 500 snacks on the floor (list), it dispenses one at a time when you press a button (yield).
+
+## The Basic Pattern
+
+\`\`\`python
+def read_large_file(path):
+    with open(path) as f:
+        for line in f:
+            yield line.strip()
+
+# Does not load the file into memory
+for line in read_large_file('huge_log.txt'):
+    process(line)
+\`\`\`
+
+## Generator Expressions
+
+A concise syntax for simple generators:
+
+\`\`\`python
+# List comprehension: creates entire list in memory
+squares = [x**2 for x in range(1_000_000)]
+
+# Generator expression: yields one at a time
+squares = (x**2 for x in range(1_000_000))
+\`\`\`
+
+## When to Use Generators
+
+-   Reading large files line by line
+-   Processing database query results in batches
+-   Streaming API responses
+-   Creating infinite sequences
+-   Piping data through multiple processing steps
+
+## The Chaining Trick
+
+Generators compose naturally. You can build a pipeline where each step is a generator:
+
+\`\`\`python
+def parse(lines):
+    for line in lines:
+        yield json.loads(line)
+
+def filter_errors(records):
+    for r in records:
+        if r.get('level') == 'error':
+            yield r
+
+# Pipeline: read -> parse -> filter
+logs = read_large_file('app.log')
+records = parse(logs)
+errors = filter_errors(records)
+\`\`\`
+
+## The Takeaway
+
+Generators turn memory-heavy operations into streaming pipelines. If you are building lists just to iterate over them, you probably want a generator instead.
+
+_Happy coding!_
+`
+  },
 ];
