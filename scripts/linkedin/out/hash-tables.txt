@@ -1,0 +1,22 @@
+When you write dict[key], a hash function turns the key into a number, and the number picks a slot. That is the whole trick behind O(1).
+
+A hash table is an array plus a hash function. Insert: hash the key → array index → store. Lookup: hash the key → same index → return. No scanning, regardless of how many items are stored. That single step is why dicts and sets feel instant even with millions of entries.
+
+The catch: two different keys can hash to the same slot (a collision). The standard solution is chaining — each slot holds a small list, and you walk it when hashes collide. With a good hash function and a sensible load factor (items/slots), chains stay at length ~1, so average work stays O(1). When the load factor climbs, the table resizes (rehashing everything — an occasional O(n) hiccup).
+
+Why programmers love them:
+
+1.  Deduplication: a set is a hash table with no values.
+2.  Caching: memoize by hashing the input, store the output.
+3.  Counting: word frequency is one loop over a dict.
+4.  Everything identity-based: sessions, user maps, registry lookups.
+
+The price: hash tables are unordered (mostly), use more memory than arrays, and their performance depends on a good hash function. That is the trade — space for speed.
+
+Key takeaway: O(1) is not magic — it's 'compute a slot, then maybe walk a tiny chain'.
+
+Tip: When an algorithm needs 'does this exist?' repeatedly, ask whether a hash set changes the complexity. It usually flips O(n²) to O(n).
+
+Follow The Coder Bros for a daily coding lesson.
+
+#DataStructures #Algorithms #HashTables #Coding #ComputerScience #Programming #TheCoderBros #CodingLife
