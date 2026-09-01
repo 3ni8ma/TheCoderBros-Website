@@ -1,6 +1,6 @@
 {
-  "topic_index": 20,
-  "last_post_slug": "hash-tables",
+  "topic_index": 21,
+  "last_post_slug": "binary-search",
   "last_error": "Page.goto: net::ERR_INTERNET_DISCONNECTED at https://www.linkedin.com/feed/\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-08-31"
+  "last_post_date": "2026-09-01"
 }

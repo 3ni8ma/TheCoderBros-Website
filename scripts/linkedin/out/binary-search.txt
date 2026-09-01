@@ -1,0 +1,33 @@
+Think of the classic number-guessing game: 'higher or lower?' halves the search space every answer. That is binary search — and it is everywhere.
+
+Given sorted data, binary search looks at the middle element and compares. If it is too big, the target must be in the left half; too small, the right half. Either way, half the candidates disappear in one comparison. Repeated halving means 1 million items need ~20 comparisons; a billion need ~30. That is log₂ n — the most practical complexity in computer science.
+
+Where it hides in your daily tools:
+
+1.  Database B-tree lookups (indexes are sorted trees).
+2.  'Which version introduced this bug?' — bisecting commits is binary search.
+3.  git bisect: the tool literally asks you higher/lower on commits.
+4.  Standard library: Python's bisect, JS's Array.indexOf (engine-dependent), C++'s std::lower_bound.
+
+The classic bugs: off-by-one on the loop condition (lo <= hi vs lo < hi), integer overflow on (lo + hi) // 2 in old languages, and forgetting the array must be sorted. Otherwise the algorithm is five lines — memorize it.
+
+Code:
+  def binary_search(arr, target):
+      lo, hi = 0, len(arr) - 1
+      while lo <= hi:
+          mid = (lo + hi) // 2
+          if arr[mid] == target:
+              return mid
+          elif arr[mid] < target:
+              lo = mid + 1
+          else:
+              hi = mid - 1
+      return -1
+
+Key takeaway: If your data is sorted, searching is 20 steps, not 1 million.
+
+Tip: When a problem says 'minimize the maximum' or 'find the threshold', think binary search on the answer. That pattern solves half of 'hard' problems.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Algorithms #BinarySearch #DataStructures #Coding #Programming #InterviewPrep #TheCoderBros #CodingLife
