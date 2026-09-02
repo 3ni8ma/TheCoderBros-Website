@@ -1,0 +1,32 @@
+Every 'works on my machine' story dies the same way: a dependency version. Docker fixes it by packaging the machine with the app.
+
+An image is a layered, read-only snapshot: base OS, runtime, dependencies, and your code, assembled by a Dockerfile. Each instruction (FROM, RUN, COPY) adds a layer, which is why layers are cached — rebuilds only rerun what changed. A container is a running instance of that image: its own filesystem view, processes, and network, isolated from the host.
+
+The three concepts that answer 90% of questions:
+
+1.  Ports: -p 8000:8000 maps container port 8000 to your machine's 8000. Without it, the container is unreachable from outside.
+2.  Volumes: -v ./data:/data persists files. Container filesystems are wiped on rebuild — anything you want kept must be a volume.
+3.  Registry: images are pulled from Docker Hub or your own registry; that is why 'just run it' works for the whole team.
+
+The practical upgrade path: write a Dockerfile for one project → add docker-compose.yml to also run Postgres and Redis → push the image to a registry. You have now learned the minimum viable deployment story.
+
+Code:
+  # Dockerfile
+  FROM python:3.12-slim
+  WORKDIR /app
+  COPY requirements.txt .
+  RUN pip install -r requirements.txt
+  COPY . .
+  CMD ["uvicorn", "main:app"]
+  
+  # build and run:
+  # docker build -t my-api .
+  # docker run -p 8000:8000 my-api
+
+Key takeaway: An image is the app plus its entire environment — that is what makes it portable.
+
+Tip: Keep images small: use slim base images and multi-stage builds (compile in one stage, copy the binary into a tiny runtime image). Your deploy times and your team will thank you.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#Docker #DevOps #Containers #Backend #Deployment #Coding #TheCoderBros #CodingLife
