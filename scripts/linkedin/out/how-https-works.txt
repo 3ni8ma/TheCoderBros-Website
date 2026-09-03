@@ -1,0 +1,22 @@
+Every padlock in your browser is the result of a 3-message conversation between your browser and a server you have never met. Here is what actually happens.
+
+HTTPS is HTTP running inside TLS. The job of TLS is threefold: encrypt (no one in the middle reads the traffic), authenticate (the server is who it claims), and ensure integrity (nothing was modified in transit). It does this with a handshake that mixes two kinds of cryptography.
+
+The core idea: asymmetric crypto (public/private key pairs) is slow but perfect for exchanging secrets; symmetric crypto is fast but needs a shared secret. So the handshake uses the server's public key to safely agree on a symmetric session key, then all subsequent traffic uses the fast symmetric encryption.
+
+The identity part is the chain of trust: the server presents a certificate — its public key plus its domain, signed by a certificate authority (CA). Your browser trusts a small set of root CAs, verifies the signature up the chain, and rejects anything unsigned. That is why a self-signed certificate triggers a scary warning: your browser has no reason to trust that identity. This exact machinery also underlies SSH, email encryption, and TLS-secured APIs.
+
+Code:
+  Browser -> Server: Hello, here's what I support
+  Server -> Browser: Certificate + chosen cipher
+  Browser: verifies certificate against trusted CAs
+  Browser: generates session key, sends it encrypted
+  Browser <-> Server: all traffic encrypted
+
+Key takeaway: HTTPS = HTTP + TLS. The handshake agrees on a shared secret; the certificate proves identity.
+
+Tip: Next time you see an expired certificate warning, that is the chain of trust breaking — the server's identity proof expired. Your browser is right to be suspicious.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#HTTPS #Security #TLS #ComputerScience #WebDevelopment #Networking #TheCoderBros #CodingLife

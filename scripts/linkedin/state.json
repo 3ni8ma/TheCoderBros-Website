@@ -1,6 +1,6 @@
 {
-  "topic_index": 22,
-  "last_post_slug": "docker-basics",
+  "topic_index": 23,
+  "last_post_slug": "how-https-works",
   "last_error": "Page.goto: net::ERR_INTERNET_DISCONNECTED at https://www.linkedin.com/feed/\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-09-02"
+  "last_post_date": "2026-09-03"
 }
