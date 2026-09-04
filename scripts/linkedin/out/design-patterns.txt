@@ -1,0 +1,34 @@
+Design patterns are not a checklist of ways to complicate your code. They are names for problems that have been solved thousands of times before — so you solve them in one word.
+
+The Gang of Four catalogued 23 patterns in 1994, but most programmers live comfortably with a handful. The value of the pattern is mostly vocabulary: saying 'publish-subscribe' instantly communicates a whole architecture, and reviewer conversations stop being paragraphs of hand-waving.
+
+The three that appear in nearly every codebase:
+
+1.  Observer/pub-sub: one object notifies many. You use it every time you subscribe to an event — DOM events, message queues, state managers (Redux, Vue reactivity), WebSocket broadcasts. If you have a 1-to-many notification problem, you have this pattern.
+2.  Factory: centralize object creation. When constructing an object requires config, branching, or caches, a factory keeps that logic in one place.
+3.  Singleton: one shared instance. Databases, loggers, config — but treat it as a flag: global mutable state is the classic source of impossible bugs. Modern dependency injection often replaces it.
+
+The anti-pattern is pattern-first development: forcing FactoryFactoryFactory onto 50 lines of code. Patterns earn their place when a problem actually hurts.
+
+Code:
+  # Observer: the pattern behind events & pub/sub
+  class EventBus:
+      def __init__(self):
+          self.listeners = []
+      def subscribe(self, fn):
+          self.listeners.append(fn)
+      def emit(self, data):
+          for fn in self.listeners:
+              fn(data)
+  
+  bus = EventBus()
+  bus.subscribe(print)
+  bus.emit("user signed up")
+
+Key takeaway: Use a pattern when the problem matches. If it doesn't match, you don't need it.
+
+Tip: Read the catalog once so you recognize the patterns, but implement only what you have felt the pain of. Code that grows in pain grows into patterns naturally.
+
+Follow The Coder Bros for a daily coding lesson.
+
+#DesignPatterns #SoftwareEngineering #Programming #Architecture #CleanCode #Coding #TheCoderBros #CodingLife
