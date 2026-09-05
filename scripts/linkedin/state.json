@@ -1,6 +1,6 @@
 {
-  "topic_index": 0,
-  "last_post_slug": "design-patterns",
+  "topic_index": 1,
+  "last_post_slug": "big-o-time-complexity",
   "last_error": "Page.goto: net::ERR_INTERNET_DISCONNECTED at https://www.linkedin.com/feed/\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-09-04"
+  "last_post_date": "2026-09-05"
 }
