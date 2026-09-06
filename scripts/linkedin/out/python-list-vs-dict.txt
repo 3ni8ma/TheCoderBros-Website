@@ -16,14 +16,14 @@ Code:
   users = [{'id': 1, 'name': 'Ada'}, {'id': 2, 'name': 'Alan'}]
   
   for order in orders:
-      for u in users:
-          if u['id'] == order['user_id']:
-              # ...
+      for u in users:
+          if u['id'] == order['user_id']:
+              # ...
   
   # Fast: build a dict once, O(1) lookups -> O(n)
   by_id = {u['id']: u for u in users}
   for order in orders:
-      u = by_id.get(order['user_id'])
+      u = by_id.get(order['user_id'])
 
 Key takeaway: If you ever write `if x in my_list` inside a loop, you probably want a set or dict.
 
