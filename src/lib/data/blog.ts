@@ -1045,4 +1045,94 @@ Generators turn memory-heavy operations into streaming pipelines. If you are bui
 _Happy coding!_
 `
   },
+  {
+    slug: "rest-api-design-best-practices",
+    title: "REST API Design: Best Practices That Scale",
+    description: "Designing APIs that are consistent, predictable, and developer-friendly.",
+    date: "2026-09-11",
+    category: "Web Development",
+    readTime: 7,
+    author: "Nivyadin Dey",
+    image: "/images/blog/webdev.jpg",
+    content: `
+
+A well-designed API is invisible — developers intuit how to use it. A poorly designed API generates support tickets. Here are the principles that make the difference.
+
+## Resource Naming
+
+Use nouns, not verbs. The HTTP method is the verb.
+
+\`\`\`
+GET /users          # List users
+GET /users/123      # Get user 123
+POST /users         # Create user
+PUT /users/123      # Update user 123
+DELETE /users/123   # Delete user 123
+\`\`\`
+
+**Think of it as** a filing cabinet. The URL is the folder path. The HTTP method is what you do with the file.
+
+## Consistent Response Format
+
+\`\`\`json
+{
+  "data": { ... },
+  "meta": {
+    "page": 1,
+    "total": 42
+  }
+}
+\`\`\`
+
+Always return data in the same shape. Errors should follow the same structure:
+
+\`\`\`json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Email is required",
+    "field": "email"
+  }
+}
+\`\`\`
+
+## Pagination
+
+For large collections, always paginate:
+
+\`\`\`
+GET /users?page=2&limit=20
+\`\`\`
+
+Return the total count and pagination metadata so the client knows how many pages exist.
+
+## Versioning
+
+Version your API from day one:
+\`\`\`
+/api/v1/users
+/api/v2/users
+\`\`\`
+
+Breaking changes go in a new version. Non-breaking changes (adding fields) go in the current version.
+
+## Rate Limiting
+
+Return rate limit headers with every response:
+
+\`\`\`
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 97
+X-RateLimit-Reset: 1640000000
+\`\`\`
+
+When the limit is hit, return 429 Too Many Requests.
+
+## The Takeaway
+
+Good API design is about consistency and predictability. Follow conventions, return predictable shapes, and document everything. Your future self and your consumers will thank you.
+
+_Happy coding!_
+`
+  },
 ];
