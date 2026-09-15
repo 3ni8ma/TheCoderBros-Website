@@ -1135,4 +1135,69 @@ Good API design is about consistency and predictability. Follow conventions, ret
 _Happy coding!_
 `
   },
+  {
+    slug: "sql-joins-visual-explained",
+    title: "SQL Joins Visually Explained: INNER, LEFT, RIGHT, FULL",
+    description: "Joins are the most confusing SQL concept until you see them as Venn diagrams. Then they click.",
+    date: "2026-09-15",
+    category: "Database",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/database.jpg",
+    content: `
+
+Joins combine rows from two tables based on a related column. The type of join determines which rows are included. Venn diagrams make this obvious.
+
+## The Four Main Joins
+
+**INNER JOIN** — only rows that exist in both tables:
+
+\`\`\`sql
+SELECT * FROM orders
+INNER JOIN customers ON orders.customer_id = customers.id;
+\`\`\`
+
+**LEFT JOIN** — all rows from the left table, matching rows from the right:
+
+\`\`\`sql
+SELECT * FROM customers
+LEFT JOIN orders ON customers.id = orders.customer_id;
+\`\`\`
+
+**RIGHT JOIN** — all rows from the right table, matching rows from the left:
+
+\`\`\`sql
+SELECT * FROM orders
+RIGHT JOIN customers ON orders.customer_id = customers.id;
+\`\`\`
+
+**FULL OUTER JOIN** — all rows from both tables:
+
+\`\`\`sql
+SELECT * FROM customers
+FULL OUTER JOIN orders ON customers.id = orders.customer_id;
+\`\`\`
+
+## When to Use Each
+
+| Join | Use when |
+| --- | --- |
+| INNER | You only want records that exist in both tables |
+| LEFT | You want all records from the main table, with optional related data |
+| RIGHT | You want all records from the related table (rare, usually rewrite as LEFT) |
+| FULL | You want everything, including unmatched rows on both sides |
+
+## The Common Mistake
+
+Using INNER JOIN when you need LEFT JOIN. If you want all customers even if they have no orders, use LEFT JOIN. INNER JOIN silently drops customers without orders.
+
+**The fix:** always ask yourself: do I want all rows from the left table, or only matching ones?
+
+## The Takeaway
+
+Joins are Venn diagrams in SQL clothing. Draw the circles, shade the overlap, and the right join type becomes obvious.
+
+_Happy coding!_
+`
+  },
 ];
