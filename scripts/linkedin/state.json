@@ -1,6 +1,6 @@
 {
-  "topic_index": 12,
-  "last_post_slug": "neural-networks-neurons",
+  "topic_index": 13,
+  "last_post_slug": "transformers-explained",
   "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-09-17"
+  "last_post_date": "2026-09-19"
 }
