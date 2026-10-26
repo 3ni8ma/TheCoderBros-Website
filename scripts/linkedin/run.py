@@ -10,6 +10,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
+import fcntl
+
 BASE = Path(__file__).parent
 REPO = BASE.parent.parent
 sys.path.insert(0, str(BASE))
@@ -45,7 +47,9 @@ def log(msg):
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(LOG_FILE, "a") as f:
         f.write(line + "\n")
-    print(line, flush=True)
+    # launchd points stdout at this same file, so echoing would double every line.
+    if sys.stdout.isatty():
+        print(line, flush=True)
 
 
 def topic_url(topic):
@@ -92,6 +96,15 @@ def pick_topic(state):
 
 
 def main():
+    # launchd fires every missed trigger when the laptop wakes, so two copies
+    # can start in the same second. Only one may reach the posting code.
+    lock = open(BASE / ".post.lock", "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        log("ALREADY_RUNNING — exiting")
+        sys.exit(0)
+
     state = load_state()
     topic, idx, today = pick_topic(state)
     log(f"TOPIC: {topic['slug']} ({topic['category']})")
