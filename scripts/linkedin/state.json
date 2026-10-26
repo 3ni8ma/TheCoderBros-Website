@@ -1,6 +1,6 @@
 {
-  "topic_index": 10,
-  "last_post_slug": "ml-pipeline",
+  "topic_index": 11,
+  "last_post_slug": "overfitting",
   "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
-  "last_post_date": "2026-10-25"
+  "last_post_date": "2026-10-26"
 }
