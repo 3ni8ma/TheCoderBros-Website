@@ -1200,4 +1200,118 @@ Joins are Venn diagrams in SQL clothing. Draw the circles, shade the overlap, an
 _Happy coding!_
 `
   },
+  {
+    slug: "python-decorators-demystified",
+    title: "Python Decorators Demystified: Functions That Modify Functions",
+    description: "Decorators look like magic until you see what they actually do. Here is the plain-English version.",
+    date: "2026-10-26",
+    category: "Python",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/python.jpg",
+    content: `
+
+Decorators are one of Python's most elegant features — and one of the most confusing for beginners. Once you see the pattern, though, they become second nature.
+
+## What a Decorator Actually Is
+
+A decorator is a function that takes a function, adds something to it, and returns the modified version. That is it. There is no magic.
+
+**Think of it as** gift wrapping. The gift (your function) stays the same, but the wrapping (the decorator) adds something extra.
+
+## The Plain Version
+
+\`\`\`python
+def log_calls(func):
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+@log_calls
+def add(a, b):
+    return a + b
+
+add(2, 3)  # Prints: Calling add
+           # Returns: 5
+\`\`\`
+
+The \`@log_calls\` syntax is just shorthand for \`add = log_calls(add)\`.
+
+## Real-World Uses
+
+-   **Timing functions** — measure how long a function takes
+-   **Access control** — check permissions before running a function
+-   **Caching** — store results to avoid recomputation
+-   **Logging and debugging** — trace function calls automatically
+-   **Rate limiting** — prevent functions from being called too often
+
+## Stacking Decorators
+
+You can stack multiple decorators. They apply bottom-up:
+
+\`\`\`python
+@decorator_a
+@decorator_b
+def my_func():
+    pass
+# Same as: my_func = decorator_a(decorator_b(my_func))
+\`\`\`
+
+## The Takeaway
+
+Decorators are not magic — they are just functions that take functions. Once you see the \`wrapper\` pattern, you can build any decorator you need.
+
+_Happy coding!_
+`
+  },
+  {
+    slug: "reading-stack-traces",
+    title: "How to Read a Stack Trace Without Panicking",
+    description: "A stack trace is a map, not an error message. Here is how to find the one line that matters.",
+    date: "2026-10-26",
+    category: "Fundamentals",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/fundamentals.jpg",
+    content: `
+A stack trace is not the error. It is the list of calls that led to the error, with the newest call at the top and the oldest at the bottom. Most people read the top line, see something unfamiliar, and give up. The useful line is usually a few below that.
+
+## What the lines actually say
+
+\`\`\`text
+Traceback (most recent call last):
+  File "app.py", line 42, in <module>
+    total = checkout(cart)
+  File "app.py", line 28, in checkout
+    return apply_discount(total, user)
+  File "app.py", line 19, in apply_discount
+    return total * (1 - user.discount_rate)
+AttributeError: 'NoneType' object has no attribute 'discount_rate'
+\`\`\`
+
+Read the last line first. That is the error: something was \`None\` and we asked it for an attribute. Then walk up until you find the frame that belongs to your code and where the bad value entered. Here \`user\` is \`None\` at line 19, and line 28 is the call that passed it in.
+
+## The frame you want
+
+Your own file, not the library. If the trace is all \`site-packages\`, the bug is usually in the arguments you passed in. The first frame that is your code is where to start reading.
+
+In JavaScript the order is reversed: the error comes first, then the call stack, innermost at the top.
+
+\`\`\`text
+TypeError: Cannot read properties of undefined (reading 'name')
+    at renderUser (user.js:12:20)
+    at UserList (list.js:8:9)
+\`\`\`
+
+\`renderUser\` received something undefined. Look at what \`UserList\` passed it.
+
+## When your code is not in the trace
+
+That means the failure happened inside a framework before your code ran, or after it returned. Check the request, the config, or the data you handed over. A trace with no frames of yours is still telling you something: the problem is at the boundary.
+
+## Recursion
+
+Deep traces that repeat the same function are a missing base case. Count the repeats, then read the arguments at each level. The one where the argument stops changing is where the condition failed.`
+  },
 ];
