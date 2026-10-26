@@ -53,6 +53,11 @@ def topic_url(topic):
     return f"{SITE}/blog/{slug}" if slug else f"{SITE}/blog"
 
 
+def tracked(url, slug):
+    """Without these the LinkedIn traffic is indistinguishable from direct."""
+    return f"{url}?utm_source=linkedin&utm_medium=social&utm_campaign={slug}"
+
+
 def build_caption(topic):
     """Short, plain, first-person. Labels like 'Key takeaway:' are what make
     a caption read as generated, so the structure carries the emphasis."""
@@ -60,7 +65,8 @@ def build_caption(topic):
     body = c["body"][0] if c["body"] else ""
     tags = " ".join(c["hashtags"][:3])
 
-    parts = [c["hook"], "", body, "", topic["takeaway"], "", f"Longer version: {topic_url(topic)}"]
+    link = tracked(topic_url(topic), topic["slug"])
+    parts = [c["hook"], "", body, "", topic["takeaway"], "", f"Longer version: {link}"]
     if tags:
         parts.extend(["", tags])
     return "\n".join(parts)

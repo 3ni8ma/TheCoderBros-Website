@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ClientLayout } from "./client-layout";
+import { SiteAnalytics } from "@/components/site-analytics";
 import "./globals.css";
 
 const inter = Inter({
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-dvh flex flex-col antialiased font-sans">
         <ClientLayout>{children}</ClientLayout>
+        <SiteAnalytics />
       </body>
     </html>
   );
