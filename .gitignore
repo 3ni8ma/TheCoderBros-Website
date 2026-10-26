@@ -48,3 +48,5 @@ __pycache__/
 *.pyc
 scripts/linkedin/out/*.html
 scripts/linkedin/queue.json
+
+# Pipeline timestamp 1792987202
