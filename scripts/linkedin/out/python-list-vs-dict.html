@@ -7,7 +7,11 @@
     padding:76px 84px 64px; display:flex; flex-direction:column;
     -webkit-font-smoothing:antialiased;
   }
-  .rule { height:1px; background:#DEDEDE; }
+  .rule { height:1px; background:#DEDEDE; flex:none; }
+  .main { flex:1; display:flex; flex-direction:column; justify-content:flex-start; min-height:0; }
+  .main.sparse .row { padding:21px 0; }
+  .main.sparse .txt { font-size:29px; }
+  .main.sparse .tagline { margin-bottom:52px; }
   .masthead {
     display:flex; justify-content:space-between; align-items:baseline;
     font-family:"SF Mono", Menlo, ui-monospace, monospace;
@@ -57,14 +61,16 @@
   <div class="masthead"><span>thecoderbros.vercel.app</span><span>The Coder Bros</span></div>
   <div class="rule"></div>
 
-  <div class="cat">Python</div>
-  <h1>List vs Dict in Python</h1>
-  <div class="tagline">The single biggest performance decision in Python code.</div>
+  <main class="main">
+    <div class="cat">Python</div>
+    <h1>List vs Dict in Python</h1>
+    <div class="tagline">The single biggest performance decision in Python code.</div>
 
-  <div class="rows"><div class="row"><div class="idx">1</div><div class="txt">List: ordered, indexed by position — great for sequences.</div></div><div class="row"><div class="idx">2</div><div class="txt">Dict: keyed lookup in O(1) — &#x27;is this in here?&#x27; questions.</div></div><div class="row"><div class="idx">3</div><div class="txt">membership in list: O(n). membership in dict: O(1).</div></div><div class="row"><div class="idx">4</div><div class="txt">Rule: if you only store values to check existence, use a set.</div></div></div>
-  <div class="code-label">python</div><pre class="code"><span class="c"># Slow: O(n) check inside O(n) loop -&gt; O(n^2)</span><br>users = [{&#x27;id&#x27;: 1, &#x27;name&#x27;: &#x27;Ada&#x27;}, {&#x27;id&#x27;: 2, &#x27;name&#x27;: &#x27;Alan&#x27;}]<br>&nbsp;<br>for order in orders:<br>    for u in users:<br>        if u[&#x27;id&#x27;] == order[&#x27;user_id&#x27;]:<br><span class="c">            # ...</span><br>&nbsp;<br><span class="c"># Fast: build a dict once, O(1) lookups -&gt; O(n)</span><br>by_id = {u[&#x27;id&#x27;]: u for u in users}<br>for order in orders:<br>    u = by_id.get(order[&#x27;user_id&#x27;])</pre>
+    <div class="rows"><div class="row"><div class="idx">1</div><div class="txt">List: ordered, indexed by position — great for sequences.</div></div><div class="row"><div class="idx">2</div><div class="txt">Dict: keyed lookup in O(1) — &#x27;is this in here?&#x27; questions.</div></div><div class="row"><div class="idx">3</div><div class="txt">membership in list: O(n). membership in dict: O(1).</div></div><div class="row"><div class="idx">4</div><div class="txt">Rule: if you only store values to check existence, use a set.</div></div></div>
+    <pre class="code"><span class="c"># Slow: O(n) check inside O(n) loop -&gt; O(n^2)</span><br>users = [{&#x27;id&#x27;: 1, &#x27;name&#x27;: &#x27;Ada&#x27;}, {&#x27;id&#x27;: 2, &#x27;name&#x27;: &#x27;Alan&#x27;}]<br>&nbsp;<br>for order in orders:<br>    for u in users:<br>        if u[&#x27;id&#x27;] == order[&#x27;user_id&#x27;]:<br><span class="c">            # ...</span><br>&nbsp;<br><span class="c"># Fast: build a dict once, O(1) lookups -&gt; O(n)</span><br>by_id = {u[&#x27;id&#x27;]: u for u in users}<br>for order in orders:<br>    u = by_id.get(order[&#x27;user_id&#x27;])</pre>
 
-  <div class="takeaway"><span class="lead">Worth remembering</span>If you ever write `if x in my_list` inside a loop, you probably want a set or dict.</div>
+    <div class="takeaway"><span class="lead">Worth remembering</span>If you ever write `if x in my_list` inside a loop, you probably want a set or dict.</div>
+  </main>
 
   <div class="foot"><span>Code, explained plainly.</span><span>thecoderbros.vercel.app/blog</span></div>
 </body></html>

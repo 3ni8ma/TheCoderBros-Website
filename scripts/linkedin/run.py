@@ -11,6 +11,7 @@ from datetime import date
 from pathlib import Path
 
 BASE = Path(__file__).parent
+REPO = BASE.parent.parent
 sys.path.insert(0, str(BASE))
 
 from topics import TOPICS  # noqa: E402
@@ -21,7 +22,22 @@ OUT_DIR = BASE / "out"
 STATE_FILE = BASE / "state.json"
 LOG_FILE = Path.home() / ".local" / "var" / "log" / "thecoderbros-linkedin.log"
 
-HASHTAG_BASE = "#TheCoderBros #CodingLife"
+SITE = "https://thecoderbros.vercel.app"
+
+# Explicit, because keyword matching linked "How HTTPS Works" to the Git
+# internals post. A wrong deep link is worse than sending people to the index.
+BLOG_FOR_TOPIC = {
+    "big-o-time-complexity": "understanding-big-o-notation",
+    "recursion-explained": "recursion-simply-explained",
+    "git-internals": "git-internals-how-it-actually-works",
+    "css-specificity": "css-specificity-once-and-for-all",
+    "http-status-codes": "http-status-codes-you-need-to-know",
+    "rest-api-design": "rest-api-design-best-practices",
+    "sql-joins": "sql-joins-visual-explained",
+    "python-generators": "python-generators-and-lazy-evaluation",
+    "async-await": "javascript-async-await",
+    "docker-basics": "docker-containers-simply-explained",
+}
 
 
 def log(msg):
@@ -30,6 +46,24 @@ def log(msg):
     with open(LOG_FILE, "a") as f:
         f.write(line + "\n")
     print(line, flush=True)
+
+
+def topic_url(topic):
+    slug = BLOG_FOR_TOPIC.get(topic["slug"])
+    return f"{SITE}/blog/{slug}" if slug else f"{SITE}/blog"
+
+
+def build_caption(topic):
+    """Short, plain, first-person. Labels like 'Key takeaway:' are what make
+    a caption read as generated, so the structure carries the emphasis."""
+    c = topic["caption"]
+    body = c["body"][0] if c["body"] else ""
+    tags = " ".join(c["hashtags"][:3])
+
+    parts = [c["hook"], "", body, "", topic["takeaway"], "", f"Longer version: {topic_url(topic)}"]
+    if tags:
+        parts.extend(["", tags])
+    return "\n".join(parts)
 
 
 def load_state():
@@ -49,30 +83,6 @@ def pick_topic(state):
         sys.exit(0)
     idx = state.get("topic_index", 0)
     return TOPICS[idx % len(TOPICS)], idx, today
-
-
-def build_caption(topic):
-    def nbsp_indent(line):
-        stripped = line.lstrip(" ")
-        return "\u00A0" * (len(line) - len(stripped)) + stripped
-
-    c = topic["caption"]
-    parts = [c["hook"], ""]
-    for p in c["body"]:
-        parts.extend([p, ""])
-    if topic.get("code"):
-        parts.append("Code:")
-        for line in topic["code"]["lines"]:
-            parts.append("  " + nbsp_indent(line))
-        parts.append("")
-    parts.append(f"Key takeaway: {topic['takeaway']}")
-    parts.append("")
-    parts.append(f"Tip: {c['tip']}")
-    parts.append("")
-    parts.append("Follow The Coder Bros for a daily coding lesson.")
-    parts.append("")
-    parts.append(" ".join(c["hashtags"] + [HASHTAG_BASE]))
-    return "\n".join(parts)
 
 
 def main():

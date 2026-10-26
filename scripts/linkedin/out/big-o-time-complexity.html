@@ -7,7 +7,11 @@
     padding:76px 84px 64px; display:flex; flex-direction:column;
     -webkit-font-smoothing:antialiased;
   }
-  .rule { height:1px; background:#DEDEDE; }
+  .rule { height:1px; background:#DEDEDE; flex:none; }
+  .main { flex:1; display:flex; flex-direction:column; justify-content:flex-start; min-height:0; }
+  .main.sparse .row { padding:21px 0; }
+  .main.sparse .txt { font-size:29px; }
+  .main.sparse .tagline { margin-bottom:52px; }
   .masthead {
     display:flex; justify-content:space-between; align-items:baseline;
     font-family:"SF Mono", Menlo, ui-monospace, monospace;
@@ -40,7 +44,7 @@
     background:#F7F7F5; border:1px solid #DEDEDE; border-radius:4px;
     padding:26px 30px; font-family:"SF Mono", Menlo, ui-monospace, monospace;
     font-size:21px; line-height:1.62; color:#2E2E2E;
-    white-space:pre-wrap; word-break:break-word; margin-bottom:36px;
+    white-space:pre; word-break:normal; flex:0 0 auto; margin-bottom:36px;
   }
   .code .c { color:#8A8A8A; }
   .takeaway { font-size:25px; line-height:1.45; color:#141414; padding-top:24px; }
@@ -57,14 +61,16 @@
   <div class="masthead"><span>thecoderbros.vercel.app</span><span>The Coder Bros</span></div>
   <div class="rule"></div>
 
-  <div class="cat">Computer Science</div>
-  <h1>Big O in 5 Minutes</h1>
-  <div class="tagline">How to predict your code&#x27;s speed before the data grows.</div>
+  <main class="main sparse">
+    <div class="cat">Computer Science</div>
+    <h1>Big O in 5 Minutes</h1>
+    <div class="tagline">How to predict your code&#x27;s speed before the data grows.</div>
 
-  <div class="rows"><div class="row"><div class="idx">1</div><div class="txt">O(1): constant time. Fast at any size — like dict lookups.</div></div><div class="row"><div class="idx">2</div><div class="txt">O(n): linear. 10x the data means 10x the work.</div></div><div class="row"><div class="idx">3</div><div class="txt">O(n log n): the sweet spot for sorting — merge sort lives here.</div></div><div class="row"><div class="idx">4</div><div class="txt">O(n²): nested loops. Fine for small n, painful at scale.</div></div></div>
-  
+    <div class="rows"><div class="row"><div class="idx">1</div><div class="txt">O(1): constant time. Fast at any size — like dict lookups.</div></div><div class="row"><div class="idx">2</div><div class="txt">O(n): linear. 10x the data means 10x the work.</div></div><div class="row"><div class="idx">3</div><div class="txt">O(n log n): the sweet spot for sorting — merge sort lives here.</div></div><div class="row"><div class="idx">4</div><div class="txt">O(n²): nested loops. Fine for small n, painful at scale.</div></div></div>
+    
 
-  <div class="takeaway"><span class="lead">Worth remembering</span>Nested loops are a smell. Ask: can I do this in one pass?</div>
+    <div class="takeaway"><span class="lead">Worth remembering</span>Nested loops are a smell. Ask: can I do this in one pass?</div>
+  </main>
 
   <div class="foot"><span>Code, explained plainly.</span><span>thecoderbros.vercel.app/blog</span></div>
 </body></html>

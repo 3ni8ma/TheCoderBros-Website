@@ -71,7 +71,11 @@ def build_html(topic):
     padding:76px 84px 64px; display:flex; flex-direction:column;
     -webkit-font-smoothing:antialiased;
   }}
-  .main {{ flex:1; display:flex; flex-direction:column; justify-content:center; min-height:0; }}
+  .rule {{ height:1px; background:{RULE}; flex:none; }}
+  .main {{ flex:1; display:flex; flex-direction:column; justify-content:flex-start; min-height:0; }}
+  .main.sparse .row {{ padding:21px 0; }}
+  .main.sparse .txt {{ font-size:29px; }}
+  .main.sparse .tagline {{ margin-bottom:52px; }}
   .masthead {{
     display:flex; justify-content:space-between; align-items:baseline;
     font-family:"SF Mono", Menlo, ui-monospace, monospace;
@@ -104,7 +108,7 @@ def build_html(topic):
     background:{CODE_BG}; border:1px solid {RULE}; border-radius:4px;
     padding:26px 30px; font-family:"SF Mono", Menlo, ui-monospace, monospace;
     font-size:21px; line-height:1.62; color:{BODY};
-    white-space:pre-wrap; word-break:break-word; margin-bottom:36px;
+    white-space:pre; word-break:normal; flex:0 0 auto; min-width:0; box-sizing:border-box; margin-bottom:36px;
   }}
   .code .c {{ color:#8A8A8A; }}
   .takeaway {{ font-size:25px; line-height:1.45; color:{INK}; padding-top:24px; }}
@@ -121,14 +125,16 @@ def build_html(topic):
   <div class="masthead"><span>{SITE}</span><span>The Coder Bros</span></div>
   <div class="rule"></div>
 
-  <div class="cat">{esc(topic["category"])}</div>
-  <h1>{esc(topic["headline"])}</h1>
-  <div class="tagline">{esc(topic["tagline"])}</div>
+  <main class="main{"" if topic.get("code") else " sparse"}">
+    <div class="cat">{esc(topic["category"])}</div>
+    <h1>{esc(topic["headline"])}</h1>
+    <div class="tagline">{esc(topic["tagline"])}</div>
 
-  <div class="rows">{points}</div>
-  {code_html}
+    <div class="rows">{points}</div>
+    {code_html}
 
-  <div class="takeaway"><span class="lead">Worth remembering</span>{esc(topic["takeaway"])}</div>
+    <div class="takeaway"><span class="lead">Worth remembering</span>{esc(topic["takeaway"])}</div>
+  </main>
 
   <div class="foot"><span>Code, explained plainly.</span><span>{SITE}/blog</span></div>
 </body></html>"""
@@ -146,6 +152,31 @@ def render(topic, out_path):
         page = browser.new_page(viewport={"width": 1080, "height": 1350})
         page.goto(html_path.as_uri())
         page.wait_for_timeout(400)
+        # Long topics (big code blocks) overflow 1350px. Shrinking the whole
+        # block keeps the type proportional instead of letting the footer
+        # collide with the takeaway.
+        page.evaluate(
+            """() => {
+              // Code must not wrap mid-expression; shrink it until the longest
+              // line fits instead.
+              const pre = document.querySelector('pre.code');
+              if (pre) {
+                let fs = parseFloat(getComputedStyle(pre).fontSize);
+                let guard = 0;
+                while (pre.scrollWidth > pre.clientWidth && fs > 12 && guard++ < 40) {
+                  fs -= 0.5;
+                  pre.style.fontSize = fs + 'px';
+                }
+              }
+              const main = document.querySelector('main');
+              const fit = main.clientHeight / main.scrollHeight;
+              if (fit < 1) {
+                main.style.transformOrigin = 'top center';
+                main.style.transform = `scale(${Math.max(fit, 0.6)})`;
+              }
+            }"""
+        )
+        page.wait_for_timeout(150)
         page.screenshot(path=str(out_path), full_page=True, timeout=60000)
         browser.close()
     return out_path
