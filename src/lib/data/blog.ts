@@ -1314,4 +1314,68 @@ That means the failure happened inside a framework before your code ran, or afte
 
 Deep traces that repeat the same function are a missing base case. Count the repeats, then read the arguments at each level. The one where the argument stops changing is where the condition failed.`
   },
+  {
+    slug: "git-undo-without-panic",
+    title: "Git Undo, Without Panic",
+    description: "Restore, reset, revert, reflog. Four commands that cover almost every 'I broke it' moment.",
+    date: "2026-10-28",
+    category: "Tools",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/tools.jpg",
+    content: `
+Most git fear comes from not knowing which undo applies. There are four, and they are not interchangeable.
+
+## Changed a file and want it back
+
+\`\`\`bash
+git restore app.js
+\`\`\`
+
+The file returns to the last committed version. Your edits are gone. If you might want them, \`git stash\` first instead.
+
+To unstage something you already added:
+
+\`\`\`bash
+git restore --staged app.js
+\`\`\`
+
+## Committed too early
+
+\`\`\`bash
+git reset --soft HEAD~1
+\`\`\`
+
+The commit is undone, the changes stay staged, nothing is lost. This is the one to reach for after a bad commit message or a commit that was too small.
+
+\`--mixed\` (the default) unstages as well. \`--hard\` throws the changes away. Only use \`--hard\` when you are certain, because it is the one that can lose work.
+
+## Already pushed
+
+Do not rewrite it. Undo it forward:
+
+\`\`\`bash
+git revert <commit>
+\`\`\`
+
+That creates a new commit reversing the old one. History stays intact, which is what everyone else's clone expects.
+
+## Anything at all, in the last 30 days
+
+\`\`\`bash
+git reflog
+\`\`\`
+
+Every time HEAD moved, it was recorded. Find the commit you had before the mistake and reset to it.
+
+\`\`\`bash
+git reset --hard HEAD@{3}
+\`\`\`
+
+This is the safety net that makes git hard to permanently break. A commit you "lost" with \`--hard\` is still in the reflog until it is garbage collected.
+
+## The one rule
+
+Before any destructive command, run \`git status\` and \`git log --oneline -5\`. Ten seconds of reading tells you which of the four you actually need.`
+  },
 ];
