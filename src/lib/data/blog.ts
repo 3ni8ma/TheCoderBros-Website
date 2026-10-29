@@ -1432,4 +1432,52 @@ if missing:
 
 A container that refuses to boot is much easier to debug than one that throws a 500 on the first checkout.`
   },
+  {
+    slug: "n-plus-one-queries",
+    title: "The N+1 Query, and How to Spot It",
+    description: "One loop, one query per row, and a page that gets slower every month. The most common performance bug in database code.",
+    date: "2026-10-29",
+    category: "Database",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/data-structures.jpg",
+    content: `
+The page loads in 120ms in development and four seconds in production. Nothing changed in the code. What changed is the number of rows.
+
+## The shape of the bug
+
+\`\`\`python
+orders = db.query("SELECT * FROM orders LIMIT 50")
+for order in orders:
+    customer = db.query("SELECT * FROM customers WHERE id = ?", order.customer_id)
+    print(customer.name)
+\`\`\`
+
+That is one query for the orders, then one more per order. Fifty-one queries where two would do. The code looks fine because the loop is right there, and the cost is hidden inside the call.
+
+It gets worse quietly. Ten orders is fine. Ten thousand orders is a timeout, and the query count grows with the data, not the code.
+
+## The fix
+
+Ask for the related rows in one statement:
+
+\`\`\`python
+sql = (
+    "SELECT orders.*, customers.name "
+    "FROM orders JOIN customers ON customers.id = orders.customer_id "
+    "LIMIT 50"
+)
+rows = db.query(sql)
+\`\`\`
+
+ORMs have the same idea under different names. Django has \`select_related\` for foreign keys and \`prefetch_related\` for many-to-many. Rails has \`includes\`. Prisma has \`include\`. All of them mean: load the relation now, not per row.
+
+## Finding it
+
+Turn on query logging in development and count the statements for a single request. If the number scales with the number of rows returned, you have one. In Django, \`connection.queries\` shows every statement. In Rails, watch the log for repeated \`SELECT ... WHERE id = $1\`.
+
+## The other N+1
+
+The same pattern appears without a database: an HTTP call inside a loop, a file read per item, a cache lookup per row. The fix is always to move the call outside the loop and batch it.`
+  },
 ];
