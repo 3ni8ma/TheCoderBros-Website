@@ -1378,4 +1378,58 @@ This is the safety net that makes git hard to permanently break. A commit you "l
 
 Before any destructive command, run \`git status\` and \`git log --oneline -5\`. Ten seconds of reading tells you which of the four you actually need.`
   },
+  {
+    slug: "environment-variables-and-secrets",
+    title: "Environment Variables, Config, and Secrets",
+    description: "Why API keys belong in env vars, why .env stays out of git, and what to do when one leaks.",
+    date: "2026-10-29",
+    category: "DevOps",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/deploy-apps.jpg",
+    content: `
+The same code runs on your laptop, a staging box, and production. What changes is configuration: database URLs, ports, API keys. Environment variables are how that difference is passed in without editing code.
+
+## Reading them
+
+\`\`\`python
+import os
+
+DATABASE_URL = os.environ["DATABASE_URL"]
+DEBUG = os.environ.get("DEBUG", "false") == "true"
+\`\`\`
+
+Use \`[]\` for values the app cannot start without, and \`.get\` with a default for optional ones.
+
+In Node and Next.js the same idea:
+
+\`\`\`js
+const key = process.env.STRIPE_KEY;
+\`\`\`
+
+Only variables prefixed with \`NEXT_PUBLIC_\` reach the browser. That prefix is a promise that the value is safe to publish, so never put a secret behind it.
+
+## Why .env stays out of git
+
+A \`.env\` file holds real keys. Once committed, the key is in every clone and in the history forever, even if you delete it in the next commit. Add it to \`.gitignore\` before the first commit, and commit \`.env.example\` with the variable names and empty values instead.
+
+If a key does get committed, treat it as leaked. Rotate it at the provider, then remove it from history with \`git filter-repo\`. Cleaning the file is not enough on its own.
+
+## Config is not secrets
+
+Not everything belongs in an env var. Feature flags, page sizes, and timeouts are fine in a config file that is committed. Env vars are for what differs per environment or must stay private. Mixing the two makes both harder to reason about.
+
+## Validating at startup
+
+Fail loudly and early rather than halfway through a request:
+
+\`\`\`python
+REQUIRED = ["DATABASE_URL", "STRIPE_KEY"]
+missing = [k for k in REQUIRED if not os.environ.get(k)]
+if missing:
+    raise SystemExit(f"Missing env vars: {', '.join(missing)}")
+\`\`\`
+
+A container that refuses to boot is much easier to debug than one that throws a 500 on the first checkout.`
+  },
 ];
