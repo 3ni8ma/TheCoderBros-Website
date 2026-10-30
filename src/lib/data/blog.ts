@@ -1480,4 +1480,70 @@ Turn on query logging in development and count the statements for a single reque
 
 The same pattern appears without a database: an HTTP call inside a loop, a file read per item, a cache lookup per row. The fix is always to move the call outside the loop and batch it.`
   },
+  {
+    slug: "async-await-mistakes",
+    title: "Three async/await Mistakes You Will Make",
+    description: "The forgotten await, the async forEach, and the serial loop that should have been parallel.",
+    date: "2026-10-30",
+    category: "JavaScript",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/javascript-async-await.jpg",
+    content: `
+\`async/await\` made asynchronous code readable, which makes it easy to write bugs that look correct. These three account for most of them.
+
+## 1. Forgetting the await
+
+\`\`\`js
+async function save(user) {
+  db.write(user);          // missing await
+  return { ok: true };
+}
+\`\`\`
+
+The function returns before the write finishes, so errors are lost and the caller sees success. If you never use the returned value, add the \`await\`. If you do not need to wait, say so with \`void db.write(user)\` so the next reader knows it was deliberate.
+
+## 2. async inside forEach
+
+\`\`\`js
+items.forEach(async (item) => {
+  await process(item);
+});
+console.log("done");       // runs first
+\`\`\`
+
+\`forEach\` ignores the promise its callback returns, so nothing waits. Use \`for...of\` when order matters:
+
+\`\`\`js
+for (const item of items) {
+  await process(item);
+}
+\`\`\`
+
+Or \`Promise.all\` when it does not:
+
+\`\`\`js
+await Promise.all(items.map((item) => process(item)));
+\`\`\`
+
+## 3. Awaiting in a loop when you did not need to
+
+\`\`\`js
+const a = await fetchUser(1);
+const b = await fetchUser(2);
+const c = await fetchUser(3);
+\`\`\`
+
+Each call waits for the previous one. If they are independent, the total time is the sum and it should be the maximum:
+
+\`\`\`js
+const [a, b, c] = await Promise.all([fetchUser(1), fetchUser(2), fetchUser(3)]);
+\`\`\`
+
+Keep the loop when each step depends on the last, for example paging through results.
+
+## Errors
+
+\`try/catch\` only catches what you awaited. A floating promise rejects outside the block and becomes an unhandled rejection. That is another reason the missing \`await\` is the expensive one.`
+  },
 ];
