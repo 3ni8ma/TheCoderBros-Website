@@ -1546,4 +1546,74 @@ Keep the loop when each step depends on the last, for example paging through res
 
 \`try/catch\` only catches what you awaited. A floating promise rejects outside the block and becomes an unhandled rejection. That is another reason the missing \`await\` is the expensive one.`
   },
+  {
+    slug: "regex-without-fear",
+    title: "Regex Without Fear",
+    description: "Stop trying to write the whole pattern at once. Build it one matching piece at a time.",
+    date: "2026-10-31",
+    category: "Fundamentals",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/fundamentals.jpg",
+    content: `
+Regex has a reputation for being unreadable, and most of that comes from writing it in one go and testing it against production data. The trick is to build it in pieces and check each piece.
+
+## Start with literal text
+
+Match the simplest thing that should work:
+
+\`\`\`text
+^user_
+\`\`\`
+
+Then add one element at a time, testing after each. \`^\` anchors to the start. \`$\` anchors to the end. Without them, \`user_\` matches inside \`superuser_42\`, which is rarely what you meant.
+
+## Character classes
+
+\`\`\`text
+[0-9]      a digit
+[a-z]      a lowercase letter
+\\d          same as [0-9]
+\\w          letters, digits, underscore
+\\s          whitespace
+\`\`\`
+
+Quantifiers say how many:
+
+\`\`\`text
+\\d{4}       exactly four digits
+\\d+         one or more
+\\d*         zero or more
+\\d?         zero or one
+\`\`\`
+
+Put them together for something real, an order reference like \`ORD-2026-0042\`:
+
+\`\`\`text
+^ORD-\\d{4}-\\d{4}$
+\`\`\`
+
+## Greedy and lazy
+
+\`.*\` grabs as much as it can, which is why \`<.*>\` against \`<b>bold</b>\` matches the whole string. \`.*?\` grabs as little as possible and stops at the first \`>\`. When a match is too long, add the \`?\`.
+
+## Groups you can read
+
+\`\`\`text
+^(ORD)-(\\d{4})-(\\d{4})$
+\`\`\`
+
+Named groups make the result self-documenting:
+
+\`\`\`python
+m = re.match(r"^(?P<prefix>ORD)-(?P<year>\\d{4})-(?P<id>\\d{4})$", "ORD-2026-0042")
+m.group("year")   # '2026'
+\`\`\`
+
+## Testing
+
+Use a site like regex101 with the same flavour you use in code, because Python, JavaScript, and Go differ on escaping and lookbehind. Paste real strings, including the ugly ones: empty strings, trailing spaces, unicode. A pattern that passes one happy example has not been tested.
+
+One last habit: when a pattern is longer than a line, split it into named pieces with comments. The next person to read it will not have your memory of why it works.`
+  },
 ];
