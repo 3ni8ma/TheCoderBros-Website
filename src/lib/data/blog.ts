@@ -1616,4 +1616,67 @@ Use a site like regex101 with the same flavour you use in code, because Python, 
 
 One last habit: when a pattern is longer than a line, split it into named pieces with comments. The next person to read it will not have your memory of why it works.`
   },
+  {
+    slug: "floating-point-and-money",
+    title: "Why 0.1 + 0.2 Is Not 0.3",
+    description: "Binary floating point cannot represent most decimals exactly. That matters the moment you handle money.",
+    date: "2026-11-01",
+    category: "Fundamentals",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/fundamentals.jpg",
+    content: `
+Open a console and type this:
+
+\`\`\`python
+0.1 + 0.2
+# 0.30000000000000004
+\`\`\`
+
+That is not a bug in Python. JavaScript, Java, C, and Go all do the same, because they all store decimals the same way.
+
+## Why
+
+Floats are stored in binary. Just as \`1/3\` cannot be written exactly in decimal, \`0.1\` cannot be written exactly in binary. The stored value is the closest one available, and the small error shows up when you add them.
+
+\`\`\`python
+0.1 == 0.1        # True
+0.1 + 0.2 == 0.3  # False
+\`\`\`
+
+Comparison is where it bites first. Never test floats with \`==\`.
+
+## Comparing instead
+
+\`\`\`python
+import math
+math.isclose(0.1 + 0.2, 0.3)   # True
+\`\`\`
+
+In JavaScript, \`Math.abs(a - b) < 1e-9\`. What tolerance is acceptable depends on the domain, not on the language.
+
+## Money
+
+For prices and totals, floats are the wrong tool. Store integer cents:
+
+\`\`\`python
+price_cents = 1999
+quantity = 3
+total = price_cents * quantity   # 5997
+\`\`\`
+
+Format only at the edge, when displaying:
+
+\`\`\`python
+f"\${total / 100:.2f}"   # '$59.97'
+\`\`\`
+
+Addition, subtraction, and multiplication of integers stay exact, which is what an invoice needs. Division is the case to handle deliberately: decide the rounding once, at a known place.
+
+If the domain needs arbitrary decimals, for example tax rates or currency conversion, use a decimal type (\`decimal.Decimal\`, \`BigDecimal\`) and set the rounding mode explicitly.
+
+## Where floats are fine
+
+Measurements, graphics, statistics, and anything already approximate. A temperature of 21.3 degrees does not need exactness. Money, quantities, and counters do.`
+  },
 ];
