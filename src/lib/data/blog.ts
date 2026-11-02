@@ -1679,4 +1679,60 @@ If the domain needs arbitrary decimals, for example tax rates or currency conver
 
 Measurements, graphics, statistics, and anything already approximate. A temperature of 21.3 degrees does not need exactness. Money, quantities, and counters do.`
   },
+  {
+    slug: "http-caching-explained",
+    title: "HTTP Caching, Explained By Its Headers",
+    description: "Cache-Control, ETag, and the 304. Why users see the old version and why hashed filenames fix it.",
+    date: "2026-11-02",
+    category: "Web Development",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/deploy-apps.jpg",
+    content: `
+You deploy, a user reports the old page, and you clear your cache and see the new one. The headers are the reason.
+
+## Cache-Control
+
+The main switch:
+
+\`\`\`text
+Cache-Control: max-age=3600
+\`\`\`
+
+The browser may reuse the response for an hour without asking. \`no-cache\` means revalidate every time but still store it. \`no-store\` means do not store it at all. They are not synonyms, and \`no-cache\` does not mean "do not cache", which is the most common misreading.
+
+## Revalidation
+
+\`ETag\` is a fingerprint of the content:
+
+\`\`\`text
+ETag: "8a1f3c"
+\`\`\`
+
+Next request sends it back:
+
+\`\`\`text
+If-None-Match: "8a1f3c"
+\`\`\`
+
+If nothing changed, the server answers \`304 Not Modified\` with no body. Cheap, and the browser keeps using what it has.
+
+\`Last-Modified\` does the same job with timestamps and \`If-Modified-Since\`.
+
+## Why the old version sticks around
+
+HTML cached with \`max-age=86400\` is served from disk for a day, and nothing on the server can reach into that cache. So serve HTML short-lived:
+
+\`\`\`text
+Cache-Control: no-cache
+\`\`\`
+
+and give static assets a long life. The way to deploy new CSS without waiting is to change its URL: \`app.8a1f3c.css\`. Most bundlers do this automatically. The filename changes, the URL is new, the old cache entry is irrelevant, and you can cache the new file for a year.
+
+## The header that lies
+
+\`Cache-Control: public\` on a response containing one user's data lets shared caches store it and hand it to someone else. Authenticated responses should be \`private\` or \`no-store\`, and \`Vary: Cookie\` (or \`Vary: Authorization\`) tells intermediaries the response depends on them.
+
+If a page is showing another user's data, look here before anywhere else.`
+  },
 ];
