@@ -1735,4 +1735,54 @@ and give static assets a long life. The way to deploy new CSS without waiting is
 
 If a page is showing another user's data, look here before anywhere else.`
   },
+  {
+    slug: "database-migrations-without-downtime",
+    title: "Migrations That Do Not Take the App Down",
+    description: "Adding a required column, renaming one, and backfilling a million rows without a maintenance window.",
+    date: "2026-11-03",
+    category: "Database",
+    readTime: 7,
+    author: "Aarush Karak",
+    image: "/images/blog/data-structures.jpg",
+    content: `
+During a deploy, two versions of the code run at once: the old one still serving requests and the new one starting up. A migration that only works with the new code breaks the old one. That is what takes sites down.
+
+## Add a column as nullable first
+
+\`\`\`sql
+ALTER TABLE users ADD COLUMN display_name TEXT;
+\`\`\`
+
+Not \`NOT NULL\` yet. The old code does not know about the column and will insert rows without it. Add it nullable, deploy the code that writes it, backfill the existing rows, then add the constraint in a later migration.
+
+\`\`\`sql
+UPDATE users SET display_name = username WHERE display_name IS NULL;
+ALTER TABLE users ALTER COLUMN display_name SET NOT NULL;
+\`\`\`
+
+## Backfill in batches
+
+One \`UPDATE\` over a million rows locks a lot and can time out. Do it in chunks:
+
+\`\`\`sql
+UPDATE users SET display_name = username
+WHERE id IN (
+  SELECT id FROM users WHERE display_name IS NULL LIMIT 1000
+);
+\`\`\`
+
+Run it repeatedly until nothing is left. Each batch is short, and the site stays responsive.
+
+## Renaming
+
+Do not rename in place. Old code queries the old name and the column is already gone. Use four steps, each deployed separately: add the new column, write to both, backfill and read from the new one, then drop the old one.
+
+## Dropping
+
+The opposite risk. Once the code no longer reads a column, dropping it is safe. Until then it is not.
+
+## The general rule
+
+Every migration must leave the database usable by both the current and the previous version of the code. If it cannot, the change needs two deploys instead of one. Slower, and the only version that does not page anyone at 2am.`
+  },
 ];
