@@ -1785,4 +1785,55 @@ The opposite risk. Once the code no longer reads a column, dropping it is safe. 
 
 Every migration must leave the database usable by both the current and the previous version of the code. If it cannot, the change needs two deploys instead of one. Slower, and the only version that does not page anyone at 2am.`
   },
+  {
+    slug: "cors-explained",
+    title: "CORS: What the Browser Is Actually Blocking",
+    description: "The error is in the browser, the fix is on the server. Here is which header to change.",
+    date: "2026-11-04",
+    category: "Web Development",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/deploy-apps.jpg",
+    content: `
+\`Access to fetch has been blocked by CORS policy\` is one of the most misread errors on the web. The server responded. The browser received the response and refused to hand it to your JavaScript.
+
+## Why it exists
+
+A page on \`evil.com\` can send a request to \`bank.com\`, and the browser will attach the user's cookies. Without a rule, \`evil.com\` could read the response. CORS is that rule: the server says which origins may read its responses.
+
+It protects users from sites they visit, not servers from clients. Anyone with \`curl\` ignores CORS entirely.
+
+## The header that matters
+
+\`\`\`text
+Access-Control-Allow-Origin: https://app.example.com
+\`\`\`
+
+That one line is the whole permission. \`*\` allows any origin, but not with credentials. For cookies you also need:
+
+\`\`\`text
+Access-Control-Allow-Credentials: true
+\`\`\`
+
+and the origin must be named exactly, not \`*\`.
+
+## Preflight
+
+A request with a JSON content type, a custom header, or a method other than GET/POST is sent as a preflight first:
+
+\`\`\`text
+OPTIONS /api/orders
+Origin: https://app.example.com
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: content-type
+\`\`\`
+
+The server must answer with the allowed method and headers. If the route only handles \`POST\`, the preflight fails and the real request is never sent. That is why "it works in Postman" and fails in the browser.
+
+## Debugging
+
+Look at the network tab, not the console. The console message hides the useful part. If the response has no \`Access-Control-Allow-Origin\`, the server is wrong. If it has the header but the origin does not match, it is a typo or a trailing slash. If it is a \`localhost\` port mismatch, that is just a different origin.
+
+Proxying through your own server in development removes the problem for local work, but it does not make production correct.`
+  },
 ];
