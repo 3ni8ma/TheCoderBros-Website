@@ -1836,4 +1836,56 @@ Look at the network tab, not the console. The console message hides the useful p
 
 Proxying through your own server in development removes the problem for local work, but it does not make production correct.`
   },
+  {
+    slug: "utc-and-time-zones",
+    title: "Store UTC, Display Local, and Other Lies",
+    description: "Where time zone bugs come from, why DST breaks arithmetic, and what to store.",
+    date: "2026-11-05",
+    category: "Backend",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/handbook.jpg",
+    content: `
+Two rules prevent most time zone bugs: store UTC, and convert only when displaying. Everything else is detail.
+
+## Store UTC
+
+A timestamp with no zone is ambiguous. \`2026-03-14 09:00:00\` could be anywhere. Store it with the offset, or store UTC and keep the user's zone separately.
+
+\`\`\`sql
+created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+\`\`\`
+
+In Postgres, \`TIMESTAMPTZ\` normalises to UTC on write. The name is misleading: it does not store a zone, it stores an instant.
+
+## Convert at the edge
+
+\`\`\`python
+from zoneinfo import ZoneInfo
+
+local = created_at.astimezone(ZoneInfo("America/Toronto"))
+print(local.strftime("%b %d, %I:%M %p"))
+\`\`\`
+
+Do this in the view, not in the database. The database holds instants; the UI holds what a person should read.
+
+## Why DST breaks arithmetic
+
+Adding 24 hours is not the same as adding one day. On the day clocks go forward, a day is 23 hours. Adding \`timedelta(days=1)\` to a local time can land on a time that does not exist.
+
+\`\`\`python
+# wrong: tomorrow at 9am may not exist
+tomorrow = now + timedelta(hours=24)
+\`\`\`
+
+If you need "9am tomorrow in the user's zone", do the arithmetic in UTC and convert, or use a library that understands the zone's rules.
+
+## Recurring events
+
+"Every Monday at 9am" is not a fixed instant. It is a rule with a zone attached. Store the rule and the zone, then compute each occurrence. Storing the first occurrence as UTC and adding 7 days drifts by an hour twice a year.
+
+## When there is no zone
+
+Some values are deliberately zoneless: a store's opening hours, a birthday. Keep those as dates without a time, and do not convert them. Converting a birthday to UTC is how people end up born a day earlier.`
+  },
 ];
