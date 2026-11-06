@@ -1888,4 +1888,67 @@ If you need "9am tomorrow in the user's zone", do the arithmetic in UTC and conv
 
 Some values are deliberately zoneless: a store's opening hours, a birthday. Keep those as dates without a time, and do not convert them. Converting a birthday to UTC is how people end up born a day earlier.`
   },
+  {
+    slug: "terminal-pipes-and-redirects",
+    title: "Pipes, Redirects, and Exit Codes",
+    description: "The four characters that turn one command into a workflow: |, >, 2>, and &&.",
+    date: "2026-11-06",
+    category: "Tools",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/tools.jpg",
+    content: `
+Most terminal tutorials list commands. The useful part is composition, and that comes from four pieces of syntax.
+
+## The pipe
+
+\`\`\`bash
+cat app.log | grep ERROR | wc -l
+\`\`\`
+
+The output of one command becomes the input of the next. \`wc -l\` counts lines, so this counts errors. The same thing written shorter:
+
+\`\`\`bash
+grep -c ERROR app.log
+\`\`\`
+
+Pipes are worth learning because they compose without limit. \`grep -r TODO src | cut -d: -f1 | sort -u\` lists every file with a TODO.
+
+## Redirects
+
+\`\`\`bash
+npm run build > build.log      # write, overwrite
+npm run build >> build.log     # append
+\`\`\`
+
+\`>\` replaces the file. \`>>\` adds to it. Mixing them up destroys a log you meant to keep.
+
+Errors are a separate stream, so the terminal still shows them even when output goes to a file:
+
+\`\`\`bash
+npm run build > build.log 2>&1
+\`\`\`
+
+\`2>&1\` sends errors to the same place as normal output.
+
+## Exit codes
+
+Every command returns a number. \`0\` means success, anything else is a failure. That is why commands can be chained:
+
+\`\`\`bash
+npm test && npm run deploy
+\`\`\`
+
+\`&&\` runs the second only if the first succeeded. \`||\` runs the second only if the first failed.
+
+This is also what makes a script honest. A script that ends with an error but still writes \`Done\` teaches the next person to ignore its output.
+
+## Finding things
+
+\`\`\`bash
+grep -rn "getUser" src --include="*.ts"
+\`\`\`
+
+\`-r\` recurses, \`-n\` adds line numbers, and the include narrows it to one type. \`find . -name "*.log" -mtime +7 -delete\` is the same idea for files by age. Read what a command will match before adding \`-delete\`.`
+  },
 ];
