@@ -1951,4 +1951,60 @@ grep -rn "getUser" src --include="*.ts"
 
 \`-r\` recurses, \`-n\` adds line numbers, and the include narrows it to one type. \`find . -name "*.log" -mtime +7 -delete\` is the same idea for files by age. Read what a command will match before adding \`-delete\`.`
   },
+  {
+    slug: "writing-good-unit-tests",
+    title: "What Makes a Unit Test Worth Keeping",
+    description: "One behaviour, a clear failure message, and no knowledge of the internals.",
+    date: "2026-11-07",
+    category: "Fundamentals",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/career.jpg",
+    content: `
+A test suite is only useful if a failure tells you what broke. Plenty of suites run green and catch nothing, or fail and take twenty minutes to explain why.
+
+## One behaviour per test
+
+\`\`\`python
+def test_total_applies_discount():
+    assert total([Item(100)], discount=0.1) == 90
+
+def test_total_is_zero_for_empty_cart():
+    assert total([], discount=0.1) == 0
+\`\`\`
+
+Two asserts on two behaviours means the first failure hides the second. Split them, and name each one after the behaviour rather than the function.
+
+## Test the contract, not the implementation
+
+\`\`\`python
+# brittle
+assert repo.cache == {"user:1": {...}}
+
+# useful
+assert repo.get_user(1).name == "Ada"
+\`\`\`
+
+The first breaks the moment you change the cache. The second breaks when the behaviour breaks, which is the point. If a refactor with no behaviour change requires rewriting tests, the tests were describing the implementation.
+
+## Arrange, act, assert
+
+Keep the three parts visible and short. A test that needs fifty lines of setup is usually testing something too large, or hiding a fixture that belongs in a helper.
+
+## Failure messages
+
+\`\`\`python
+assert parse("10m") == 600, f"got {parse('10m')}"
+\`\`\`
+
+An assertion that prints the actual value saves a debugging session. Most frameworks show it, but only if you compare values rather than booleans.
+
+## What not to test
+
+Getters, framework code, and the language itself. Chasing coverage percentages produces tests that assert nothing. It is better to have forty tests covering the money path than four hundred that mirror the code.
+
+## Speed
+
+Unit tests should run in seconds so they run on every save. Anything that needs a database, a network call, or a browser is an integration test and belongs in a slower stage.`
+  },
 ];
