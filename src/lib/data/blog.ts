@@ -2007,4 +2007,49 @@ Getters, framework code, and the language itself. Chasing coverage percentages p
 
 Unit tests should run in seconds so they run on every save. Anything that needs a database, a network call, or a browser is an integration test and belongs in a slower stage.`
   },
+  {
+    slug: "reading-code-you-didnt-write",
+    title: "How to Read Code You Did Not Write",
+    description: "Start at the entry point, follow one request, and use git to find out why a line exists.",
+    date: "2026-11-08",
+    category: "Career",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/career-blueprint.jpg",
+    content: `
+Joining a codebase with a hundred thousand lines is intimidating until you stop trying to read all of it. You never need all of it. You need one path through it.
+
+## Start from the outside
+
+Find the entry point: \`main\`, the route handler, the CLI command. Pick one request and follow it. Where does it come from, what does it touch, where does it end. Everything else can stay unknown for now.
+
+In a web app, start at the route, not at the utilities. Utilities make sense only once you know who calls them.
+
+## Follow the data
+
+Trace one value from input to output. A user ID from the request, into the handler, through the service, into the query. That single thread teaches you the architecture faster than any diagram, because you see what actually happens rather than what the README claims.
+
+## Ask git why
+
+Code shows what happens. Git shows why.
+
+\`\`\`bash
+git log -S "retry_limit" --oneline
+git blame src/client.py
+\`\`\`
+
+\`-S\` finds the commit that added or removed a string. \`blame\` shows the last commit that touched each line. Read the commit message and the diff. Half the strange lines in a codebase exist because of an incident, and the commit is the only record of it.
+
+## Write while you read
+
+Keep notes: entry points, the three files that matter, terms the team uses, questions. The vocabulary is often the real barrier. A "manifest" and a "bundle" may be the same thing.
+
+## Ask, then verify
+
+Other developers are the fastest source, and their answers are sometimes out of date. Ask, then check the code. That is not distrust; codebases drift and memory drifts faster.
+
+## The first change
+
+Fix something small and ship it. A typo in a log message, a missing null check. The process of getting a change through review, CI, and deploy teaches you the tooling, which is the part no amount of reading covers.`
+  },
 ];
