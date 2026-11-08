@@ -2052,4 +2052,63 @@ Other developers are the fastest source, and their answers are sometimes out of 
 
 Fix something small and ship it. A typo in a log message, a missing null check. The process of getting a change through review, CI, and deploy teaches you the tooling, which is the part no amount of reading covers.`
   },
+  {
+    slug: "python-venv-and-dependencies",
+    title: "Virtual Environments and Why Your Imports Break",
+    description: "Why python3 works in one terminal and not another, and what a lockfile is for.",
+    date: "2026-11-08",
+    category: "Python",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/python.jpg",
+    content: `
+\`ModuleNotFoundError: No module named 'requests'\` after \`pip install requests\` is almost always two Pythons, or two environments.
+
+## What a virtual environment is
+
+A directory holding its own copy of Python's package directory. Activate it and \`python\` and \`pip\` point there instead of at the system.
+
+\`\`\`bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install requests
+\`\`\`
+
+The prompt changes, which is the only visible sign. If it did not change, nothing is activated.
+
+## Why the system one is a bad idea
+
+Installing into the system Python writes into a directory shared by every project and possibly by the OS. Two projects needing different versions of the same library cannot both be right. On macOS and Linux, \`pip install\` outside an environment may refuse to run at all, and that refusal is a feature.
+
+## Recording what you installed
+
+\`\`\`bash
+pip freeze > requirements.txt
+pip install -r requirements.txt
+\`\`\`
+
+\`freeze\` lists exact versions, including transitive dependencies. That is what makes an install reproducible. A \`requirements.txt\` with only \`requests\` will install a different tree next year.
+
+Modern projects use \`pyproject.toml\` for direct dependencies and a lockfile for the resolved tree:
+
+\`\`\`bash
+uv add requests
+uv sync
+\`\`\`
+
+The lockfile is the part that matters. Commit it, and do not hand-edit it.
+
+## The editor problem
+
+An editor with its own interpreter setting can report imports as missing while the terminal is fine. Point the editor at \`.venv/bin/python\` explicitly. When both agree, the error goes away.
+
+## Quick check
+
+\`\`\`bash
+which python
+python -c "import sys; print(sys.prefix)"
+\`\`\`
+
+If \`sys.prefix\` is not the project's \`.venv\`, that is your bug.`
+  },
 ];
