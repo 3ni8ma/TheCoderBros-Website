@@ -2111,4 +2111,59 @@ python -c "import sys; print(sys.prefix)"
 
 If \`sys.prefix\` is not the project's \`.venv\`, that is your bug.`
   },
+  {
+    slug: "string-encoding-utf8",
+    title: "Bytes, Strings, and Why You Got Mojibake",
+    description: "What encode and decode actually do, and why len('café') is not what you expect.",
+    date: "2026-11-09",
+    category: "Fundamentals",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/python-vs-js.jpg",
+    content: `
+Text is not bytes. A string is a sequence of characters; a file or a socket carries bytes. Encoding is the translation, and every mojibake bug is a translation done with the wrong table.
+
+## UTF-8 in one paragraph
+
+UTF-8 maps each character to one to four bytes. ASCII characters use one byte and match their ASCII value, which is why old English-only files still open correctly. \`é\` takes two bytes. An emoji takes four.
+
+## Python
+
+\`\`\`python
+s = "café"
+len(s)              # 4 characters
+len(s.encode())     # 5 bytes, because é is two
+\`\`\`
+
+\`str.encode()\` goes to bytes, \`bytes.decode()\` comes back. The error you will meet:
+
+\`\`\`python
+b"caf\\xe9".decode("utf-8")
+# UnicodeDecodeError: invalid start byte
+\`\`\`
+
+That byte is Latin-1, not UTF-8. Someone wrote the file with the wrong encoding, and the fix is to read it with the encoding it was written in: \`.decode("latin-1")\`.
+
+## The classic
+
+\`\`\`python
+open("data.csv").read()
+\`\`\`
+
+On Windows this may default to cp1252, on Linux to UTF-8. The same file gives different results on two machines. Always pass the encoding:
+
+\`\`\`python
+open("data.csv", encoding="utf-8")
+\`\`\`
+
+Newer Python versions warn about this for exactly that reason.
+
+## JavaScript
+
+\`Buffer\` and \`Uint8Array\` are bytes, \`String\` is text. \`Buffer.from(str, "utf8")\` and \`buf.toString("utf8")\` are the two directions. A \`fetch\` response needs \`.text()\` for text and \`.arrayBuffer()\` for bytes, and choosing wrong gives you \`[object Object]\` or a corrupted file.
+
+## The rule
+
+Bytes at the edges, strings in the middle. Decide the encoding once, at the boundary where data enters, and convert there. Do not carry bytes into your business logic and hope.`
+  },
 ];
