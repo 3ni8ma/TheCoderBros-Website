@@ -2166,4 +2166,77 @@ Newer Python versions warn about this for exactly that reason.
 
 Bytes at the edges, strings in the middle. Decide the encoding once, at the boundary where data enters, and convert there. Do not carry bytes into your business logic and hope.`
   },
+  {
+    slug: "api-error-responses",
+    title: "Designing API Errors People Can Actually Use",
+    description: "A status code is not enough. What to return so a client can react without guessing.",
+    date: "2026-11-10",
+    category: "Backend",
+    readTime: 5,
+    author: "Aarush Karak",
+    image: "/images/blog/frameworks.jpg",
+    content: `
+An API that returns \`500\` with the text \`Something went wrong\` forces every client to guess. Errors are part of the interface, and they deserve the same care as success responses.
+
+## Status code first
+
+The code tells the client what kind of failure it was, without parsing the body.
+
+- \`400\` the request is malformed
+- \`401\` not authenticated
+- \`403\` authenticated but not allowed
+- \`404\` not found
+- \`409\` conflicts with current state
+- \`422\` well formed but semantically invalid
+- \`429\` rate limited
+- \`500\` the server broke
+
+The difference between \`401\` and \`403\` matters: a client should retry after logging in, and should not retry after a permission denial.
+
+## Then a body that says which field
+
+\`\`\`json
+{
+  "error": {
+    "code": "invalid_email",
+    "message": "That email address is not valid.",
+    "field": "email"
+  }
+}
+\`\`\`
+
+The \`code\` is for code, stable and documented. The \`message\` is for humans and may change or be translated. A client that matches on the message text breaks the first time someone edits a typo.
+
+## Lists of problems
+
+For form validation, return all of them at once rather than the first:
+
+\`\`\`json
+{
+  "error": {
+    "code": "validation_failed",
+    "fields": {
+      "email": "not a valid address",
+      "password": "must be at least 12 characters"
+    }
+  }
+}
+\`\`\`
+
+One round trip instead of three.
+
+## What not to return
+
+Stack traces, SQL, file paths, and internal hostnames. They are useful to an attacker and confusing to a client. Log them with a request ID and return the ID:
+
+\`\`\`json
+{ "error": { "code": "internal", "request_id": "req_8f21" } }
+\`\`\`
+
+Support can then find the exact failure without you exposing it.
+
+## Consistency
+
+One shape for every error, from every endpoint. A client should not need a different parser for each route, and the first endpoint that invents its own shape is the one that breaks the mobile app in production.`
+  },
 ];
