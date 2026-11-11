@@ -2239,4 +2239,56 @@ Support can then find the exact failure without you exposing it.
 
 One shape for every error, from every endpoint. A client should not need a different parser for each route, and the first endpoint that invents its own shape is the one that breaks the mobile app in production.`
   },
+  {
+    slug: "code-review-what-to-look-for",
+    title: "What to Look For in a Code Review",
+    description: "Correctness, then clarity, then style. And how to leave a comment someone can act on.",
+    date: "2026-11-11",
+    category: "Career",
+    readTime: 6,
+    author: "Aarush Karak",
+    image: "/images/blog/career.jpg",
+    content: `
+A review that only comments on formatting teaches nobody anything. The ordering below keeps attention on what matters.
+
+## 1. Does it do what it claims
+
+Read the description, then the diff, and check they agree. Look for the cases the author did not mention: empty input, one item, a million items, a failure halfway through. Most review value is here.
+
+## 2. Will it break something else
+
+Who else calls this function? What happens to existing data? Is the migration reversible? A change that is correct in isolation can still break a caller that relied on the old behaviour.
+
+\`\`\`bash
+grep -rn "functionName" src
+\`\`\`
+
+Two minutes of this prevents most regressions.
+
+## 3. Error handling
+
+Where can this fail, and what happens then? A swallowed exception, an empty \`catch\`, a \`.then\` with no \`.catch\`. Silent failure is worse than a crash because nobody notices it.
+
+## 4. Clarity
+
+Would someone unfamiliar understand this in six months? Names, comments on the non-obvious parts, and structure. This is not style: a function that does four things is a future bug.
+
+## 5. Style
+
+Last, and mostly a job for a formatter. If a linter can catch it, let the linter catch it, and keep the human comments for things a machine cannot judge.
+
+## How to leave a comment
+
+Say what you observed, why it matters, and what you would do.
+
+> This runs a query per row, so the endpoint gets slower as the table grows. Could we load the customers in one query and map them?
+
+That is actionable and about the code. Compare with "this is wrong", which is not.
+
+Mark severity so the author knows what blocks the merge: a nit, a suggestion, or a blocker. Without that, everything reads as equally serious and the author either fixes all of it or none.
+
+## Small pull requests
+
+A review of forty lines is careful. A review of a thousand is a rubber stamp. If a change is too big to review properly, the most useful comment is to ask for it to be split.`
+  },
 ];
