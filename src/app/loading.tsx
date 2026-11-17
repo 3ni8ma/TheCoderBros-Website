@@ -1,4 +1,4 @@
-// Updated: 2026-11-16 19:30:33
+// Updated: 2026-11-16 20:00:18
 export default function Loading() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#0a0a0a]">
