@@ -1,6 +1,6 @@
 {
   "topic_index": 15,
   "last_post_slug": "concurrency-vs-parallelism",
-  "last_error": "Locator.wait_for: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"div[role=\\\"dialog\\\"]\").first to be visible\n",
+  "last_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.linkedin.com/feed/\", waiting until \"domcontentloaded\"\n",
   "last_post_date": "2026-11-03"
 }
